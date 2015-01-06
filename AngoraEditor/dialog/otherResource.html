@@ -1,0 +1,158 @@
+	<style>
+	label { display: inline-block; width: 200px; text-align: right; }
+	input { margin:2px; }
+	.easyui-textbox{
+	  display: inline-block;
+	  white-space: nowrap;
+	  margin: 0;
+	  padding: 0;
+	  border-width: 1px;
+	  border-style: solid;
+	  border-color:#ddd;
+	  overflow: hidden;
+	  vertical-align: middle;
+	  height: 20px;
+	}
+	</style>
+	<div class="easyui-panel" title="New Project" style="width:480px">
+	<div style="padding:10px 30px 20px 30px">
+	<div id='form' style="text-align:center;">
+		<p>ID:<input id='resID' class='.easyui-textbox'/><p>
+		<select id="cc" class="easyui-combobox" name="dept" style="width:200px;">
+			<option>spritesheet</option>
+			<option>atlas</option>
+			<option>bitmapFont</option>
+			<option>tileMap</option>
+			<option>text</option>
+		</select>
+		<div id='options'>
+		<p>asset:<input id='asset' class='file' readonly/><p>
+		<p>Xframe:<input id='Xframe' class='easyui-numberbox'/></p>
+		<p>Yframe:<input id='Yframe' class='easyui-numberbox'/></p>
+		</div>
+		<img id='assetpreview' alt='preview'/>
+	</div>
+	<div style="text-align:center;padding:5px">
+	<a id="confirm" class="easyui-linkbutton" >OK</a>
+	<a id="cancel" class="easyui-linkbutton" >Cancel</a>
+	</div>
+	</div>
+	</div>
+  <script>
+	function showPane(type){
+		$('#options').empty();
+		var options=null;
+		switch(type){
+		case 'spritesheet':
+			options="<p>asset:<input id='asset' class='file' readonly/><p>"+
+					"<p>Xframe:<input id='Xframe' class='easyui-numberbox'/></p>"+
+					"<p>Yframe:<input id='Yframe' class='easyui-numberbox'/></p>";
+			break;
+		case 'atlas':
+			options="<p>asset:<input id='asset' class='file' readonly/></p>"+
+					"<p>atlasData:<input id='data' class='file' readonly/></p>";
+			break;
+		case 'bitmapFont':
+			options="<p>bitmap:<input id='bitmap' class='file' readonly/></p>"+
+					"<p>fontData:<input id='data' class='file' readonly/></p>";
+			break;
+		case 'tileMap':
+			options="<p>tileset:<input id='tileset' class='file' readonly/></p>"+
+					"<p>tileData:<input id='data' class='file' readonly/></p>";
+			break;
+		case 'text':
+			options="<p>file:<input id='data' class='file' readonly/></p>";
+			break;
+		default:
+			options="";
+			break;
+		}
+		$('#options').append(options);
+	}
+	$(document).ready(function(){
+		var editor=edt;
+		var height;
+		var width;
+		var type='spritesheet';
+		$('#cc').combobox({
+			onSelect:function(record){
+				showPane(record.value);
+				$('#assetpreview').attr('src','');
+				type=record.value;
+			}
+		});
+		$("#options").delegate('.file','dblclick',function(){
+			var selected=$(this);
+			editor.file.openFileDialog('',function(filename){
+				selected.val(filename);
+				if($('#resID').val()==''){
+					$('#resID').val(filename.substr(0, filename.lastIndexOf('.')) || filename);
+				}
+				if(type=='spritesheet'){
+					var projectpath = editor.project.currentProject.path;
+					var respath = "{0}/data/{1}".format(projectpath,filename);
+					$('#assetpreview').attr("src",respath);
+					$('#assetpreview').one('load',function(){
+						height=this.naturalHeight;
+						width=this.naturalWidth;
+					});
+				}
+			});
+		});
+		$('#confirm').click(function(){
+			/*for(i=0;i<$(".file").size();i++){
+				var div=$(".file").get(i);
+				var path=div.value;
+				var filename = path.replace(/^.*[\\\/]/, '');
+				var dest=editor.project.currentProject.path+'\\data\\'+filename;
+				editor.file.copyFile(path,dest);
+				$(".file").get(i).value=filename;
+			}*/
+			var resID=$('#resID').val();
+			//var type=$('#cc').val();
+			//var res= {"id":resID,"type":type}
+			switch(type){
+			case 'spritesheet':
+				res={
+					path:$('#asset').val(),
+					Xframe:$('#Xframe').val(),
+					Yframe:$('#Yframe').val(),
+					height:height,
+					width:width
+				}
+				break;
+			case 'atlas':
+				res={
+					path:$('#asset').val(),
+					data:$('#data').val()
+				}
+				break;
+			case 'bitmapFont':
+				res={
+					bitmap:$('#bitmap').val(),
+					data:$('#data').val()
+				}
+				break;
+			case 'tileMap':
+				res={
+					tileset:$('#tileset').val(),
+					data:$('#data').val()
+				}
+				break;
+			case 'text':
+				res=$('#data').val();
+				break;
+			default:
+				res=null;
+				break;
+			}
+			//editor.res.add($('#resID').val(),type,res);
+			editor.res.add(resID,type,res);
+			editor.res.selected=res;
+			$('#dd').dialog('close');
+		});
+		$('#cancel').click(function(){
+			$('#dd').dialog('close');
+		});
+	  });
+  </script>

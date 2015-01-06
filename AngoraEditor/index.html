@@ -1,0 +1,209 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>AngoraEditor -- based on Phaser Game Engine</title>
+		<link rel="stylesheet" href="style/style.css" media="screen">
+		<link rel="stylesheet" href="script/jquery/themes/metro/easyui.css" media="screen">
+		<link rel="stylesheet" href="script/jquery/themes/icon.css" media="screen">
+		<link rel="stylesheet" href="style/icons.css" media="screen">	
+		
+		<script type="text/javascript" src="script/phaser.min.js"></script>
+		<script type="text/javascript" src="script/jquery/jquery.min.js"></script>
+		<script type="text/javascript" src="script/jquery/jquery.mousewheel.min.js"></script>
+		<script type="text/javascript" src="script/jquery/jquery.easyui.min.js"></script>
+		<script type="text/javascript" src="script/editor/AngoraEditor.js"></script>
+		<script type="text/javascript" src="script/editor/game.js"></script>
+		<script type="text/javascript" src="script/editor/nodeAttr.js"></script>
+		<script type="text/javascript" src="script/editor/file.js"></script>
+		<script type="text/javascript" src="script/editor/scene.js"></script>
+		<script type="text/javascript" src="script/editor/sceneScript.js"></script>
+		<script type="text/javascript" src="script/editor/node.js"></script>
+		<script type="text/javascript" src="script/editor/project.js"></script>
+		<script type="text/javascript" src="script/editor/system.js"></script>
+		<script type="text/javascript" src="script/editor/resource.js"></script>
+		<script type="text/javascript" src="script/editor/nodetree.js"></script>
+		<script type="text/javascript" src="script/editor/propertygrid.js"></script>
+		<script type="text/javascript" src="script/editor/scenepane.js"></script>
+		<script type="text/javascript" src="script/editor/eventpane.js"></script>
+		<script type="text/javascript" src="script/editor/gamepane.js"></script>
+		<script type="text/javascript" src="script/editor/ui.js"></script>
+		<script type="text/javascript" src="script/editor/uiCallback.js"></script>
+		
+		
+		<link rel="stylesheet" href="script/codemirror/lib/codemirror.css">
+		<link rel="stylesheet" href="script/codemirror/addon/lint/lint.css">
+		<script src="script/codemirror/lib/codemirror.js"></script>
+		<script src="script/codemirror/mode/javascript/javascript.js"></script>
+		<script src="script/codemirror/addon/lint/jshint.js"></script>
+		<script src="script/codemirror/addon/lint/lint.js"></script>
+		<script src="script/codemirror/addon/lint/javascript-lint.js"></script>
+		<style>
+		  .CodeMirror {
+			  font-size:16px;
+			  height: 100%;
+			}
+			.CodeMirror-scroll {
+			  overflow-y: hidden;
+			  overflow-x: auto;
+			}
+			#preview{
+				width: 1024px;
+				height: 1024px;
+				background-color: lightgray;
+				background-image: linear-gradient(0deg, #FFFFFF 1px, rgba(0,0,0,0) 1px), linear-gradient(90deg, #FFFFFF 1px, rgba(0,0,0,0) 1px), linear-gradient(0deg, rgba(255,255,255,0.298039) 1px, rgba(0,0,0,0) 1px), linear-gradient(90deg, rgba(255,255,255,0.298039) 1px, rgba(0,0,0,0) 1px);
+				background-size: 32px 32px;
+			}
+		</style>
+	</head>
+	<body>
+	<div class="easyui-layout" fit="true">
+		<div id="topContainer" data-options="region:'north'" style="overflow:hidden">
+			<div >
+			<a href="#" class="easyui-menubutton" menu="#submenu_file" iconCls="icon-ae-file">File</a>
+			<a href="#" class="easyui-menubutton" menu="#submenu_view" iconCls="icon-ae-view">View</a>
+			<a href="#" class="easyui-menubutton" menu="#submenu_tools" iconCls="icon-ae-tools">Tools</a>
+			<a href="#" class="easyui-menubutton" menu="#submenu_app" iconCls="icon-ae-app">App</a>
+			<a href="#" class="easyui-menubutton" menu="#submenu_run" iconCls="icon-ae-run">Run</a>
+			<a href="#" class="easyui-menubutton" menu="#submenu_help" iconCls="icon-ae-help">About</a>
+			</div>
+			<div id="submenu_file" style="width:100px;">
+			<div id="newProject" iconCls="icon-ae-new">New</div>
+			<div id="openProject" iconCls="icon-ae-open">Open</div>
+			<div id="saveProject" iconCls="icon-ae-save">Save</div>
+			</div>
+			<div id="submenu_view" style="width:100px;">
+			<div id="showgrid" iconCls="icon-ae-grid">ShowGrid</div>
+			<div id="snaptogrid" iconCls="icon-ae-grid">SnapToGrid</div>
+			<div id="setgridsize" iconCls="icon-ae-grid">ConfigGrid</div>
+			</div>
+			<div id="submenu_tools" style="width:100px;">
+			<div id="stamp" iconCls="icon-ae-stamp">Stamp</div>
+			<div id="resource" iconCls="icon-ae-resource">Resource</div>
+			<div id="tilemap" iconCls="icon-ae-tilemap">Tilemap</div>
+			<div id="particle" iconCls="icon-ae-particle">Particle</div>
+			<div id="audio" iconCls="icon-ae-audio">Audio</div>
+			<div id="anime" iconCls="icon-ae-anime">Animation</div>
+			</div>
+			<div id="submenu_app" style="width:100px;">
+			<div id="app" iconCls="icon-ae-app">App property</div>
+			<div id="release" iconCls="icon-ae-release">Release</div>
+			</div>
+			<div id="submenu_run" style="width:100px;">
+			<div id="run" iconCls="icon-ae-run">Run</div>
+			</div>
+			<div id="submenu_help" style="width:100px;">
+			<div id="help" iconCls="icon-ae-help">Help</div>
+			<div id="about" iconCls="icon-ae-about">About</div>
+			</div>
+		</div>
+		<!--<div id="bottomContainer" data-options="region:'south',split:true" style="height:50px;"></div>-->
+		<div id="rightContainer" data-options="region:'east',split:true" title="Properties" style="width:200px;">
+			<div class="easyui-tabs" fit="true" data-options="border:false">
+				<div title="Attributes" fit="true">
+					<div class="easyui-layout" fit="true">
+						<div data-options="region:'north'" style="overflow:hidden">
+							<a id="addProperty" class="easyui-linkbutton" data-options="iconCls:'icon-ae-add'" style="border:none"></a>
+							<a id="removeProperty" class="easyui-linkbutton" data-options="iconCls:'icon-ae-remove'" style="border:none"></a>
+						</div>
+						<div id="attributes" class="easyui-propertygrid" data-options="region:'center'" ></div>
+						<!-- <div id="attribute_description" data-options="region:'south',split:true" style="height:150px;"></div> -->
+					</div>
+				</div>
+				<div title="events" fit="true">
+					<div class="easyui-layout" fit="true">
+						<div data-options="region:'north'" style="overflow:hidden">
+							<a id="addEvent" class="easyui-linkbutton" data-options="iconCls:'icon-ae-add'" style="border:none"></a>
+							<a id="removeEvent" class="easyui-linkbutton" data-options="iconCls:'icon-ae-remove'" style="border:none"></a>
+						</div>
+						<div id="events" data-options="region:'center'" ></div>
+						<!-- <div id="event_description" data-options="region:'south',split:true" style="height:150px;"></div> -->
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="leftContainer" data-options="region:'west',split:true" title="Scene" style="width:200px;">
+			<div class="easyui-tabs" fit="true" data-options="border:false">
+				<div title="scenes" fit="true">
+					<div class="easyui-layout" fit="true">
+						<div data-options="region:'north'" style="overflow:hidden">
+							<a id="addScene" class="easyui-linkbutton" data-options="iconCls:'icon-ae-add'" style="border:none"></a>
+							<a id="removeScene" class="easyui-linkbutton" data-options="iconCls:'icon-ae-remove'" style="border:none"></a>
+						</div>
+						<div id="scenes" data-options="region:'center'"></div>
+						<!-- <div id="scene_description"  data-options="region:'south',split:true" style="height:150px;"></div> -->
+					</div>
+				</div>
+				<div title="nodes" fit="true">
+					<div class="easyui-layout" fit="true">
+						<div data-options="region:'north'" style="overflow:hidden">
+							<a id="addNode" class="easyui-linkbutton" data-options="iconCls:'icon-ae-add'" style="border:none"></a>
+							<a id="removeNode" class="easyui-linkbutton" data-options="iconCls:'icon-ae-remove'" style="border:none"></a>
+							<a id="moveupNode" class="easyui-linkbutton" data-options="iconCls:'icon-ae-moveup'" style="border:none"></a>
+							<a id="movedownNode" class="easyui-linkbutton" data-options="iconCls:'icon-ae-movedown'" style="border:none"></a>
+						</div>
+						<div id="nodetreepanel" data-options="region:'center'" ><ul id="nodes" class="easyui-tree" ></ul></div>
+						<!-- <div id="node_description" data-options="region:'south',split:true" style="height:150px;"></div> -->
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="centerContainer" data-options="region:'center'">
+			<div id="tabs" fit="true"  class="easyui-tabs" data-options="border:false">
+				<div title="preview" style="overflow:hidden;">
+					<div id="preview" style="overflow:hidden;transform:scale(1.0);transform-origin:0 0;">
+						<div id="scene" style="position:relative;width:800px;height:600px;border:2px solid red;">
+							
+						</div>
+					</div>
+				</div>
+				<!-- <div title="script">
+					<textarea id="code" name="code"></textarea>
+				</div> -->
+			</div>
+		</div>
+	</div>
+<!-- 	<div id="dd" class="easyui-dialog" title="My Dialog" style="width:400px;height:200px;"
+		data-options="iconCls:'icon-save',resizable:true,modal:true,href:'/showProject'">
+		Dialog Content.
+	</div> -->
+	<div id="context" class="easyui-menu">
+		<div id="cm_remove">remove</div>
+		<div id="cm_addnode">
+			<span>new</span>
+			<div>
+				<div>image</div>
+				<div>sprite</div>
+				<div>animation</div>
+				<div>particle</div>
+				<div>text</div>
+			</div>
+		</div>
+		<div id="cm_moveup">moveup</div>
+		<div id="cm_movedown">moveup</div>
+	</div>
+	<div id="dd"></div>
+	<form action="/files" id="filedialog" method="post" enctype="multipart/form-data" style="display:none">
+	  <input id="upload" type="file" name="upload" />
+	</form>
+	<script>
+	  if (!String.prototype.format) {
+		String.prototype.format = function () {
+		  var args = arguments;
+		  return this.replace(/{(\d+)}/g, function (match, number) {
+			return typeof args[number] != 'undefined'? args[number] : match ;
+		  });
+		};
+	  }
+	  if(!String.prototype.insert){
+		String.prototype.insert = function (index, string) {
+		  if (index > 0)
+			return this.substring(0, index) + string + this.substring(index, this.length);
+		  else
+			return string + this;
+		};
+	  }
+	  var edt=new AngoraEditor();
+	</script>
+	</body>
+</html>

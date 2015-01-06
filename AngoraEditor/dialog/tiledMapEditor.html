@@ -1,0 +1,221 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>hello phaser!</title>
+
+        <link rel="stylesheet" href="data/style.css" media="screen">
+		<link rel="stylesheet" href="script/jquery/themes/metro/easyui.css" media="screen">
+		<link rel="stylesheet" href="script/jquery/themes/icon.css" media="screen">
+        
+        <script src="script/jquery/jquery.min.js"></script>
+        <script src="script/jquery/jquery.easyui.min.js"></script>
+        <script src="script/phaser.min.js"></script>
+        <style>
+        body{
+			margin:0px;
+			padding:0px;
+        }
+        #map{
+			height:528px;
+			width:528px;        
+			float:left;
+			overflow:scroll;
+        }
+        #layer{
+			height:264px;
+			width:264px;
+			float:left;
+			overflow:scroll;
+        }
+		.layer{
+			height:24px;
+			border:1px solid black;
+		}
+        #tilesets{
+			padding: 0;
+			margin: 0;
+        }
+		#tiles{
+			height:264px;
+			width:264px;
+			float:left;
+			overflow:scroll;
+		}
+		#marker{
+			position:relative;
+			left:0px;
+			top:0px;
+			border:1px red solid;
+			height:32px;
+			width:32px;
+		}
+		#tilemap{
+			float:left;
+		}
+        </style>
+    </head>
+    <body>
+    <div class="easyui-layout" fit="true">
+        <div id="topContainer" data-options="region:'north'" style="overflow:hidden">
+		    <div style="width:100%;">
+				<a href="#" class="easyui-menubutton" menu="#mm1" iconCls="icon-edit">Edit</a>
+				<a href="#" class="easyui-menubutton" menu="#mm2" iconCls="icon-help">Help</a>
+				</div>
+				<div id="mm1" style="width:150px;">
+				<div iconCls="icon-undo">Undo</div>
+				<div iconCls="icon-redo">Redo</div>
+				<div class="menu-sep"></div>
+				<div>Cut</div>
+				<div>Copy</div>
+				<div>Paste</div>
+				</div>
+				<div id="mm2" style="width:100px;">
+				<div>Help</div>
+				<div>Update</div>
+				<div>About</div>
+			</div>
+        </div>
+        <div id="map" data-options="region:'center'">
+		    <div id="tilemap"></div>
+        </div> 
+        <div id="leftContainer" data-options="region:'east',split:true" title="Scene" style="width:300px;">
+            <div class="easyui-layout" fit="true">
+                <div data-options="region:'north'" style="overflow:hidden">
+					<a id="btn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'"></a>
+				</div>
+                <div id="layer" data-options="region:'center'"></div>
+                <div id="tiles" data-options="region:'south'">
+		            <div id="tilesets"></div>
+		            <div id="marker"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+	<script>
+	//var dlg=Ti.UI.currentWindow;
+	//var editor=dlg.editor;
+	//var tileset=editor.res.resources[editor.node.selected['tileset']];
+	//var tilesetPath="file:///"+editor.project.currentProject.path.replace(/\\/g, '/')+"/"+tileset['path'];
+	
+	var mymarker=document.getElementById("marker");
+	var tiles=document.getElementById("tiles");
+	var tilesets=document.getElementById('tilesets');
+	var pos = [0, 0];
+	var tileid = { x: 0, y: 0 };
+	var tileRect = null;
+	var tilesetPath="file:///D:/tidetest-tidesdk/Resources/data/tmw_desert_spacing.png";
+	var mapPath="file:///D:/tidetest-tidesdk/Resources/data/features_test.json";
+	var mapObject;
+	var mapLayers;
+	var mapTileSets;
+	
+	var map;
+	var marker;
+	var currentTile = 2;
+	var currentLayer;
+	var cursors;
+	var selectedTab;
+
+	var mouseDown = false;
+
+	$("#tiles").on({
+	    mousemove: function (e) {
+	        pos[0] = e.clientX+tiles.scrollLeft;
+			pos[1] = e.clientY+tiles.scrollTop;
+	    }
+	});
+	$('#tiles').delegate('img','mouseenter',function(){
+		for(i in mapTileSets){
+			if(mapTileSets[i].name==$(this).attr('id')){
+				mymarker.style.height=mapTileSets[i].tileheight+'px';
+				mymarker.style.width=mapTileSets[i].tilewidth+'px';
+			}
+		}
+	});
+	$("#marker").on({
+	    click: function (e) {
+	        currentTile = tileid.y * 8 + tileid.x;
+	    }
+	});
+	$(document).ready(function () {
+	    tileRect=tiles.getBoundingClientRect();
+		$.getJSON(mapPath, function(json) {
+			mapObject=json;
+			mapLayers=json['layers'];
+			mapTileSets=json['tilesets'];
+			for( i in mapLayers){
+				$('#layer').append("<div class='layer'>"+mapLayers[i].name+"</div>");
+			}
+			for( i in mapTileSets){
+				$('#tilesets').prepend('<img id="'+mapTileSets[i].name+'" src="data/'+mapTileSets[i].image+'"/>');
+				/*$('#tt').tabs('add',{
+					title: mapTileSets[i].name,
+					content:'<img src="data/'+mapTileSets[i].image+'"/>',
+					selected: false
+				});*/
+			}
+			/*$('#tt').tabs({
+				onSelect:function(title,index){
+					tilesets=$("div[title='"+title+"']");
+				}
+			});*/
+		});
+
+		var game = new Phaser.Game(800, 600, Phaser.AUTO, 'tilemap', { preload: preload, create: create, update: update });
+
+		function preload() {
+			//game.load.image('tiles', tilesetPath);
+			game.load.tilemap('map', 'data/features_test.json', null, Phaser.Tilemap.TILED_JSON);
+			for(i in mapTileSets){
+				game.load.image(mapTileSets[i].name, 'data/'+mapTileSets[i].image);
+			}
+		}
+		
+		function create() {
+			map = game.add.tilemap('map');
+			
+			for(i in mapTileSets){
+				map.addTilesetImage(mapTileSets[i].name);
+			}
+
+			map.createLayer('Tile Layer 3');
+			layer = map.createLayer('Tile Layer 1');
+
+			layer.resizeWorld();
+
+			currentLayer = layer;
+			
+			//  Our painting marker
+			marker = game.add.graphics();
+			marker.lineStyle(2, 0x000000, 1);
+			marker.drawRect(0, 0, 32, 32);
+			game.input.setMoveCallback(updateMarker, this);
+
+			cursors = game.input.keyboard.createCursorKeys();
+
+		}
+
+		function pickTile(sprite, pointer) {
+			currentTile = map.getTile(tileid.x, tileid.y);
+		}
+
+		function updateMarker() {
+			marker.x = currentLayer.getTileX(game.input.activePointer.worldX) * 32;
+			marker.y = currentLayer.getTileY(game.input.activePointer.worldY) * 32;
+			if (game.input.mousePointer.isDown){
+				map.putTile(currentTile, currentLayer.getTileX(marker.x), currentLayer.getTileY(marker.y), currentLayer);
+			}
+		}
+
+		function update() {
+			tileid.x = game.math.snapToFloor(pos[0] - tileRect.left, 33) / 33;
+			tileid.y = (tilesets.clientHeight + game.math.snapToFloor(pos[1] - tilesets.clientHeight - tileRect.top, 33) - 1) / 33;
+			mymarker.style.left = game.math.snapToFloor(pos[0] - tileRect.left, 33) + 'px';
+			mymarker.style.top = game.math.snapToFloor(pos[1] - tilesets.clientHeight - tileRect.top, 33) - 1 + 'px';
+		}
+	
+	});
+	</script>
+	</body>
+</html>

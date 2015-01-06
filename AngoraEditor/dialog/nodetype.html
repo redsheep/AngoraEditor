@@ -1,0 +1,105 @@
+<div class="easyui-layout" fit="true">
+	<div data-options="region:'north'" style="overflow:hidden;">
+		<input></input>
+	</div>
+	<div data-options="region:'center'" style="overflow:scoll;">
+		<ul id="tt" class="easyui-tree">
+		</ul>
+	</div>
+</div>
+<script>
+types=[{
+	"text": "Node2D",
+	"iconCls":"icon-ae-node2d",
+	"type": "node2d",
+	"children":[
+	  {
+		  "text": "Group",
+		  "iconCls":"icon-ae-group",
+		  "type": "group"
+	  },
+	  {
+		  "text": "Sprite",
+		  "iconCls":"icon-ae-sprite",
+		  "type": "sprite"
+	  },
+	  {
+		  "text": "TileSprite",
+		  "iconCls":"icon-ae-prite",
+		  "type": "tilesprite"
+	  },
+	  {
+		  "text": "Animation",
+		  "iconCls":"icon-ae-anim",
+		  "type": "animate"
+	  },
+	  {
+		  "text":"Image",
+		  "iconCls":"icon-ae-image",
+		  "type":"image"
+	  },
+	  {
+		  "text":"Geometry",
+		  "iconCls":"icon-ae-geom",
+		  "type":"geometry"
+	  },
+	  {
+		  "text":"Particle",
+		  "iconCls":"icon-ae-particle",
+		  "type":"particle"
+	  },
+	  {
+		  "text":"Text",
+		  "iconCls":"icon-ae-text",
+		  "type":"text"
+	  },
+	  {
+		  "text":"BitmapText",
+		  "iconCls":"icon-ae-text",
+		  "type":"bitmaptext"
+	  }]
+  },
+  {
+	  "text":"Tilemap",
+	  "iconCls":"icon-ae-tilemap",
+	  "type":"tilemap"
+  },
+  {
+	  "text":"Camera",
+	  "iconCls":"icon-ae-camera",
+	  "type":"camera"
+  },
+  {
+	  "text":"Timer",
+	  "iconCls":"icon-ae-timer",
+	  "type":"timer"
+  },
+{
+	"text":"Audio",
+	"iconCls":"icon-ae-audio",
+	"type":"audio"
+},
+{
+	"text":"GUI",
+	"iconCls":"icon-ae-gui",
+	"type":"gui",
+	"children":[{
+		"text":"Button",
+		"iconCls":"icon-ae-button",
+		"type":"button"
+	}]
+}];
+$(document).ready(function(){
+	var editor=edt;
+	$('#tt').tree({
+		data:types,
+		onDblClick: function(node){
+			var node = editor.node.create(node.type);
+			editor.node.add(node);
+			editor.ui.nodeTree.addNode(node);
+			editor.ui.gamePane.add(node);
+			$('#dd').dialog('close');
+		}
+	});
+});
+</script>

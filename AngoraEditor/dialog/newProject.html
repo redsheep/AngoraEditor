@@ -1,0 +1,96 @@
+	<style>
+	label { display: inline-block; width: 200px; text-align: right; }
+	input { margin:2px; }
+	.easyui-textbox{
+	  display: inline-block;
+	  white-space: nowrap;
+	  margin: 0;
+	  padding: 0;
+	  border-width: 1px;
+	  border-style: solid;
+	  border-color:#ddd;
+	  overflow: hidden;
+	  vertical-align: middle;
+	  height: 20px;
+	}
+	</style>
+	<div style="padding:10px 60px 20px 60px">
+	<form id="ff" method="post">
+	<table cellpadding="5">
+	<tr>
+	<td>Name:</td>
+	<td><input id='name' class="easyui-textbox" ></input></td>
+	</tr>
+	<tr>
+	<td>Width:</td>
+	<td><input id='DisplayX' class="easyui-numberspinner" value='800'></input></td>
+	</tr>
+	<tr>
+	<td>Height:</td>
+	<td><input id='DisplayY' class="easyui-numberspinner" value='600'></input></td>
+	</tr>
+	<tr>
+	<td>AntiAlias:</td>
+	<td><input id='AntiAlias' type="checkbox" checked="checked"></input></td>
+	</tr>
+	<tr>
+	<td>Render:</td>
+	<td><select id='Render' >
+		<option>AUTO</option>
+		<option>WEBGL</option>
+		<option>CANVAS</option>
+	</select></td>
+	</tr>
+	<tr>
+	<td>Physics:</td>
+	<td>
+	<select id='Physics' >
+	<option>ARCADE</option>
+	<option>P2JS</option>
+	<option>BOX2D</option>
+	<option>CHIPMUNK</option>
+	<option>NINJA</option>
+	</select>
+	</td>
+	</tr>
+	</table>
+	</form>
+	<div style="text-align:center;padding:5px">
+	<a id="confirm" class="easyui-linkbutton" >OK</a>
+	<a id="cancel" class="easyui-linkbutton" >Cancel</a>
+	</div>
+	</div>
+	</div>
+	<script>
+	$(document).ready(function(){
+		var editor = edt;
+		$('#confirm').click(function(){
+			var name=$('#name').val();
+			var path=editor.system.workspacePath+'/'+name;
+			var DisplayX=$('#DisplayX').val();
+			var DisplayY=$('#DisplayY').val();
+			var Render=$('#Render').val();
+			var AntiAlias=$('#AntiAlias').is(':checked');
+			var Physics=$('#Physics').val();
+			var project={
+				name: name,
+				path: path,
+				icons: '',
+				descript:''
+			};
+			var config={
+				display:{width:DisplayX,height:DisplayY},
+				render:Render,
+				antialias:true,
+				physics:Physics,
+				plugins:''
+			};
+			editor.project.add(project,config,true);
+			//editor.project.load(project);
+			$('#dd').dialog('close');
+		});
+		$('#cancel').click(function(){
+			$('#dd').dialog('close');
+		});
+	  });
+  </script>

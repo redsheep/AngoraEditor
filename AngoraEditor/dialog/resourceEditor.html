@@ -1,0 +1,141 @@
+<style>
+	.resrect{
+		height:64px;
+		width:64px;
+		border:2px solid gray;
+		margin:8px;
+		float:left;
+		position:relative;
+		overflow:hidden;
+	}
+	.resrect span{
+		background:#ccc;
+		position:absolute;
+		width:64px;
+
+		left:0px;
+		top:48px;
+		font-size:14px;
+	}
+	.resrect img{
+		height:64px;
+		width:64px;
+	}
+	.addbtn{
+		border:2px dashed gray;
+	}
+	.selectedrect{
+		background-color:lightgray;!important
+		border-color:red;!important
+	}
+</style>
+<div class="easyui-layout" fit="true">
+	<div id="topContainer" data-options="region:'north'">
+		<p class="title">Game Editor</p>
+	</div>
+	<div data-options="region:'center'">
+		<div id="resourcepane" class="easyui-accordion" fit="true">
+			<div id="res_image" title="Image">
+				<div id='addimgbtn' class='resrect addbtn'></div>
+			</div>
+			<div id="res_audio" title="Audio">
+				<div id='addsndbtn' class='resrect addbtn'></div>
+			</div>
+			<div id="other" title="Other">
+				<div id='addotherbtn' class='resrect addbtn'></div>
+			</div>
+		</div>
+	</div>
+	<div data-options="region:'south'">
+		<button id="okbtn">OK</button>
+		<button id="cancelbtn">Cancel</button>
+	</div>
+</div>
+<script>
+//var editor=dlg.editor;
+//var dlg=Ti.UI.currentWindow;
+ $(document).ready(function(){
+	//$('#dd').dialog('close');
+	var editor=edt;
+	var res=editor.res.globalres;
+	var projectpath = editor.project.currentProject.path;
+	for( resID in res){
+		var type=res[resID].type;
+		if(type=='image'||type=='spritesheet'||type=='atlas'){
+			var path=editor.project.currentProject.path+"/"+res[resID]['path'];
+			$('#res_image').prepend('<div class="resrect"><img id="{0}" src="{1}"/><span>{0}</span></div>'.format(resID,path));
+		}else if(type=='audio'){
+			$('#res_audio').prepend('<div class="resrect"><img id="{0}" src="/data/audio.png"/><span>{0}</span></div>'.format(resID));
+		}else{
+			$('#other').prepend('<div class="resrect"><img id="{0}" src="/data/{1}.png"/><span>{0}</span></div>'.format(resID,type));
+		}
+	}
+	var localres=editor.res.localres;
+	for( resID in localres){
+		var type=localres[resID].type;
+		if(type=='image'||type=='spritesheet'||type=='atlas'){
+			var path=editor.project.currentProject.path+"/"+localres[resID]['path'];
+			$('#res_image').prepend('<div class="resrect"><img id="{0}" src="{1}"/><span>{0}</span></div>'.format(resID,path));
+		}else if(type=='audio'){
+			$('#res_audio').prepend('<div class="resrect"><img id="{0}" src="/data/audio.png"/><span>{0}</span></div>'.format(resID));
+		}else{
+			$('#other').prepend('<div class="resrect"><img id="{0}" src="/data/{1}.png"/><span>{0}</span></div>'.format(resID,type));
+		}
+	}
+	$('#resourcepane').delegate('.resrect',"click",function(){
+	//$('.resrect').on("click",function(){
+		var selected=$(".selectedrect");
+		if(selected.length>0)
+			selected.removeClass("selectedrect");
+		$(this).addClass("selectedrect");
+	});
+	$('#addimgbtn').click(function(){
+		editor.file.openFileDialog('',function(filename){
+			//var filename = path[0].replace(/^.*[\\\/]/, '');
+			//var dest=editor.project.currentProject.path+'\\data\\'+filename;
+			//editor.file.copyFile(path[0],dest);
+			var resID = filename.substr(0, filename.lastIndexOf('.')) || filename;
+			var respath = "{0}/data/{1}".format(projectpath,filename);
+			//var res=JSON.parse(data);
+			$('#res_image').prepend('<div class="resrect"><img id="{0}" src="{1}"/><span>{0}</span></div>'.format(resID,respath));
+			$('#'+resID).load(function(){
+				var res={path:filename,height:this.naturalHeight,width:this.naturalWidth};
+				editor.res.add(resID,'image',res);
+			});
+		});
+	});
+	$('#addsndbtn').click(function(){
+		editor.file.openFileDialog('',function(filename){
+			//var filename = path[0].replace(/^.*[\\\/]/, '');
+			//var dest=editor.project.currentProject.path+'\\data\\'+filename;
+			//editor.file.copyFile(path[0],dest);
+			var resID = filename.substr(0, filename.lastIndexOf('.')) || filename;
+			$('#res_audio').prepend('<div class="resrect"><img id="{0}" src="/data/audio.png"/><span>{0}</span></div>'.format(resID));
+			editor.res.add(resID,'audio',filename);
+		});
+	});
+	$('#addotherbtn').click(function(){
+		editor.ui.showDialog("/dialog/otherResource",480,400,function(){
+			/*var res = editor.res.selected;
+			var resID = res.id;
+			var respath = "{0}/data/{1}".format(projectpath,res.path);
+			//var res=JSON.parse(data);
+			$('#other').prepend('<img id="'+resID+'" class="resrect" src="'+respath+'"/>');
+			$('#'+resID).load(function(){
+				res['height']=this.naturalHeight;
+				res['width']=this.naturalWidth;
+				editor.res.add(resID,res.type,res);
+			});*/
+		});
+	});
+	$('#okbtn').click(function(){
+		editor.res.selected=editor.res.get($(".selectedrect img").attr('id'));
+		//result=true;
+		$('#dd').dialog('close');
+	});
+	$('#canclebtn').click(function(){
+		//result=false;
+		$('#dd').dialog('close');
+	});
+  });
+</script>

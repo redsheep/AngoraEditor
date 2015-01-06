@@ -1,0 +1,193 @@
+.icon-ae-file{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/icons-16.png");
+	background-position: 0px -64px;
+}
+.icon-ae-edit{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/icons-16.png");
+	background-position: -64px -80px;
+}
+.icon-ae-tools{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/icons-16.png");
+	background-position: -16px -32px;
+}
+.icon-ae-help{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/icons-16.png");
+	background-position: 0px -80px;
+}
+.icon-ae-about{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/icons-16.png");
+	background-position: -16px -80px;
+}
+.icon-ae-paste{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/icons-16.png");
+	background-position: -96px -80px;
+}
+.icon-ae-open{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/icons-16.png");
+	background-position: -16px 0px;
+}
+.icon-ae-add{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/icons-16.png");
+	background-position: -48px -32px;
+}
+.icon-ae-remove{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/icons-16.png");
+	background-position: -80px -32px;
+}
+.icon-ae-moveup{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/icons-16.png");
+	background-position: -48px -64px;
+}
+.icon-ae-movedown{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/icons-16.png");
+	background-position: -64px -64px;
+}
+.icon-ae-save{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/icons-16.png");
+	background-position: -32px 0px;
+}
+.icon-ae-delete{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/icons-16.png");
+	background-position: 0px -32px;
+}
+.icon-ae-run{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/icons-16.png");
+	background-position: -96px -48px;
+}
+.icon-ae-undo{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/icons-16.png");
+	background-position: 0px -16px;
+}
+.icon-ae-redo{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/icons-16.png");
+	background-position: -16px -16px;
+}
+.icon-ae-cut{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/icons-16.png");
+	background-position: -64px 0px;
+}
+.icon-ae-copy{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/icons-16.png");
+	background-position: -80px 0px;
+}
+.icon-ae-new{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/icons-16.png");
+	background-position: 0px 0px;
+}
+
+.icon-ae-node2d{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: 0px 0px;
+}
+.icon-ae-group{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: -16px 0px;
+}
+.icon-ae-sprite{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: -32px -32px;
+}
+.icon-ae-anim{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: 0px 0px;
+}
+.icon-ae-image{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: -48px 0px;
+}
+.icon-ae-geom{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: -16px -32px;
+}
+.icon-ae-particle{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: 0px 0px;
+}
+.icon-ae-text{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: 0px -32px;
+}
+.icon-ae-tilemap{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: -32px -16px;
+}
+.icon-ae-camera{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: -32px 0px;
+}
+.icon-ae-timer{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: -16px -16px;
+}
+.icon-ae-audio{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: 0px -16px;
+}
+.icon-ae-gui{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: 0px 0px;
+}

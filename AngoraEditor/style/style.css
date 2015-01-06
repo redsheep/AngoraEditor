@@ -1,0 +1,298 @@
+* {
+	outline: none !important;
+}
+
+body {
+	margin: 0;
+	padding: 2em;
+	font-family: Lucida Sans,Lucida Grande,Arial !important;
+	font-size: 13px !important;
+	background: white;
+	color: #333;
+}
+
+/* button {
+	-webkit-transition: background-color 0.2s linear;
+	border-radius:4px;
+	-moz-border-radius: 4px 4px 4px 4px;
+	-moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+	background-color: #E4F2FF;
+	background-image: url("dijit/themes/claro/form/images/button.png");
+	background-position: center top;
+	background-repeat: repeat-x;
+	border: 1px solid #769DC0;
+	padding: 2px 8px 4px;
+	font-size:1em;
+} */
+button{
+	border:0;
+	margin:5px;
+	font-size:16px;
+	height:36px;
+	width:96px;
+}
+button:hover {
+	background-color: #AFD9FF;
+	color: #000000;
+}
+
+h1 {
+	font-size:1.5em;
+}
+.break
+{
+float:none;
+clear:both;
+}
+/* Any demo specific styling needed for this tutorial only */
+html, body {
+	height: 100%;
+	margin: 0;
+	overflow: hidden;
+	padding: 0;
+}
+
+#appLayout {
+	height: 100%;
+}
+#leftCol {
+	width: 14em;
+}
+
+.claro .demoLayout .edgePanel {
+	background-color: #d0e9fc;
+	padding:0;
+}
+
+#viewsChart {
+	width: 550px;
+	height: 550px;
+}
+.bar{
+	background-color:lightblue !important;
+	height:25px !important;
+	
+}
+.bartitle{
+	float:left;
+	margin:0;
+	padding:0;
+	min-width:120px !important;
+}
+.toolbar{
+	background-color:lightblue !important;
+}
+.toolbar .btn{
+	/*border:1px solid white;*/
+	border:0;
+	height:20px;
+	width:20px;
+	padding:0;
+	margin:1px;
+	background-color:lightblue !important;
+}
+.lbarbtn{
+	border:1px solid white;
+	height:18;
+	padding:0;
+	margin:1px;
+	background-color:lightblue !important;
+	position:absolute!important;
+	top:0px;
+	left:0px;
+}
+.rbarbtn{
+	border:1px solid white;
+	height:18;
+	padding:0;
+	margin:1px;
+	background-color:lightblue !important;
+	position:absolute!important;
+	top:0px;
+	right:0px;
+}
+.icon {
+	background-image: url('icons.png');
+	background-position: -480px center;
+	width: 24px;
+	height: 24px;
+}
+.DefaultIcon{
+	background-image: url('icons.png');
+	background-position: 0px center;
+	width: 16px;
+	height: 16px;
+}
+.spriteIcon{
+	background-image: url('icons.png');
+	background-position: -16px center;
+	width: 16px;
+	height: 16px;
+}
+.timeIcon{
+	background-image: url('icons.png');
+	background-position: -32px center;
+	width: 16px;
+	height: 16px;
+}
+.animIcon{
+  	background-image: url('icons.png');
+	background-position: -48px center;
+	width: 16px;
+	height: 16px;
+}
+.rigidIcon{
+  	background-image: url('icons.png');
+	background-position: -64px center;
+	width: 16px;
+	height: 16px;
+}
+.animIcon{
+  	background-image: url('icons.png');
+	background-position: -80px center;
+	width: 16px;
+	height: 16px;
+}
+.audioIcon{
+  	background-image: url('icons.png');
+	background-position: -96px center;
+	width: 16px;
+	height: 16px;
+}
+.cameraIcon{
+  	background-image: url('icons.png');
+	background-position: -112px center;
+	width: 16px;
+	height: 16px;
+}
+.geometryIcon{
+  	background-image: url('icons.png');
+	background-position: -128px center;
+	width: 16px;
+	height: 16px;
+}
+.particleIcon{
+  	background-image: url('icons.png');
+	background-position: -144px center;
+	width: 16px;
+	height: 16px;
+}
+.textIcon{
+  	background-image: url('icons.png');
+	background-position: -160px center;
+	width: 16px;
+	height: 16px;
+}
+.tilemapIcon{
+  	background-image: url('icons.png');
+	background-position: -176px center;
+	width: 16px;
+	height: 16px;
+}
+/*#tree{
+  height:100%;
+}*/
+.dndOne {
+  min-width: 10px;
+  min-height: 10px;
+/*padding: 10px; */
+  border: 1px solid #000;
+  -webkit-transform-origin:left top;
+/*  overflow:hidden;*/
+/*background-image:url("mushroom2.png"); */
+}
+.dndArea {
+  height: 200px;
+  padding: 10px;
+  border: 1px solid #000;
+}
+table input[type="text"]{
+  width:100px!important;
+  border:0;
+}
+.sceneitem{
+  display:block;
+  /*font-size:1.1em;
+  background-color:#66CCFF;
+  padding:5px;*/
+  width:95%;
+  border-radius:0;
+}
+#texture{
+  height:64px;
+  width:64px;
+}
+#itemroot{
+  -webkit-transform: scale(0.5);
+  /*transform: scale(0.5,0.5);*/
+  height:600px;
+  width:800px;
+}
+#myscene{
+  overflow:hidden;
+  margin:0;
+  padding:0;
+}
+#scenescale{
+  position:fixed;
+  left:500px;
+  top:80px;
+  font-size:32px;
+  z-index:999;
+}
+#resImage{
+  margin:0;
+  padding:0;
+}
+#resImage .resData{
+  border:1px solid #000;
+  margin:5px;
+  padding:2px;
+  float:left;
+  height:80px;
+  width:64px;
+  overflow:hidden;
+  text-align:center;
+}
+#resImage .resData img{
+  width:64px;
+  height:64px;
+}
+#resImage .resData p{
+  border:1px solid #000;
+}
+#resImage .selected{
+  border:1px solid lightgray;
+  background-color:lightgray;
+}
+#resourceDialog{
+  margin:0;
+  padding:0;
+}
+.dijitDialogPaneContent{
+  padding:0!important;
+}
+#resTools span{
+  height:16px;
+  width:16px;
+  background-color:lightblue;
+  margin-right:8px;
+}
+.iconaddimage{
+  background-image: url('icons.png');
+  background-position: -144px center;
+  width: 16px;
+  height: 16px;
+}
+.iconaddaudio{
+  background-image: url('icons.png');
+  background-position: -144px center;
+  width: 16px;
+  height: 16px;
+}
+.iconaddbody{
+  background-image: url('icons.png');
+  background-position: -144px center;
+  width: 16px;
+  height: 16px;
+}

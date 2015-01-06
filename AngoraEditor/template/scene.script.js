@@ -1,0 +1,3 @@
+{sceneName}.prototype.customUpdate=function(){
+
+}

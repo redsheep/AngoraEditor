@@ -1,0 +1,58 @@
+html, body {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	overflow:hidden;
+	background-color:lightblue;
+}
+
+#layoutContainer {
+	width: 100%;
+	height: 100%;
+	text-align:center;
+}
+.listbox{
+	height:50px;
+}
+#projects{
+	border:1px white solid;
+	/*height:100%;*/
+	overflow-x:hidden;
+}
+.project{
+	height:25%;
+	background-color:skyblue;
+	text-align:left;
+	/*font-size:1.5em;*/
+}
+button{
+	border:0;
+	margin:5px;
+	font-size:16px;
+	height:36px;
+	width:96px;
+}
+.title{
+	font-size:2em;
+	border-bottom:1px white solid;
+	margin:0 50px;
+}
+.projectName{
+	display:block;
+	float:left;
+	border-right:1px white solid;
+	text-align:center;
+	width:64px;
+	height:64px;
+	background-image:url('default.png');
+	background-size:100% 100%;
+}
+.projectSrc{
+	display:block;
+}
+.descibe{
+	display:block;
+}
+.selected{
+	border:2px red solid;
+}
