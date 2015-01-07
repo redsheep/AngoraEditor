@@ -174,7 +174,6 @@ AngoraEditor.UI.prototype = {
 	 reset: function () {
 		this.nodeTree.reset();
 		this.propertyGrid.reset();
-		this.scenePane.reset();
 		this.eventPane.reset();
 		this.gamePane.reset();
 		$('#tabs').tabs('close','code');

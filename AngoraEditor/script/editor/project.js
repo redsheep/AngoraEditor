@@ -135,7 +135,10 @@ AngoraEditor.ProjectManager.prototype = {
 	* @param 
 	*/
 	reset: function(){
-		this.editor.scene.removeAll();
+		this.editor.scene.scenes={};
+		this.editor.res.clearAll();
+		this.editor.scene.reset();
+		this.editor.ui.scenePane.reset();
 		this.currentProject=null;
 	},
 	/**

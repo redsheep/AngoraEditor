@@ -138,6 +138,16 @@ AngoraEditor.ResourceManager.prototype = {
 	clear : function () {
 		this.localres = {};
 		this.selected = null;
+	},
+	/**
+	* clear all resource 
+	* @method clear
+	* @param 
+	*/
+	clearAll : function () {
+		this.localres = {};
+		this.globalres = {};
+		this.selected = null;
 	}
 }
 

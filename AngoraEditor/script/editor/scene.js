@@ -181,6 +181,14 @@ AngoraEditor.SceneManager.prototype = {
 		this.editor.ui.reset();
 	},
 	/**
+	* reset current scene
+	* @method reset
+	* @param 
+	*/
+	clearAll : function () {
+		this.scenes={};
+	},
+	/**
 	* set configuration of current scene
 	* @method setConfig
 	* @param {string} key

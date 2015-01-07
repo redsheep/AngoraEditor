@@ -62,7 +62,7 @@ AngoraEditor.ScenePaneManager.prototype = {
 	 * @param
 	 */
 	reset : function () {
-		
+		this.pane.empty();
 	}
 }
 
