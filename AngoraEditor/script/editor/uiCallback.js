@@ -249,7 +249,7 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		editor.ui.showDialog("http://docs.phaser.io/");
 	});
 	$("#about").click(function () {
-		editor.ui.showDialog("/dialog/about",400,300,function(){});
+		editor.ui.showDialog("/dialog/about",420,320,function(){});
 	});
 	$("#app").click(function () {
 		editor.ui.showDialog("/dialog/app",360,360,function(){});
