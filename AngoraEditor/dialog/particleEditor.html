@@ -1,70 +1,40 @@
-<style>
-.label{
-	display:inline-block;
-	min-width:48px;
-	font-size:1.2em;
-}
-p{
-	margin:10px;
-}
-.easyui-numberspinner{
-	width:64px;
-}
-</style>
 <div id="container" class="easyui-layout" fit="true">
 	<div data-options="region:'north'" style="overflow:hidden;">
 		<a id="btn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'"></a>
 	</div>
-	
-	<div data-options="region:'west'" style="overflow:hidden;width:150px;">
-			<div><p class='label'>emitX</p><input id='emitX' class="easyui-numberspinner" ></div>
-			<div><p class='label'>emitY</p><input id='emitY' class="easyui-numberspinner" ></div>
-			<div><p class='label'>height</p><input id='height' class="easyui-numberspinner" ></div>
-			<div><p class='label'>width</p><input id='width' class="easyui-numberspinner" ></div>
 
-			<div><p class='label'>speedX</p><input id='speedX' class="easyui-numberspinner" ></div>
-			<div><p class='label'>speedY</p><input id='speedY' class="easyui-numberspinner" ></div>
-			<div><p class='label'>gravity</p><input id='gravity' class="easyui-numberspinner" ></div>
-	</div>	
-	
 	<div id="particles" data-options="region:'center'" style="overflow:hidden;width:350px;height:480px;">
 	</div>
-	
-	<div data-options="region:'east'" style="overflow:hidden;width:150px;">
-			<div><p class='label'>angle</p><input id='angle' class="easyui-numberspinner" ></div>
-			<div><p class='label'>rotation</p><input id='rotation' class="easyui-numberspinner" ></div>
-			<div><p class='label'>scale</p><input id='scale' class="easyui-numberspinner" ></div>
-			<div><p class='label'>alpha</p><input id='alpha' class="easyui-numberspinner" ></div>
-
-			<div><p class='label'>lifespan</p><input id='lifespan' class="easyui-numberspinner" ></div>
-			<div><p class='label'>max</p><input id='max' class="easyui-numberspinner"></div>
+	<div data-options="region:'east'" style="overflow:hidden;width:200px;">
+		<div id="particleproperty">property</div>
 	</div>
 </div>
 <script>
 	$(document).ready(function(){
+		var editor=edt;
+		var selected=editor.node.selected;
 		var emitter;
-		$('.easyui-numberspinner').numberspinner({
-			value:0,
-			onSpinUp:function(){
-				$(this).trigger('change');
-			},
-			onSpinDown:function(){
-				$(this).trigger('change');
+		var data=[];
+		for( key in selected){
+			switch(key){
+			case 'id':
+			case 'type':
+			case 'x':
+			case 'y':
+			case 'visible':type='none';break;
+			default:type='numberbox';break;
 			}
-		})
-		$('input').change(function(){
-			var id=$(this).attr('id');
-			var value=$(this).val();
-			//particle[id]=value;
-			emitter[id]=parseInt(value);
-			//emitter.start(false, 5000, 100);
-			//emitter.kill();
-			//particle['max'];
-			//emitter.update();
+			data.push({name:key,value:selected[key],group:'default',editor:type});
+		}
+		$('#particleproperty').propertygrid({
+			data: data,
+			onEndEdit : function (index, field, changes) {
+				var name = field['name'];
+				var value = field['value'];
+				emitter[name]=parseInt(value);
+			}
 		});
-		var w=$('#particles').width();
-		var h=$('#particles').height();
-		var game = new Phaser.Game(w, h, Phaser.CANVAS, 'particles', { preload: preload, create: create, render: render});
+		var game = new Phaser.Game(300, 400, Phaser.CANVAS, 'particles', { preload: preload, create: create, render: render});
 
 		function preload() {
 			game.load.image('particle', 'data/particle.png');
@@ -73,7 +43,10 @@ p{
 			game.stage.backgroundColor = '#000000';
 			emitter = game.add.emitter(game.world.centerX, game.world.centerY, 30);
 			emitter = emitter.makeParticles('particle');
-			emitter.start(false, 5000, 100);
+			emitter.start(false);
+			for(key in selected){
+				emitter[key]=selected[key];
+			}
 		}
 		function render() {
 			game.debug.text(emitter.total, 32, 32);

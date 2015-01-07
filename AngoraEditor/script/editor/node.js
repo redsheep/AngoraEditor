@@ -167,13 +167,16 @@ AngoraEditor.NodeManager.prototype = {
 		var physics=this.setAttr('physics',node.physics);
 		var image=this.setAttr('image',node.image);
 		var delay=this.setAttr('delay',node.delay);
-		var maxParicles=this.setAttr('maxParicles',node.maxParicles);
+		var maxparicles=this.setAttr('maxparicles',node.maxparicles);
 		var lifespan=this.setAttr('lifespan',node.lifespan);
 		var gravity=this.setAttr('gravity',node.gravity);
 		var frequency=this.setAttr('frequency',node.frequency);
+		var alpha=this.setAttr('alpha',node.alpha);
 		var angle=this.setAttr('angle',node.angle);
-		var minspeed=this.setAttr('minspeed',node.minspeed);
-		var maxspeed=this.setAttr('maxspeed',node.maxspeed);
+		var minspeedX=this.setAttr('minspeedX',node.minspeedX);
+		var maxspeedX=this.setAttr('maxspeedX',node.maxspeedX);
+		var minspeedY=this.setAttr('minspeedY',node.minspeedY);
+		var maxspeedY=this.setAttr('maxspeedY',node.maxspeedY);
 		switch(node.type){
 			case 'image':
 			case 'sprite':
@@ -245,15 +248,17 @@ AngoraEditor.NodeManager.prototype = {
 			case 'particle':
 				node['x']=x;
 				node['y']=y;
-				node['maxParicles']=maxParicles;
+				node['alpha']=alpha;
+				node['rotation']=rotation;
+				node['maxparicles']=maxparicles;
 				node['lifespan']=lifespan;
 				node['angle']=angle;
 				node['gravity']=gravity;
 				node['frequency']=frequency;
-				node['minspeedX']=minspeed;
-				node['maxspeedX']=maxspeed;
-				node['minspeedY']=minspeed;
-				node['maxspeedY']=maxspeed;
+				node['minspeedX']=minspeedX;
+				node['maxspeedX']=maxspeedX;
+				node['minspeedY']=minspeedY;
+				node['maxspeedY']=maxspeedY;
 				break;
 			case 'timer':
 				node['delay']=delay;

@@ -169,13 +169,16 @@ AngoraEditor.NodeAttrManager.prototype = {
 			case 'atlasWidth':return 64;
 			case 'atlasHeight':return 64;
 			case 'delay':return 100;
-			case 'maxParicles':return 30;
+			case 'maxparicles':return 30;
 			case 'lifespan':return 100;
 			case 'gravity': return 900;
 			case 'frequency':return 100;
+			case 'alpha':return 1;
 			case 'angle':return 0;
-			case 'minspeed':return 0;
-			case 'maxspeed':return 100;
+			case 'minspeedX':return 0;
+			case 'maxspeedX':return 100;
+			case 'minspeedY':return 0;
+			case 'maxspeedY':return 100;
 			default:return null;
 		}
 	}
