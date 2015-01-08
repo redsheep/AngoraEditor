@@ -287,17 +287,7 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 	});
 	$('#preview').bind('contextmenu',function(e){
 		e.preventDefault();
-		$('#context').menu('show', {
-			left: e.pageX,
-			top: e.pageY
-		});
-	});
-	$('#nodetreepanel').bind('contextmenu',function(e){
-		e.preventDefault();
-		$('#context').menu('show', {
-			left: e.pageX,
-			top: e.pageY
-		});
+		editor.ui.contextMenu.showContextMenu(e.pageX,e.pageY);
 	});
 	$(document).bind('contextmenu',function(e){
 		e.preventDefault();

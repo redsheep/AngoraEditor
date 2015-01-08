@@ -60,6 +60,11 @@ AngoraEditor.NodeTreeManager.prototype = {
 				var nodes=$('#nodes').tree('getRoots');
 				editor.node.update(nodes);
 			},
+			onContextMenu: function(e,node){
+				e.preventDefault();
+				$(this).tree('select',node.target);
+				editor.ui.contextMenu.showContextMenu(e.pageX,e.pageY);
+			}
 		});
 	},
 	/**

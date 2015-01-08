@@ -33,6 +33,10 @@ AngoraEditor.UI = function (editor) {
 	 */
 	this.eventPane = null;
 	/**
+	 * @property {EventPane}
+	 */
+	this.contextMenu = null;	
+	/**
 	 * @property {boolean}
 	 */
 	this.showGrid=true;
@@ -64,6 +68,7 @@ AngoraEditor.UI.prototype = {
 		this.scenePane = new AngoraEditor.ScenePaneManager(this.editor);
 		this.eventPane = new AngoraEditor.EventPaneManager(this.editor);
 		this.gamePane =new AngoraEditor.GamePaneManager(this.editor);
+		this.contextMenu =new AngoraEditor.ContextMenuManger(this.editor);
 		//this.gamePane.setup();
 		this.setupUICallback();
 	},

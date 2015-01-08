@@ -16,6 +16,7 @@
 		<script type="text/javascript" src="script/editor/game.js"></script>
 		<script type="text/javascript" src="script/editor/nodeAttr.js"></script>
 		<script type="text/javascript" src="script/editor/file.js"></script>
+		<script type="text/javascript" src="script/editor/menu.js"></script>
 		<script type="text/javascript" src="script/editor/scene.js"></script>
 		<script type="text/javascript" src="script/editor/sceneScript.js"></script>
 		<script type="text/javascript" src="script/editor/node.js"></script>
@@ -168,9 +169,8 @@
 		Dialog Content.
 	</div> -->
 	<div id="context" class="easyui-menu">
-		<div id="cm_remove">remove</div>
 		<div id="cm_addnode">
-			<span>new</span>
+			<span>New</span>
 			<div>
 				<div>image</div>
 				<div>sprite</div>
@@ -179,8 +179,10 @@
 				<div>text</div>
 			</div>
 		</div>
-		<div id="cm_moveup">moveup</div>
-		<div id="cm_movedown">moveup</div>
+		<div id="cm_remove">Remove</div>
+		<div id="cm_anime">AnimeEditor</div>
+		<div id="cm_audio">AudioEditor</div>
+		<div id="cm_particle">ParticleEditor</div>
 	</div>
 	<div id="dd"></div>
 	<form action="/files" id="filedialog" method="post" enctype="multipart/form-data" style="display:none">
