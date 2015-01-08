@@ -20,6 +20,11 @@ AngoraEditor.ContextMenuManger = function (editor) {
 	 * @property {jquery object}
 	 */
 	this.menu = $('#context');
+	/**
+	 * @property {number}
+	 */
+	this.menuposX = 0;
+	this.menuposY = 0;
 }
 AngoraEditor.ContextMenuManger.prototype = {
 	/**
@@ -86,6 +91,7 @@ AngoraEditor.ContextMenuManger.prototype = {
 	 */
 	showContextMenu : function (x,y) {
 		var editor=this.editor;
+		this.menuposX=x;this.menuposY=y;
 		this.hideAll();
 		if(editor.node.selected!=null){
 			this.show('Remove');

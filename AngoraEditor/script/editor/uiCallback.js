@@ -255,7 +255,7 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		editor.ui.showDialog("/dialog/app",360,360,function(){});
 	});
 	$("#audio").click(function () {
-		editor.ui.showDialog("/dialog/audioEditor",400,400,function(){});
+		editor.ui.showAudioEditor(function(){});
 	});
 	$("#anime").click(function () {
 		editor.ui.showAnimationEditor(function(){});
@@ -288,6 +288,25 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 	$('#preview').bind('contextmenu',function(e){
 		e.preventDefault();
 		editor.ui.contextMenu.showContextMenu(e.pageX,e.pageY);
+	});
+	$('#cm_audio').click(function(){
+		$('#audio').trigger('click');
+	});
+	$('#cm_anime').click(function(){
+		$('#anime').trigger('click');
+	});
+	$('#cm_particle').click(function(){
+		$('#particle').trigger('click');
+	});
+	$('.cm_additem').click(function(e){
+		var type = $(this)[0].children[0].innerHTML;
+		var node = editor.node.create(type);
+		var offset = $('#scene').offset();
+		node.x=editor.ui.contextMenu.menuposX-offset.left;
+		node.y=editor.ui.contextMenu.menuposY-offset.top;
+		editor.node.add(node);
+		editor.ui.nodeTree.addNode(node);
+		editor.ui.gamePane.add(node);
 	});
 	$(document).bind('contextmenu',function(e){
 		e.preventDefault();
