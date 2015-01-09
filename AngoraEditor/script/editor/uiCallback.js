@@ -14,64 +14,6 @@
 AngoraEditor.UI.prototype.setupUICallback = function () {
 	var editor = this.editor;
 
-	$('#attributes').propertygrid({
-		onEndEdit : function (index, field, changes) {
-			var name = field['name'];
-			var value = field['value'];
-			if(editor.node.selected==null){
-				editor.scene.setConfig(name,field['group'],value);
-			}else{
-				switch (name) {
-				case 'id':
-					editor.ui.nodeTree.updateNode(editor.node.selected.id, value);
-					editor.attr.setAttr(editor.node.selected, 'id', value);
-					break;
-				default:
-					editor.attr.setAttr(editor.node.selected,name,value);
-					break;
-				}
-			}
-		},
-		onDblClickRow:function(index, field){
-			var name = field['name'];
-			var value = field['value'];
-			switch (name) {
-			case 'image':
-			case 'assetatlas':
-				editor.ui.showResourceEditor(function () {
-					var id = editor.res.selected['id'];
-					editor.attr.setAttr(editor.node.selected, name, id);
-				});
-				break;
-			case 'animations':
-				editor.ui.showAnimationEditor(function(){
-					//alert(JSON.stringify(editor.res.anim));
-					//editor.node.selected['animations']=editor.res.anim;
-					//editor.attr.setAttr(editor.node.selected, 'animations', editor.res.anim);
-				});
-				break;
-			case 'font':
-				editor.ui.showResourceEditor(function(){
-					var id = editor.res.selected['id'];
-					editor.attr.setAttr(editor.node.selected, name, id);
-				});
-				break;
-			case 'audio':
-				editor.ui.showResourceEditor(function () {
-					var id = editor.res.selected['id'];
-					editor.attr.setAttr(editor.node.selected, 'audio', id);
-				});
-				break;
-			case 'tracks':
-				editor.ui.showAudioEditor(function () {
-					console.log('audio modify complete!');
-				});
-				break;
-			default:
-				break;
-			}				
-		}
-	});
 	$('#preview').mousemove(function (e) {
 		//console.log(editor.ui.gamePane.dragging);
 		if (editor.ui.gamePane.dragging) {

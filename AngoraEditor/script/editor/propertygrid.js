@@ -34,6 +34,8 @@ AngoraEditor.PropertyGridManager = function (editor) {
 	this.propertyIndex = {};
 
 	this.setup();
+	
+	this.editingObject=null;
 }
 AngoraEditor.PropertyGridManager.prototype = {
 	/**
@@ -42,11 +44,72 @@ AngoraEditor.PropertyGridManager.prototype = {
 	 * @param
 	 */
 	setup : function () {
+		var editor=this.editor;
 		this.grid = $('#attributes').propertygrid({
-			data : '',
-			showGroup : true,
-			scrollbarSize : 0
-		});
+		data : '',
+		showGroup : true,
+		onBeginEdit: function(index,row){
+			editor.ui.propertyGrid.editingObject=editor.node.selected.id;
+		},
+		onEndEdit : function (index, field, changes) {
+			var editingObject=editor.node.get(editor.ui.propertyGrid.editingObject);
+			var name = field['name'];
+			var value = field['value'];
+			if(editingObject==null){
+				editor.scene.setConfig(name,field['group'],value);
+			}else{
+				switch (name) {
+				case 'id':
+					editor.ui.nodeTree.updateNode(editingObject.id, value);
+					editor.attr.setAttr(editingObject, 'id', value);
+					break;
+				default:
+					editor.attr.setAttr(editingObject,name,value);
+					break;
+				}
+			}
+			editingObject=null;
+		},
+		onDblClickRow:function(index, field){
+			var name = field['name'];
+			var value = field['value'];
+			switch (name) {
+			case 'image':
+			case 'assetatlas':
+				editor.ui.showResourceEditor(function () {
+					var id = editingObject['id'];
+					editor.attr.setAttr(editingObject, name, id);
+				});
+				break;
+			case 'animations':
+				editor.ui.showAnimationEditor(function(){
+					//alert(JSON.stringify(editor.res.anim));
+					//editor.node.selected['animations']=editor.res.anim;
+					//editor.attr.setAttr(editor.node.selected, 'animations', editor.res.anim);
+				});
+				break;
+			case 'font':
+				editor.ui.showResourceEditor(function(){
+					var id = editingObject['id'];
+					editor.attr.setAttr(editingObject, name, id);
+				});
+				break;
+			case 'audio':
+				editor.ui.showResourceEditor(function () {
+					var id = editingObject['id'];
+					editor.attr.setAttr(editingObject, 'audio', id);
+				});
+				break;
+			case 'tracks':
+				editor.ui.showAudioEditor(function () {
+					console.log('audio modify complete!');
+				});
+				break;
+			default:
+				break;
+			}				
+		}
+	});
 	},
 	/**
 	 * setup property grid from json data

@@ -191,10 +191,10 @@ AngoraEditor.GamePaneManager.prototype = {
 	* @param {string} attr
 	* @param {string} value
 	*/
-	update: function(attr,value){
+	update: function(node,attr,value){
 		var editor=this.editor;
-		var nodeDiv=this.selected;
-		var node=editor.node.selected;
+		var nodeDiv=$('#'+node.id);
+		//var node=editor.node.selected;
 		switch(attr){
 			case 'id':
 				nodeDiv.attr('id',value);

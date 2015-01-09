@@ -99,7 +99,7 @@ AngoraEditor.NodeAttrManager.prototype = {
 		}
 		node[attr]=value;
 		this.editor.ui.propertyGrid.updateRow(attr,value);
-		this.editor.ui.gamePane.update(attr,value);
+		this.editor.ui.gamePane.update(node,attr,value);
 		
 	},
 	/**
