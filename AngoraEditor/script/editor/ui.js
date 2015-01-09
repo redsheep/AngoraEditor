@@ -157,11 +157,12 @@ AngoraEditor.UI.prototype = {
 		$('#tabs').tabs('add',{
 		   id:'tab_'+id,
 		   title:id,
+		   //closable:true,
 		   content:'<textarea id="{0}" name="{0}"></textarea>'.format(id),
 		   cache:true
 		});
-		if(this.codeEditor!=null)
-			this.codeEditor.toTextArea();
+		//if(this.codeEditor!=null)
+		//	this.codeEditor.toTextArea();
 		var pane=document.getElementById(id);
 		this.codeEditor = CodeMirror.fromTextArea(pane, {
 			lineNumbers : true,
@@ -181,7 +182,7 @@ AngoraEditor.UI.prototype = {
 		this.propertyGrid.reset();
 		this.eventPane.reset();
 		this.gamePane.reset();
-		$('#tabs').tabs('close','code');
+		$('#tabs').tabs('close',this.editor.scene.curScene);
 	}
 }
 AngoraEditor.UI.prototype.constructor = AngoraEditor.UI;

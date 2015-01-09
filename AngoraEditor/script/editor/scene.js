@@ -71,7 +71,7 @@ AngoraEditor.SceneManager.prototype = {
 				console.log('gamepane setup success');
 			});
 			p.editor.script.loadSceneScript(scene,function(script){
-				p.editor.ui.setupScript('code', script);
+				p.editor.ui.setupScript(scene, script);
 				$('#tabs').tabs('select','preview');
 			});
 			var configfile="{0}/{1}.config".format(p.editor.project.currentProject.path, scene);
