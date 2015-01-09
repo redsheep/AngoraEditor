@@ -35,11 +35,6 @@ AngoraEditor.ScenePaneManager.prototype = {
 			this.pane.append(newdiv.format(i, scenes[i].name));
 		}
 		this.pane.delegate('.sceneitem', 'click', function () {
-			var sceneDiv=$('.selectedsceneitem');
-			if(sceneDiv.length>0){
-				sceneDiv.removeClass('selectedsceneitem');
-			}
-			$(this).addClass('selectedsceneitem');
 			editor.scene.load($(this).attr('sceneID'));
 		});
 	},
