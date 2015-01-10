@@ -71,32 +71,29 @@ AngoraEditor.PropertyGridManager.prototype = {
 			editingObject=null;
 		},
 		onDblClickRow:function(index, field){
+			var editingObject=editor.node.get(editor.ui.propertyGrid.editingObject);
 			var name = field['name'];
 			var value = field['value'];
 			switch (name) {
 			case 'image':
 			case 'assetatlas':
 				editor.ui.showResourceEditor(function () {
-					var id = editingObject['id'];
+					var id = editor.res.selected['id'];
 					editor.attr.setAttr(editingObject, name, id);
 				});
 				break;
 			case 'animations':
-				editor.ui.showAnimationEditor(function(){
-					//alert(JSON.stringify(editor.res.anim));
-					//editor.node.selected['animations']=editor.res.anim;
-					//editor.attr.setAttr(editor.node.selected, 'animations', editor.res.anim);
-				});
+				editor.ui.showAnimationEditor(function(){});
 				break;
 			case 'font':
 				editor.ui.showResourceEditor(function(){
-					var id = editingObject['id'];
+					var id = editor.res.selected['id'];
 					editor.attr.setAttr(editingObject, name, id);
 				});
 				break;
 			case 'audio':
 				editor.ui.showResourceEditor(function () {
-					var id = editingObject['id'];
+					var id = editor.res.selected['id'];
 					editor.attr.setAttr(editingObject, 'audio', id);
 				});
 				break;
