@@ -16,7 +16,15 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 
 	$('#preview').mousemove(function (e) {
 		//console.log(editor.ui.gamePane.dragging);
-		if (editor.ui.gamePane.dragging) {
+		if(editor.ui.gamePane.offseting){
+			var md = editor.ui.gamePane.mouse;
+			//editor.ui.gamePane.offset.x+=(e.pageX - md.x);
+			//editor.ui.gamePane.offset.y+=(e.pageY - md.y);
+			$('#scene').css('transform', 'translate({0}px,{1}px)'.format(editor.ui.gamePane.offset.x+e.pageX - md.x,editor.ui.gamePane.offset.y+e.pageY - md.y));
+			$('#preview').css('background-position', '{0}px {1}px'.format(editor.ui.gamePane.offset.x+e.pageX - md.x,editor.ui.gamePane.offset.y+e.pageY - md.y));
+			//background-position:10px 10px;
+		}
+		else if (editor.ui.gamePane.dragging) {
 			var pos = editor.ui.gamePane.selected.pos;
 			var md = editor.ui.gamePane.mouse;
 			var left = Math.round((pos.left + (e.pageX - md.x)) / editor.ui.gamePane.scale);
@@ -45,29 +53,34 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 			editor.attr.setAttr(editor.node.stampNode, 'y', top);
 		}
 	});
-	$('#preview').mouseup(function () {
-		editor.ui.gamePane.dragging = false;
+	$('#preview').mousedown(function(e){
+		editor.ui.propertyGrid.reset();
+		editor.ui.nodeTree.unselect();
+		editor.ui.propertyGrid.loadData(editor.scene.config);
+		editor.ui.eventPane.loadData(editor.scene.config);
+		editor.ui.gamePane.mouse={x:e.pageX,y:e.pageY};
+		editor.ui.gamePane.offseting=true;
 	});
-	$('#preview').mouseleave(function () {
+	$('#preview').mouseup(function (e) {
 		editor.ui.gamePane.dragging = false;
+		editor.ui.gamePane.offseting = false;
+		var md = editor.ui.gamePane.mouse;
+		editor.ui.gamePane.offset.x+=(e.pageX - md.x);
+		editor.ui.gamePane.offset.y+=(e.pageY - md.y);
+	});
+	$('#preview').mouseleave(function (e) {
+		editor.ui.gamePane.dragging = false;
+		if(editor.ui.gamePane.offseting){
+			editor.ui.gamePane.offseting = false;
+			console.log(e.pageX,e.pageY);
+			var md = editor.ui.gamePane.mouse;
+			editor.ui.gamePane.offset.x+=(e.pageX - md.x);
+			editor.ui.gamePane.offset.y+=(e.pageY - md.y);
+		}
 	});
 	$('#preview').mousewheel(function (event) {
 		editor.ui.gamePane.scaleScene(event.deltaY);
 	});
-	/*$('#preview').mousedown(function () {
-		console.log('mouse down');
-		if(typeof editor.node.stampNode!=='undefined'){
-			alert(JSON.stringify(editor.node.stampNode));
-			edtior.node.add(editor.node.stampNode);
-			alert();
-			var node=editor.node.clone(editor.node.stampNode);
-			editor.node.stampNode=node;
-			//editor.ui.nodeTree.unselect();
-			editor.node.selected=null;
-			editor.ui.gamePane.addStampNode(node);
-			alert();
-		}
-	});*/
 	$('#stamp').click(function(){
 		//editor.ui.gamePane.stampNode=editor.node.selected;
 		if(editor.ui.gamePane.stamping){
@@ -86,30 +99,12 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 	});
 	$("#addNode").click(function () {
 		editor.ui.showDialog('/dialog/nodetype');
-		/*dlg.addEventListener(Ti.CLOSED, function (event) {
-			if(dlg.result==true){
-				var type = dlg.type;
-				var node = editor.node.create(type);
-				editor.node.add(node);
-				editor.ui.nodeTree.addNode(node);
-				editor.ui.gamePane.add(node);
-			}
-			//editor.game.addResource(res);
-			//var node=editor.node.create(res.type);
-			//editor.game.addNode(node);
-		});*/
 	});
 	$("#addScene").click(function () {
 		var sceneName = prompt('Enter scene name', '');
 		if (sceneName != null) {
 			editor.scene.add(sceneName);
 		}
-		/*var dlg=editor.ui.showDialog('app://newScene.html');
-		dlg.editor=editor;
-		dlg.addEventListener(Ti.CLOSED,function(event){
-		dlg.sceneName;
-		dlg.sceneConfig;
-		});*/
 	});
 	$('#setgridsize').click(function(){
 		var size=prompt('Enter grid size','32');
@@ -204,12 +199,6 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 	});
 	$("#release").click(function () {
 		editor.project.release();
-	});
-	$('#preview').mousedown(function(e){
-		editor.ui.propertyGrid.reset();
-		editor.ui.nodeTree.unselect();
-		editor.ui.propertyGrid.loadData(editor.scene.config);
-		editor.ui.eventPane.loadData(editor.scene.config);
 	});
 	$('body').keydown(function(e){
 		if (e.ctrlKey){

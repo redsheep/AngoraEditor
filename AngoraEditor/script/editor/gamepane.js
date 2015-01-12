@@ -36,6 +36,9 @@ AngoraEditor.GamePaneManager = function (editor) {
 	 * @property {boolean}
 	 */
 	this.stamping=false;
+	
+	this.offset={x:0,y:0};
+	this.offseting=false;
 	/**
 	 * @property {number} scale ratio
 	 */
@@ -277,6 +280,7 @@ AngoraEditor.GamePaneManager.prototype = {
 	*/
 	reset: function(){
 		this.pane.empty();
+		this.offset={x:0,y:0};
 	}
 }
 

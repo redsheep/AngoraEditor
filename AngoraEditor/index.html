@@ -49,8 +49,6 @@
 			  overflow-x: auto;
 			}
 			#preview{
-				width: 1024px;
-				height: 1024px;
 				background-color: lightgray;
 				background-image: linear-gradient(0deg, #FFFFFF 1px, rgba(0,0,0,0) 1px), linear-gradient(90deg, #FFFFFF 1px, rgba(0,0,0,0) 1px), linear-gradient(0deg, rgba(255,255,255,0.298039) 1px, rgba(0,0,0,0) 1px), linear-gradient(90deg, rgba(255,255,255,0.298039) 1px, rgba(0,0,0,0) 1px);
 				background-size: 32px 32px;
@@ -116,7 +114,7 @@
 							<a id="addProperty" class="easyui-linkbutton" data-options="iconCls:'icon-ae-add'" style="border:none"></a>
 							<a id="removeProperty" class="easyui-linkbutton" data-options="iconCls:'icon-ae-remove'" style="border:none"></a>
 						</div>
-						<div id="attributes" class="easyui-propertygrid" data-options="region:'center'" ></div>
+						<div id="attributes" class="easyui-propertygrid" data-options="region:'center'" fit="true"></div>
 						<!-- <div id="attribute_description" data-options="region:'south',split:true" style="height:150px;"></div> -->
 					</div>
 				</div>
@@ -161,7 +159,7 @@
 		<div id="centerContainer" data-options="region:'center'">
 			<div id="tabs" fit="true"  class="easyui-tabs" data-options="border:false">
 				<div title="preview" style="overflow:hidden;">
-					<div id="preview" style="overflow:hidden;transform:scale(1.0);transform-origin:0 0;">
+					<div id="preview" style="width:1024px;height:1024px;transform:scale(1.0);transform-origin:0 0;">
 						<div id="scene" style="position:relative;width:800px;height:600px;border:2px solid red;">
 							
 						</div>
