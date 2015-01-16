@@ -1,9 +1,151 @@
-<html>
-<head>
-<title>Untitled Document</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-</head>
-<body bgcolor="#FF0000">
-This is the content.html page.
-</body>
-</html>
+	<style>
+	#sprite{
+		position:absolute;
+		left:128px;
+		top:32px;
+		height:256px;
+		width:256px;
+	}
+	#convex{
+		position:absolute;
+		left:128px;
+		top:32px;
+		height:256px;
+		width:256px;
+		border:1px solid red;
+	}
+	</style>
+	<div class="easyui-layout" fit='true'>
+	<div data-options="region:'north'" style="height:64px;">
+		<div style="overflow:hidden">
+			<a id="addTrack" class="easyui-linkbutton" data-options="iconCls:'icon-ae-add'" style="border:none"></a>
+			<a id="removeTrack" class="easyui-linkbutton" data-options="iconCls:'icon-ae-remove'" style="border:none"></a>
+			<audio id="selectedaudio" ></audio>
+		</div>
+	</div>
+	<div id="physicsbody" data-options="region:'center'" >
+		<img id="sprite"></img>
+		<canvas id="convex"></canvas>
+	</div>
+	<div data-options="region:'east'" style="width:150px;">
+		<div id="audioproperty">property</div>
+	</div>
+	<div data-options="region:'south'" style="height:64px;">
+		<button id="btn_ok" style="float:left;margin-top:10px;">OK</button>
+		<button id="btn_cancel" style="float:right;margin-top:10px;">Cancel</button>
+	</div>
+	</div>
+	<script type="text/javascript">
+		// Point class
+		function Point(x,y){
+			this.x = x;
+			this.y = y;
+			this.rotateRight = function(p1, p2){
+				// cross product, + is counterclockwise, - is clockwise
+				return ((p2.x*y-p2.y*x) - (p1.x*y-p1.y*x) + (p1.x*p2.y-p1.y*p2.x))<0;
+			};
+		};
+		// ConvexHull class
+		function ConvexHull(){
+			this.hull = new Array();
+			this.points = new Array();
+			this.addpoint=function(x,y){
+				this.points.push(new Point(x,y));
+			};
+			this.calculate = function(){
+				this.points.sort(function compare(p1,p2) {return p1.x - p2.x;});
+				this.hull=new Array();
+				upperHull = new Array();
+				this.calcUpperhull(upperHull);
+				for(var i = 0; i < upperHull.length; i++)
+					this.hull.push(upperHull[i]);
+
+				lowerHull = new Array();
+				this.calcLowerhull(lowerHull);
+				for(var i = 0; i < lowerHull.length; i++)
+					this.hull.push(lowerHull[i]);
+			};
+			this.calcUpperhull = function(upperHull){
+				var i = 0;
+				upperHull.push(this.points[i]);
+				i++;
+				upperHull.push(this.points[i]);
+				i++;
+				// Start upperHull scan
+				for(i; i < this.points.length; i++){
+					upperHull.push(this.points[i]);
+					while(
+						upperHull.length>2 && // more than 2 points 
+						!upperHull[upperHull.length-3].rotateRight(upperHull[upperHull.length-1],upperHull[upperHull.length-2]) // last 3 points make left turn
+					)
+						upperHull.splice(upperHull.indexOf(upperHull[upperHull.length-2]), 1); // remove middle point
+				}
+			};
+			this.calcLowerhull = function(lowerHull){
+				var i = this.points.length-1;
+				lowerHull.push(this.points[i]);
+				i--;
+				lowerHull.push(this.points[i]);
+				i--;
+				// Start lowerHull scan
+				for(i; i >= 0; i--){
+					lowerHull.push(this.points[i]);
+					while(
+						lowerHull.length>2 && // more than 2 points 
+						!lowerHull[lowerHull.length-3].rotateRight(lowerHull[lowerHull.length-1],lowerHull[lowerHull.length-2]) // last 3 points make left turn
+					)
+						lowerHull.splice(lowerHull.indexOf(lowerHull[lowerHull.length-2]), 1); // remove middle point
+				}
+			};
+		};
+	</script>
+	<script>
+	$(document).ready(function () {
+		var convas=document.getElementById("convex");
+		var ctx=convas.getContext("2d");	
+		ctx.canvas.height=256;
+		ctx.canvas.width=256;
+		var convex=new ConvexHull();
+		function loadImage(path, width, height, target) {
+			$('#sprite').attr('src',path);
+			$('#sprite').load(function() {
+				ctx.rect(0,0,256,256);
+				ctx.stroke(); 
+			});
+		}
+		loadImage('/data/default.png', 64, 64, '#sprite');
+		$('#convex').click(function(e){
+			var offset = $(this).offset();
+			//ctx.beginPath();
+			//ctx.arc(e.clientX-offset.left, e.clientY-offset.top, 4, 0, 2 * Math.PI, false);
+			//ctx.stroke();
+			convex.addpoint(e.clientX-offset.left, e.clientY-offset.top);
+			if(convex.points.length<=2){
+				ctx.beginPath();
+				ctx.arc(e.clientX-offset.left, e.clientY-offset.top, 4, 0, 2 * Math.PI, false);
+				ctx.stroke();
+			}else{
+				convex.calculate();
+				ctx.clearRect ( 0 , 0 , ctx.canvas.width, ctx.canvas.height );
+				for(var i = 1; i < convex.hull.length; i++){
+					p1 = convex.hull[i-1];
+					p2 = convex.hull[i];
+					ctx.beginPath();
+					ctx.moveTo(p1.x, p1.y);
+					ctx.lineTo(p2.x, p2.y);
+					ctx.closePath();
+					ctx.stroke();
+				}
+			}
+		});
+		$("#btn_ok").click(function(){
+			var polygon=convex.hull;
+			//console.log(polygon);
+			//editor.attr.setAttr(editor.node.selected,'tracks',tracks);
+			$('#dd').dialog('close');
+		});
+		$("#btn_cancel").click(function(){
+			$('#dd').dialog('close');
+		});
+	});
+	</script>
