@@ -114,7 +114,7 @@ AngoraEditor.UI.prototype = {
 		var dlg=this.showDialog('/dialog/particleEditor',640,480,func);
 	},
 	showPhysicsEditor: function(func){
-		var dlg=this.showDialog('/dialog/physcisEditor',640,480,func);
+		var dlg=this.showDialog('/dialog/physicsEditor',640,480,func);
 	},
 	showAnimationEditor: function(func){
 		var dlg=this.showDialog('/dialog/animeEditor',640,480,func);
@@ -158,12 +158,12 @@ AngoraEditor.UI.prototype = {
 		   id:'tab_'+id,
 		   title:id,
 		   //closable:true,
-		   content:'<textarea id="{0}" name="{0}"></textarea>'.format(id),
+		   content:'<textarea id="code"></textarea>',
 		   cache:true
 		});
 		//if(this.codeEditor!=null)
 		//	this.codeEditor.toTextArea();
-		var pane=document.getElementById(id);
+		var pane=document.getElementById("code");
 		this.codeEditor = CodeMirror.fromTextArea(pane, {
 			lineNumbers : true,
 			mode : "javascript",
@@ -173,11 +173,42 @@ AngoraEditor.UI.prototype = {
 		this.codeEditor.setValue(script);
 	},
 	/**
+	 * active state of menubutton
+	 * @method
+	 * @param
+	 */
+	activeMenu: function () {
+		$('#menu_tools').menubutton('enable');
+		$('#menu_app').menubutton('enable');
+		$('#menu_run').menubutton('enable');
+	},
+	/**
+	 * reset state of menubutton(not work in current easyui version)
+	 * @method
+	 * @param
+	 */
+	unactiveMenu: function () {
+		//$('#menu_tools').menubutton('disable');
+		//$('#menu_app').menubutton('disable');
+		//$('#menu_run').menubutton('disable');
+	},
+	/**
+	 * active menuitem
+	 * @method
+	 * @param
+	 */
+	activeMenuItem: function (menuitem) {
+		for(item in $('#submenu_tools').find('.menu-item')){
+			$(item).attr('disabled','disabled');
+		}
+		$('#'+type).attr('disabled','disabled');
+	},
+	/**
 	 * reset all ui compontents
 	 * @method reset
 	 * @param
 	 */
-	 reset: function () {
+	reset: function () {
 		this.nodeTree.reset();
 		this.propertyGrid.reset();
 		this.eventPane.reset();

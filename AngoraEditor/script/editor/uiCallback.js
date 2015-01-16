@@ -78,8 +78,9 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 			editor.ui.gamePane.offset.y+=(e.pageY - md.y);
 		}
 	});
-	$('#preview').mousewheel(function (event) {
-		editor.ui.gamePane.scaleScene(event.deltaY);
+	$('#preview').mousewheel(function (e) {
+		var origin={x:e.pageX,y:e.pageY};
+		editor.ui.gamePane.scaleScene(e.deltaY,origin);
 	});
 	$('#stamp').click(function(){
 		//editor.ui.gamePane.stampNode=editor.node.selected;
@@ -124,10 +125,10 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 	});
 	$('#showgrid').click(function(){
 		if(editor.ui.showGrid==false){
-			$('#preview').css('background',"url('data/cell.png') repeat");
+			$('#preview').addClass('grid');
 			editor.ui.showGrid=true;
 		}else{
-			$('#preview').css('background',"");
+			$('#preview').removeClass('grid');
 			editor.ui.showGrid=false;
 		}
 	});
@@ -243,4 +244,5 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		e.preventDefault();
 		return false;
 	});
+	this.unactiveMenu();
 }

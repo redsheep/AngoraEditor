@@ -73,7 +73,8 @@ AngoraEditor.ProjectManager.prototype = {
 			console.log('game setup ready');
 			p.editor.scene.setup(finished);
 			console.log('New Project Create Success!');
-		}		
+		}
+		this.editor.ui.activeMenu();
 	},
 	/**
 	* add a new project
@@ -135,6 +136,7 @@ AngoraEditor.ProjectManager.prototype = {
 	* @param 
 	*/
 	reset: function(){
+		this.editor.ui.unactiveMenu();
 		this.editor.scene.scenes={};
 		this.editor.res.clearAll();
 		this.editor.scene.reset();
