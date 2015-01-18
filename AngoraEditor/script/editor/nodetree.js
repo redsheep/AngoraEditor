@@ -116,6 +116,7 @@ AngoraEditor.NodeTreeManager.prototype = {
 	select : function(id){
 		this.selected=this.tree.tree('find', id);
 		this.tree.tree('select', this.selected.target);
+		this.editor.ui.activeMenuItem(this.editor.node.selected.type);
 	},
 	/**
 	* callback when unselect the tree node
@@ -127,6 +128,7 @@ AngoraEditor.NodeTreeManager.prototype = {
 		$(selected).removeClass("tree-node-selected");
 		this.selected=null;
 		this.editor.node.selected=null;
+		this.editor.ui.activeMenuItem(null);
 		//this.tree.tree('unSelect', selected.target);
 	},
 	/**

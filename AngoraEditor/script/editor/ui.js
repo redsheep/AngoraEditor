@@ -178,9 +178,12 @@ AngoraEditor.UI.prototype = {
 	 * @param
 	 */
 	activeMenu: function () {
-		$('#menu_tools').menubutton('enable');
-		$('#menu_app').menubutton('enable');
-		$('#menu_run').menubutton('enable');
+		//$('#menu_tools').menubutton('enable');
+		//$('#menu_app').menubutton('enable');
+		//$('#menu_run').menubutton('enable');
+		$('#submenu_run').menu('enableItem', $('#submenu_run').menu('findItem', 'Run').target);
+		$('#submenu_run').menu('enableItem', $('#submenu_run').menu('findItem', 'Release').target);
+		$('#submenu_app').menu('enableItem', $('#submenu_app').menu('findItem', 'AppConfig').target);
 	},
 	/**
 	 * reset state of menubutton(not work in current easyui version)
@@ -191,6 +194,8 @@ AngoraEditor.UI.prototype = {
 		//$('#menu_tools').menubutton('disable');
 		//$('#menu_app').menubutton('disable');
 		//$('#menu_run').menubutton('disable');
+		//var item = $('#submenu_run').menu('getItem', $('#run')[0]);
+		//$('#submenu_run').menu('disableItem', item.target);
 	},
 	/**
 	 * active menuitem
@@ -198,10 +203,24 @@ AngoraEditor.UI.prototype = {
 	 * @param
 	 */
 	activeMenuItem: function (menuitem) {
-		for(item in $('#submenu_tools').find('.menu-item')){
-			$(item).attr('disabled','disabled');
+		var editor=this.editor;
+		//for(var item in $('#submenu_tools').find('.menu-item')){
+			$('#submenu_tools').menu('disableItem', $('#submenu_tools').menu('findItem','Animation').target);
+			$('#submenu_tools').menu('disableItem', $('#submenu_tools').menu('findItem','Particle').target);
+			$('#submenu_tools').menu('disableItem', $('#submenu_tools').menu('findItem','Audio').target);
+			$('#submenu_tools').menu('disableItem', $('#submenu_tools').menu('findItem','Tilemap').target);
+			$('#submenu_tools').menu('disableItem', $('#submenu_tools').menu('findItem','Physics').target);
+		//}
+		if(menuitem!=null){
+			switch(menuitem){
+			case 'animate':$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Animation').target);break;
+			case 'particle':$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Particle').target);break;
+			case 'audio':$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Audio').target);break;
+			case 'tiledmap':$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Tilemap').target);break;
+			default:break;
+			}
+			//$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem', 'Run').target);	
 		}
-		$('#'+type).attr('disabled','disabled');
 	},
 	/**
 	 * reset all ui compontents
