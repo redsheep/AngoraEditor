@@ -59,14 +59,18 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		editor.ui.propertyGrid.loadData(editor.scene.config);
 		editor.ui.eventPane.loadData(editor.scene.config);
 		editor.ui.gamePane.mouse={x:e.pageX,y:e.pageY};
-		editor.ui.gamePane.offseting=true;
+		if(e.which==2)
+			editor.ui.gamePane.offseting=true;
 	});
 	$('#preview').mouseup(function (e) {
-		editor.ui.gamePane.dragging = false;
+		if(e.which==2){
 		editor.ui.gamePane.offseting = false;
 		var md = editor.ui.gamePane.mouse;
 		editor.ui.gamePane.offset.x+=(e.pageX - md.x);
 		editor.ui.gamePane.offset.y+=(e.pageY - md.y);
+		}else{
+		editor.ui.gamePane.dragging = false;
+		}
 	});
 	$('#preview').mouseleave(function (e) {
 		editor.ui.gamePane.dragging = false;
@@ -82,22 +86,6 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		var origin={x:e.pageX,y:e.pageY};
 		editor.ui.gamePane.scaleScene(e.deltaY,origin);
 	});
-	$('#stamp').click(function(){
-		//editor.ui.gamePane.stampNode=editor.node.selected;
-		if(editor.ui.gamePane.stamping){
-			editor.ui.gamePane.stamping=false;
-			editor.node.stampNode=null;
-			editor.ui.gamePane.selected.remove();
-		}else{
-			editor.ui.gamePane.stamping=true;
-			var newnode=editor.node.clone(editor.node.selected);
-			editor.node.stampNode=newnode;
-			editor.ui.nodeTree.unselect();
-			editor.node.selected=null;
-			editor.ui.gamePane.add(newnode);
-			editor.ui.gamePane.select(newnode.id);
-		}
-	});
 	$("#addNode").click(function () {
 		editor.ui.showDialog('/dialog/nodetype');
 	});
@@ -105,31 +93,6 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		var sceneName = prompt('Enter scene name', '');
 		if (sceneName != null) {
 			editor.scene.add(sceneName);
-		}
-	});
-	$('#setgridsize').click(function(){
-		var size=prompt('Enter grid size','32');
-		if(size==''){
-			editor.ui.gridSize=32;
-		}else{
-			editor.ui.gridSize=parseInt(size);
-		}
-		$('#preview').css('background-size','{0}px {0}px'.format(editor.ui.gridSize));
-	});
-	$('#snaptogrid').click(function(){
-		if(editor.ui.snapToGrid==false){
-			editor.ui.snapToGrid=true;
-		}else{
-			editor.ui.snapToGrid=false;
-		}
-	});
-	$('#showgrid').click(function(){
-		if(editor.ui.showGrid==false){
-			$('#preview').addClass('grid');
-			editor.ui.showGrid=true;
-		}else{
-			$('#preview').removeClass('grid');
-			editor.ui.showGrid=false;
 		}
 	});
 	$('#addEvent').click(function(){
@@ -148,9 +111,6 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		editor.ui.gamePane.remove(editor.node.selected);
 		editor.ui.propertyGrid.reset();
 	});
-	$("#cm_remove").click(function () {
-		$("#removeNode").trigger('click');
-	});
 	$("#moveupNode").click(function () {
 		//var zindex = editor.node.selected.zindex - 1;
 		//editor.attr.setAttr(editor.node.selected, 'z-index', zindex);
@@ -159,47 +119,97 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		//var zindex = editor.node.selected.zindex - 1;
 		//editor.attr.setAttr(editor.node.selected, 'z-index', zindex);
 	});
-	$('#newProject').click(function () {
-		editor.ui.showNewProjectDialog();
-	});
-	$('#openProject').click(function () {
-		editor.ui.showOpenProjectDialog();
-	});
-	$('#saveProject').click(function () {
-		editor.project.save();
-	});
-	$("#resource").click(function () {
-		editor.ui.showResourceEditor();
-	});
-	$("#tilemap").click(function () {
-		editor.ui.showTiledMapEditor();
-	});
-	$("#particle").click(function () {
-		editor.ui.showParticleEditor();
-	});
-	$("#physics").click(function () {
-		editor.ui.showPhysicsEditor();
-	});
-	$("#run").click(function () {
-		editor.ui.runProject();
-	});
-	$("#help").click(function () {
-		editor.ui.showDialog("http://docs.phaser.io/");
-	});
-	$("#about").click(function () {
-		editor.ui.showDialog("/dialog/about",420,320,function(){});
-	});
-	$("#app").click(function () {
+	$("#submenu_tools").menu({onClick:function (item) {
+		switch(item.id){
+		case 'anime':editor.ui.showAnimationEditor(function(){});break;
+		case 'audio':editor.ui.showAudioEditor(function(){});break;
+		case 'physics':editor.ui.showPhysicsEditor();break;
+		case 'particle':editor.ui.showParticleEditor();break;
+		case 'tilemap':editor.ui.showTiledMapEditor();break;
+		case 'resource':editor.ui.showResourceEditor();break;
+		case 'stamp':
+			if(editor.ui.gamePane.stamping){
+				editor.ui.gamePane.stamping=false;
+				editor.node.stampNode=null;
+				editor.ui.gamePane.selected.remove();
+			}else{
+				editor.ui.gamePane.stamping=true;
+				var newnode=editor.node.clone(editor.node.selected);
+				editor.node.stampNode=newnode;
+				editor.ui.nodeTree.unselect();
+				editor.node.selected=null;
+				editor.ui.gamePane.add(newnode);
+				editor.ui.gamePane.select(newnode.id);
+			}
+			break;
+		default:break;
+		}
+	}});
+	$("#submenu_run").menu({onClick:function (item) {
+		switch(item.id){
+		case 'run':editor.ui.runProject();break;
+		case 'release':editor.project.release();break;
+		default:break;
+		}
+	}});
+	$("#submenu_help").menu({onClick:function (item) {
+		switch(item.id){
+		case 'about':editor.ui.showDialog("/dialog/about",420,320,function(){});break;
+		case 'help':editor.ui.showDialog("http://docs.phaser.io/");break;
+		default:break;
+		}
+	}});
+	$("#submenu_app").menu({onClick:function (item) {
 		editor.ui.showDialog("/dialog/app",360,360,function(){});
-	});
-	$("#audio").click(function () {
-		editor.ui.showAudioEditor(function(){});
-	});
-	$("#anime").click(function () {
-		editor.ui.showAnimationEditor(function(){});
-	});
-	$("#release").click(function () {
-		editor.project.release();
+	}});
+	$("#submenu_file").menu({onClick:function (item) {
+		switch(item.id){
+		case 'newProject':editor.ui.showNewProjectDialog();break;
+		case 'openProject':editor.ui.showOpenProjectDialog();break;
+		case 'saveProject':editor.project.save();break;
+		case 'closeProject':editor.project.close();break;
+		default:break;
+		}
+	}});
+	$("#submenu_view").menu({onClick:function (item) {
+		switch(item.id){
+		case 'setgridsize':
+			var size=prompt('Enter grid size','32');
+			if(size==''){
+				editor.ui.gridSize=32;
+			}else{
+				editor.ui.gridSize=parseInt(size);
+			}
+			$('#preview').css('background-size','{0}px {0}px'.format(editor.ui.gridSize));
+			break;
+		case 'snaptogrid':
+			if(editor.ui.snapToGrid==false){
+				editor.ui.snapToGrid=true;
+			}else{
+				editor.ui.snapToGrid=false;
+			}
+			break;
+		case 'showgrid':
+			if(editor.ui.showGrid==false){
+				$('#preview').addClass('grid');
+				editor.ui.showGrid=true;
+			}else{
+				$('#preview').removeClass('grid');
+				editor.ui.showGrid=false;
+			}
+			break;
+		default:break;
+		}
+	}});
+	$('.cm_additem').click(function(e){
+		var type = $(this)[0].children[0].innerHTML;
+		var node = editor.node.create(type);
+		var offset = $('#scene').offset();
+		node.x=editor.ui.contextMenu.menuposX-offset.left;
+		node.y=editor.ui.contextMenu.menuposY-offset.top;
+		editor.node.add(node);
+		editor.ui.nodeTree.addNode(node);
+		editor.ui.gamePane.add(node);
 	});
 	$('body').keydown(function(e){
 		if (e.ctrlKey){
@@ -221,26 +231,9 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		e.preventDefault();
 		editor.ui.contextMenu.showContextMenu(e.pageX,e.pageY);
 	});
-	$('#cm_audio').click(function(){
-		$('#audio').trigger('click');
-	});
-	$('#cm_anime').click(function(){
-		$('#anime').trigger('click');
-	});
-	$('#cm_particle').click(function(){
-		$('#particle').trigger('click');
-	});
-	$('.cm_additem').click(function(e){
-		var type = $(this)[0].children[0].innerHTML;
-		var node = editor.node.create(type);
-		var offset = $('#scene').offset();
-		node.x=editor.ui.contextMenu.menuposX-offset.left;
-		node.y=editor.ui.contextMenu.menuposY-offset.top;
-		editor.node.add(node);
-		editor.ui.nodeTree.addNode(node);
-		editor.ui.gamePane.add(node);
-	});
 	$(document).bind('contextmenu',function(e){
+		if($(document.activeElement).is('textarea'))
+			return true;
 		e.preventDefault();
 		return false;
 	});

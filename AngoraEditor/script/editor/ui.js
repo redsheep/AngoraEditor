@@ -70,6 +70,7 @@ AngoraEditor.UI.prototype = {
 		this.gamePane =new AngoraEditor.GamePaneManager(this.editor);
 		this.contextMenu =new AngoraEditor.ContextMenuManger(this.editor);
 		//this.gamePane.setup();
+		this.contextMenu.setup();
 		this.setupUICallback();
 	},
 	/**
@@ -184,6 +185,8 @@ AngoraEditor.UI.prototype = {
 		$('#submenu_run').menu('enableItem', $('#submenu_run').menu('findItem', 'Run').target);
 		$('#submenu_run').menu('enableItem', $('#submenu_run').menu('findItem', 'Release').target);
 		$('#submenu_app').menu('enableItem', $('#submenu_app').menu('findItem', 'AppConfig').target);
+		$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Resource').target);
+		$('#submenu_file').menu('enableItem', $('#submenu_file').menu('findItem','Save').target);
 	},
 	/**
 	 * reset state of menubutton(not work in current easyui version)
@@ -205,21 +208,22 @@ AngoraEditor.UI.prototype = {
 	activeMenuItem: function (menuitem) {
 		var editor=this.editor;
 		//for(var item in $('#submenu_tools').find('.menu-item')){
-			$('#submenu_tools').menu('disableItem', $('#submenu_tools').menu('findItem','Animation').target);
-			$('#submenu_tools').menu('disableItem', $('#submenu_tools').menu('findItem','Particle').target);
-			$('#submenu_tools').menu('disableItem', $('#submenu_tools').menu('findItem','Audio').target);
-			$('#submenu_tools').menu('disableItem', $('#submenu_tools').menu('findItem','Tilemap').target);
-			$('#submenu_tools').menu('disableItem', $('#submenu_tools').menu('findItem','Physics').target);
+		$('#submenu_tools').menu('disableItem', $('#submenu_tools').menu('findItem','Stamp').target);
+		$('#submenu_tools').menu('disableItem', $('#submenu_tools').menu('findItem','Animation').target);
+		$('#submenu_tools').menu('disableItem', $('#submenu_tools').menu('findItem','Particle').target);
+		$('#submenu_tools').menu('disableItem', $('#submenu_tools').menu('findItem','Audio').target);
+		$('#submenu_tools').menu('disableItem', $('#submenu_tools').menu('findItem','Tilemap').target);
+		$('#submenu_tools').menu('disableItem', $('#submenu_tools').menu('findItem','Physics').target);
 		//}
 		if(menuitem!=null){
+			$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Stamp').target);
 			switch(menuitem){
 			case 'animate':$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Animation').target);break;
 			case 'particle':$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Particle').target);break;
 			case 'audio':$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Audio').target);break;
-			case 'tiledmap':$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Tilemap').target);break;
+			case 'tilemap':$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Tilemap').target);break;
 			default:break;
 			}
-			//$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem', 'Run').target);	
 		}
 	},
 	/**

@@ -27,6 +27,23 @@ AngoraEditor.ContextMenuManger = function (editor) {
 	this.menuposY = 0;
 }
 AngoraEditor.ContextMenuManger.prototype = {
+	setup: function(){
+		var editor=this.editor;
+		$("#context").menu({onClick:function (item) {
+			switch(item.id){
+			case 'cm_audio':$('#audio').trigger('click');break;
+			case 'cm_anime':$('#anime').trigger('click');break;
+			case 'cm_particle':$('#particle').trigger('click');break;
+			case 'cm_tilemap':$('#tilemap').trigger('click');break;
+			case 'cm_hdie':editor.attr.setAttr(editor.node.selected,'visible','false');break;
+			case 'cm_show':editor.attr.setAttr(editor.node.selected,'visible','true');break;
+			case 'cm_lock':editor.node.locked[editor.node.selected.id]=true;break;
+			case 'cm_unlock':editor.node.locked[editor.node.selected.id]=false;break;
+			case 'cm_remove':$("#removeNode").trigger('click');break;
+			default:break;
+			}
+		}});
+	},
 	/**
 	 * load and setup scene pane DOM
 	 * @method loadData
@@ -80,9 +97,14 @@ AngoraEditor.ContextMenuManger.prototype = {
 	hideAll: function(){
 		this.hide('New');
 		this.hide('Remove');
+		this.hide('Hide');
+		this.hide('Show');
+		this.hide('Lock');
+		this.hide('UnLock');
 		this.hide('AnimeEditor');
 		this.hide('AudioEditor');
 		this.hide('ParticleEditor');
+		this.hide('TileMapEditor');
 	},
 	/**
 	 * remove a scene
@@ -99,8 +121,13 @@ AngoraEditor.ContextMenuManger.prototype = {
 			case 'animate':this.show('AnimeEditor');break;
 			case 'audio':this.show('AudioEditor');break;
 			case 'particle':this.show('ParticleEditor');break;
+			case 'tilemap':this.show('TileMapEditor');break;
 			default :break;
 			}
+			this.show('Hide');
+			this.show('Show');
+			this.show('Lock');
+			this.show('UnLock');
 		}
 		else{
 			this.show('New');
