@@ -48,6 +48,7 @@ AngoraEditor.NodeTreeManager.prototype = {
 				editor.ui.eventPane.loadData(editor.node.selected);
 				//editor.game.updateSelectNode(node.id);
 				editor.ui.nodeTree.selected=editor.ui.nodeTree.tree.tree('find', node.id);
+				editor.ui.activeMenuItem(editor.node.selected.type);
 			},
 			onBeforeDrop : function (targetNode, source, point) {
 				//var targetId = $(target).tree('getNode', targetNode).id;
@@ -116,7 +117,7 @@ AngoraEditor.NodeTreeManager.prototype = {
 	select : function(id){
 		this.selected=this.tree.tree('find', id);
 		this.tree.tree('select', this.selected.target);
-		this.editor.ui.activeMenuItem(this.editor.node.selected.type);
+		//this.editor.ui.activeMenuItem(this.editor.node.selected.type);
 	},
 	/**
 	* callback when unselect the tree node

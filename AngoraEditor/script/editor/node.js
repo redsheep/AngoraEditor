@@ -21,6 +21,10 @@ AngoraEditor.NodeManager = function (editor) {
 	 */
 	this.nodes = {};
 	/**
+	 * @property {Object} - lock state of nodes
+	 */
+	this.locked={};
+	/**
 	 * @property {Object} - selected node
 	 */
 	this.selected = null;
@@ -166,6 +170,7 @@ AngoraEditor.NodeManager.prototype = {
 		var atlasHeight=this.setAttr('atlasHeight',node.atlasHeight);
 		var physics=this.setAttr('physics',node.physics);
 		var image=this.setAttr('image',node.image);
+		var animations=this.setAttr('animations',node.animations);
 		var delay=this.setAttr('delay',node.delay);
 		var maxparicles=this.setAttr('maxparicles',node.maxparicles);
 		var lifespan=this.setAttr('lifespan',node.lifespan);
@@ -199,8 +204,8 @@ AngoraEditor.NodeManager.prototype = {
 				node['height']=height;
 				//node['atlasWidth']=atlasWidth;
 				//node['atlasHeight']=atlasHeight;
-				node['image']='default';
-				node['animations']='';
+				node['image']=image;
+				node['animations']=animations;
 				node['scaleX']=scaleX;
 				node['scaleY']=scaleY;
 				node['rotation']=rotation;
@@ -274,6 +279,7 @@ AngoraEditor.NodeManager.prototype = {
 	*/
 	clear : function () {
 		this.nodes = {};
+		this.locked = {};
 		this.selected = null;
 	}
 }

@@ -204,7 +204,7 @@ AngoraEditor.PropertyGridManager.prototype = {
 	 */
 	updateRow : function (attr, value) {
 		var index = this.propertyIndex[attr];
-		var rows = $('#attributes').datagrid('getRows');
+		var rows = $('#attributes').propertygrid('getRows');
 		rows[index]['value'] = value;
 		this.grid.propertygrid('updateRow', {
 			index : index,

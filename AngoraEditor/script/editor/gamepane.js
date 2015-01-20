@@ -153,9 +153,11 @@ AngoraEditor.GamePaneManager.prototype = {
 		else nodeDiv.hide();
 		nodeDiv.css('border','1px solid orange');
 		nodeDiv.css({top: parseInt(node.y), left: parseInt(node.x), position:'absolute'});
-		nodeDiv.css('transform-origin', '0 0');
+		nodeDiv.css('transform-origin', '50% 50%');
 		//nodeDiv.css('transform', 'scale(1) rotate(0deg)');
 		nodeDiv.mousedown(function(e){
+			if(e.which==2)
+				return true;
 			e.stopPropagation();
 			if(editor.ui.gamePane.stamping){
 				editor.node.add(editor.node.stampNode);
@@ -166,13 +168,15 @@ AngoraEditor.GamePaneManager.prototype = {
 				editor.node.selected=null;
 				editor.ui.gamePane.add(newnode);
 				editor.ui.gamePane.select(newnode.id);
-				//alert();
 			}else{
+				var selectedid=$(this).attr('id');
 				editor.ui.gamePane.mouse={x:e.pageX,y:e.pageY};
-				editor.ui.gamePane.select($(this).attr('id'));
-				editor.ui.nodeTree.select($(this).attr('id'));
+				editor.ui.gamePane.select(selectedid);
+				editor.ui.nodeTree.select(selectedid);
 				editor.ui.gamePane.selected.pos=$(this).position();
+				if(e.which==1&& editor.node.locked[selectedid]!=true){
 				editor.ui.gamePane.dragging=true;
+				}
 			}
 		});
 		return nodeDiv;
@@ -239,6 +243,7 @@ AngoraEditor.GamePaneManager.prototype = {
 			case 'fontSize':nodeDiv.css('font-size',value+'px');break;
 			case 'scaleX':nodeDiv.css('transform', 'scale({0},{1})'.format(value,node.scaleY));break;
 			case 'scaleY':nodeDiv.css('transform', 'scale({0},{1})'.format(node.scaleX,value));break;
+			case 'rotation':nodeDiv.css('transform', 'rotate({0}deg)'.format(node.rotation,value));break;
 			default: break;
 		}
 	},
@@ -265,10 +270,11 @@ AngoraEditor.GamePaneManager.prototype = {
 	* @method scaleScene
 	* @param {number} scale
 	*/
-	scaleScene: function(value){
+	scaleScene: function(value,origin){
 		this.scale+=value*0.1;
 		if(this.scale<0.3)
 			this.scale=0.3;
+		//$('#preview').css('transform-origin', '{0}px {1}px'.format(origin.x,origin.y));
 		$('#preview').css('transform', 'scale({0})'.format(this.scale));
 		$('#preview').css('width',1024/this.scale);
 		$('#preview').css('height',768/this.scale);
@@ -280,7 +286,7 @@ AngoraEditor.GamePaneManager.prototype = {
 	*/
 	reset: function(){
 		this.pane.empty();
-		this.offset={x:0,y:0};
+		//this.offset={x:0,y:0};
 	}
 }
 
