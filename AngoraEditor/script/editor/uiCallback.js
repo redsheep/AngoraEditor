@@ -201,16 +201,7 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		default:break;
 		}
 	}});
-	$('.cm_additem').click(function(e){
-		var type = $(this)[0].children[0].innerHTML;
-		var node = editor.node.create(type);
-		var offset = $('#scene').offset();
-		node.x=editor.ui.contextMenu.menuposX-offset.left;
-		node.y=editor.ui.contextMenu.menuposY-offset.top;
-		editor.node.add(node);
-		editor.ui.nodeTree.addNode(node);
-		editor.ui.gamePane.add(node);
-	});
+
 	$('body').keydown(function(e){
 		if (e.ctrlKey){
 			switch(e.which){
