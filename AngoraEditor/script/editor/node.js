@@ -123,11 +123,13 @@ AngoraEditor.NodeManager.prototype = {
 	*/	
 	clone : function(node){
 		var newnode={};
-		this.count++;
+		var nodeID='{0}{1}'.format(node.type,this.count++);
+		while(typeof this.nodes[nodeID]!='undefined')
+			nodeID='{0}{1}'.format(node.type,this.count++);
 		for(key in node){
 			newnode[key]=node[key];
 		}
-		newnode['id']='{0}{1}'.format(node.type,this.count);
+		newnode['id']=nodeID;
 		return newnode;
 	},
 	/**
@@ -168,6 +170,8 @@ AngoraEditor.NodeManager.prototype = {
 		var height=this.setAttr('height',node.height);
 		var scaleX=this.setAttr('scaleX',node.scaleX);
 		var scaleY=this.setAttr('scaleY',node.scaleY);
+		var anchorX=this.setAttr('anchorX',node.anchorX);
+		var anchorY=this.setAttr('anchorY',node.anchorY);
 		var rotation=this.setAttr('rotation',node.rotaion);
 		var volume=this.setAttr('volume',node.volume);
 		var fontsize=this.setAttr('fontSize',node.fontSize);
@@ -207,6 +211,8 @@ AngoraEditor.NodeManager.prototype = {
 					node['frame']=0;
 				node['scaleX']=scaleX;
 				node['scaleY']=scaleY;
+				node['anchorX']=anchorX;
+				node['anchorY']=anchorY;
 				node['rotation']=rotation;
 				if(node.type!='image'){
 					node['physics']=physics;

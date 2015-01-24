@@ -36,6 +36,7 @@ AngoraEditor.NodeAttrManager.prototype = {
 	* @param {string} value
 	*/
 	setAttr : function (node, attr, value) {
+		this.editor.scene.isNodeChanged=true;
 		switch(attr){
 		case 'id':
 			this.editor.node.changeID(node.id,value);
@@ -94,13 +95,34 @@ AngoraEditor.NodeAttrManager.prototype = {
 		case 'animations':
 			node[attr]=value;
 			return;
+		case 'dx':
+			if(typeof node.anchorX!='undefined'){
+			value=parseInt(value)+parseInt(node.width)*parseFloat(node.anchorX);
+			attr='x';
+			}
+			break;
+		case 'dy':
+			if(typeof node.anchorY!='undefined'){
+			value=parseInt(value)+parseInt(node.height)*parseFloat(node.anchorY);
+			attr='y';
+			}
+			break;
+		case 'anchorX':
+			var x=parseInt(node.x)-parseInt(node.width)*parseFloat(node.anchorX)+parseInt(node.width)*parseFloat(value);
+			node['x']=x;
+			this.editor.ui.propertyGrid.updateRow('x',x);
+			break;
+		case 'anchorY':
+			var y=parseInt(node.y)-parseInt(node.height)*parseFloat(node.anchorY)+parseInt(node.height)*parseFloat(value);
+			node['y']=y;
+			this.editor.ui.propertyGrid.updateRow('y',y);
+			break;
 		default:
 			break;
 		}
 		node[attr]=value;
 		this.editor.ui.propertyGrid.updateRow(attr,value);
 		this.editor.ui.gamePane.update(node,attr,value);
-		this.editor.scene.isNodeChanged=true;
 	},
 	/**
 	* add attribute to node
@@ -163,6 +185,8 @@ AngoraEditor.NodeAttrManager.prototype = {
 			case 'frame':return 0;
 			case 'scaleX':return 1;
 			case 'scaleY':return 1;
+			case 'anchorX':return 0;
+			case 'anchorY':return 0;
 			case 'rotation':return 0;
 			case 'physics':return false;
 			case 'text':return 'text';

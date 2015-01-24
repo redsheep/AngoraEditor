@@ -35,8 +35,8 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 				var left = Math.round(left/gridsize)*gridsize;
 				var top = Math.round(top/gridsize)*gridsize;
 			}
-			editor.attr.setAttr(editor.node.selected, 'x', left);
-			editor.attr.setAttr(editor.node.selected, 'y', top);
+			editor.attr.setAttr(editor.node.selected, 'dx', left);
+			editor.attr.setAttr(editor.node.selected, 'dy', top);
 		}else if(editor.ui.gamePane.stamping){
 			var offset=$(this).offset();
 			//var pos = editor.ui.gamePane.stampNode.position();
@@ -50,8 +50,8 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 				var left = Math.round(left/gridsize)*gridsize;
 				var top = Math.round(top/gridsize)*gridsize;
 			}
-			editor.attr.setAttr(editor.node.stampNode, 'x', left);
-			editor.attr.setAttr(editor.node.stampNode, 'y', top);
+			editor.attr.setAttr(editor.node.stampNode, 'dx', left);
+			editor.attr.setAttr(editor.node.stampNode, 'dy', top);
 		}
 	});
 	$('#preview').mousedown(function(e){

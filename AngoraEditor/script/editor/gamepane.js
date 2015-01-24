@@ -119,8 +119,6 @@ AngoraEditor.GamePaneManager.prototype = {
 					}else if(res.type=='atlas'){
 						editor.file.readFile(projectpath+'/'+res.data,function(data){
 							var data=JSON.parse(data);
-							//editor.attr.setAttr(node,'nwidth',data[0]['frame']['w']);
-							//editor.attr.setAttr(node,'nheight',data[0]['frame']['h']);
 							nodeDiv.css('background-position','-{0}px -{1}px'.format(-data['frames'][0]['frame']['x'],-data['frames'][0]['frame']['y']));
 						});
 					}
@@ -165,8 +163,16 @@ AngoraEditor.GamePaneManager.prototype = {
 		if(node.visible=='true') nodeDiv.show();
 		else nodeDiv.hide();
 		nodeDiv.css('border','1px solid orange');
-		nodeDiv.css({top: parseInt(node.y), left: parseInt(node.x), position:'absolute'});
-		nodeDiv.css('transform-origin', '0 0');
+		if(typeof node.anchorX!='undefined'&&typeof node.anchorY!='undefined'){
+			nodeDiv.css({left: parseInt(node.x)-parseInt(node.width)*parseFloat(node.anchorX), top: parseInt(node.y)-parseInt(node.height)*parseFloat(node.anchorY), position:'absolute'});
+			nodeDiv.css('transform-origin', '{0}% {1}%'.format(parseFloat(node.anchorX)*100,parseFloat(node.anchorY)*100));
+		}
+		else{
+			nodeDiv.css({left: parseInt(node.x), top: parseInt(node.y), position:'absolute'});
+			nodeDiv.css('transform-origin', '0 0');
+		}
+		//nodeDiv.css({left: parseInt(node.x), top: parseInt(node.y), position:'absolute'});		//nodeDiv.css('transform','translate({0}px,{1}px)'.format(parseInt(node.x),parseInt(node.y)));
+		
 		//nodeDiv.css('transform', 'scale(1) rotate(0deg)');
 		nodeDiv.mousedown(function(e){
 			if(e.which==2)
@@ -181,6 +187,7 @@ AngoraEditor.GamePaneManager.prototype = {
 				editor.node.selected=null;
 				editor.ui.gamePane.add(newnode);
 				editor.ui.gamePane.select(newnode.id);
+				editor.ui.activeMenuItem(newnode.type);
 			}else{
 				var selectedid=$(this).attr('id');
 				editor.ui.gamePane.mouse={x:e.pageX,y:e.pageY};
@@ -254,14 +261,16 @@ AngoraEditor.GamePaneManager.prototype = {
 					nodeDiv.css('background-position','-{0}px -{1}px'.format(sizex*x,sizey*y));
 				}				
 				break;
-			case 'x':nodeDiv.css('left',parseInt(value));break;
-			case 'y':nodeDiv.css('top',parseInt(value));break;
+			case 'x': if(typeof node.anchorX!='undefined')nodeDiv.css('left',parseInt(value)-parseInt(node.width)*parseFloat(node.anchorX));else nodeDiv.css('left',parseInt(value));break;//nodeDiv.css('transform','translate({0}px,{1}px)'.format(parseInt(node.x),parseInt(node.y)));break;
+			case 'y':if(typeof node.anchorY!='undefined')nodeDiv.css('top',parseInt(value)-parseInt(node.height)*parseFloat(node.anchorY));else nodeDiv.css('top',parseInt(value));break;//nodeDiv.css('transform','translate({0}px,{1}px)'.format(parseInt(node.x),parseInt(node.y)));break;
 			case 'width':nodeDiv.css('width',value);break;
 			case 'height':nodeDiv.css('height',value);break;
 			case 'text':nodeDiv.text(value);break;
 			case 'fontSize':nodeDiv.css('font-size',value+'px');break;
 			case 'scaleX':nodeDiv.css('transform', 'scale({0},{1})'.format(value,node.scaleY));break;
 			case 'scaleY':nodeDiv.css('transform', 'scale({0},{1})'.format(node.scaleX,value));break;
+			case 'anchorX':nodeDiv.css('transform-origin', '{0}% {1}%'.format(parseFloat(node.anchorX)*100,parseFloat(value)*100));break;
+			case 'anchorY':nodeDiv.css('transform-origin', '{0}% {1}%'.format(parseFloat(value)*100,parseFloat(node.anchorY)*100));break;
 			case 'rotation':nodeDiv.css('transform', 'rotate({0}deg)'.format(node.rotation,value));break;
 			case 'tilemap':
 				var res=editor.res.get(node.tilemap);

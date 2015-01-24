@@ -181,6 +181,8 @@ AngoraEditor.PropertyGridManager.prototype = {
 			case 'alpha': group='general';type='numberbox';break;
 			case 'scaleX':	group='general';type={"type":"numberbox","options":{"precision":1}};break;
 			case 'scaleY':	group='general';type={"type":"numberbox","options":{"precision":1}};break;
+			case 'anchorX':	group='general';type={"type":"numberbox","options":{"precision":1}};break;
+			case 'anchorY':	group='general';type={"type":"numberbox","options":{"precision":1}};break;
 			case 'physics':	group='physics';type={"type":"checkbox","options":{"on":true,"off":false}};break;
 			case 'dynamic':	group='physics';type={"type":"checkbox","options":{"on":true,"off":false}};break;
 			case 'enable':	group='physics';type={"type":"checkbox","options":{"on":true,"off":false}};break;
@@ -218,7 +220,7 @@ AngoraEditor.PropertyGridManager.prototype = {
 			group=grp;
 		if(grp=='tracks' || grp=='animations')
 			type='none';
-		this.data.push({name:key,value:value,group:group,editor:type});
+		this.data.push({id:key,name:key,value:value,group:group,editor:type});
 	},
 	/**
 	 * update attribute property row
