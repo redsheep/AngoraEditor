@@ -28,6 +28,10 @@ AngoraEditor.SceneManager = function (editor) {
 	 * @property {string} current scene
 	 */
 	this.curScene = null;
+	this.isNodeChanged=false;
+	this.isResourceChanged=false;
+	this.isScriptChanged=false;
+	this.isConfigChanged=false;
 }
 AngoraEditor.SceneManager.prototype = {
 	/**
@@ -77,6 +81,7 @@ AngoraEditor.SceneManager.prototype = {
 			var configfile="{0}/{1}.config".format(p.editor.project.currentProject.path, scene);
 			p.editor.file.readFile(configfile,function(data){
 				p.config=JSON.parse(data);
+				p.editor.ui.gamePane.setupConfig();
 			});
 		});
 	},
@@ -179,6 +184,7 @@ AngoraEditor.SceneManager.prototype = {
 		this.editor.res.clear();
 		this.editor.node.clear();
 		this.editor.ui.reset();
+		this.curScene=null;
 	},
 	/**
 	* reset current scene
@@ -223,6 +229,7 @@ AngoraEditor.SceneManager.prototype = {
 			},
 			"physics":{
 				enable:false,
+				type:editor.game.physics,
 				gravityX:0,
 				gravityY:0
 			},
@@ -245,13 +252,24 @@ AngoraEditor.SceneManager.prototype = {
 		var projectpath = editor.project.currentProject.path;
 		var sceneName = this.curScene;
 		//editor.file.writeFile("{0}/{1}.js".format(projectpath,sceneName),);
+		if(this.isNodeChanged){
 		editor.file.writeFile("{0}/{1}.scn".format(projectpath, sceneName), JSON.stringify(editor.node.nodes, null, 2));
+		this.isNodeChanged=false;
+		}
+		if(this.isResourceChanged){
 		editor.file.writeFile("{0}/{1}.res".format(projectpath, sceneName), JSON.stringify(editor.res.localres, null, 2));
 		editor.file.writeFile("{0}/preload.res".format(projectpath), JSON.stringify(editor.res.globalres, null, 2));
+		this.isResourceChanged=false;
+		}
+		if(this.isScriptChanged){
 		//editor.file.writeFile("{0}/{1}.scripts".format(projectpath,sceneName),);
 		editor.file.writeFile("{0}/{1}.script.js".format(projectpath,sceneName),editor.ui.codeEditor.getValue());
+		this.isScriptChanged=false;
+		}
+		if(this.isConfigChanged){
 		editor.file.writeFile("{0}/{1}.config".format(projectpath,sceneName),JSON.stringify(editor.scene.config, null, 2));
-
+		this.isConfigChanged=false;
+		}
 	}
 }
 
