@@ -88,6 +88,8 @@ AngoraEditor.UI.prototype = {
 			h = 300;
 		var dlg=$('#dd').dialog({
 			title: 'My Dialog',
+			left:(window.innerWidth-w)/2,
+			top:(window.innerHeight-h)/2,
 			width: w,
 			height: h,
 			closed: false,
@@ -112,7 +114,7 @@ AngoraEditor.UI.prototype = {
 		var dlg=this.showDialog('/dialog/tiledmapEditor',800,600,func);
 	},
 	showParticleEditor: function(func){
-		var dlg=this.showDialog('/dialog/particleEditor',640,480,func);
+		var dlg=this.showDialog('/dialog/particleEditor',480,480,func);
 	},
 	showPhysicsEditor: function(func){
 		var dlg=this.showDialog('/dialog/physicsEditor',640,480,func);
@@ -152,6 +154,7 @@ AngoraEditor.UI.prototype = {
 	 * @param
 	 */
 	setupScript : function (id, script) {
+		var editor=this.editor;
 		//$(id).val(script);
 		//var CM = document.getElementById(id);
 		//$('#tabs').tabs('add',
@@ -172,6 +175,7 @@ AngoraEditor.UI.prototype = {
 			lint : true
 		});
 		this.codeEditor.setValue(script);
+		this.codeEditor.on("change",function(){editor.scene.isScriptChanged=true;});
 	},
 	/**
 	 * active state of menubutton
@@ -219,6 +223,7 @@ AngoraEditor.UI.prototype = {
 			$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Stamp').target);
 			switch(menuitem){
 			case 'animate':$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Animation').target);break;
+			case 'sprite':$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Physics').target);break;
 			case 'particle':$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Particle').target);break;
 			case 'audio':$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Audio').target);break;
 			case 'tilemap':$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Tilemap').target);break;

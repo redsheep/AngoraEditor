@@ -62,14 +62,14 @@ AngoraEditor.ProjectManager.prototype = {
 			this.editor.file.readFile(this.currentProject['configFile'],function(json){
 				p.config=JSON.parse(json);
 				p.editor.game.setup(p.config);
-				p.editor.ui.gamePane.setupConfig();
+				//p.editor.ui.gamePane.setupConfig();
 				console.log('game setup ready');
 				p.editor.scene.setup(finished);
 				console.log('New Project Create Success!');
 			});			
 		}else{
 			p.editor.game.setup(p.config);
-			p.editor.ui.gamePane.setupConfig();
+			//p.editor.ui.gamePane.setupConfig();
 			console.log('game setup ready');
 			p.editor.scene.setup(finished);
 			console.log('New Project Create Success!');
@@ -122,6 +122,10 @@ AngoraEditor.ProjectManager.prototype = {
 	save : function () {
 		this.editor.scene.save();
 	},
+	isChanged:function(){
+		var curscene=this.editor.scene;
+		return curscene.isNodeChanged||curscene.isResourceChanged||curscene.isScriptChanged||curscene.isConfigChanged;
+	},
 	/**
 	* release project with compress js file
 	* @method release
@@ -136,7 +140,7 @@ AngoraEditor.ProjectManager.prototype = {
 	* @param 
 	*/
 	reset: function(){
-		this.editor.ui.unactiveMenu();
+		//this.editor.ui.unactiveMenu();
 		this.editor.scene.scenes={};
 		this.editor.res.clearAll();
 		this.editor.scene.reset();

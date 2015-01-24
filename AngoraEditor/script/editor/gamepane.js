@@ -80,8 +80,8 @@ AngoraEditor.GamePaneManager.prototype = {
 	* @param 
 	*/
 	setupConfig : function(){
-		this.pane.css('width',this.editor.game.display.width);
-		this.pane.css('height',this.editor.game.display.height);
+		this.pane.css('width',this.editor.scene.config.world.width);
+		this.pane.css('height',this.editor.scene.config.world.height);
 		console.log('setup game config success!');
 	},
 	/**
@@ -116,6 +116,13 @@ AngoraEditor.GamePaneManager.prototype = {
 						var sizex=res.width/res.Xframe;
 						var sizey=res.height/res.Yframe;
 						nodeDiv.css('background-position','-{0}px -{1}px'.format(sizex*x,sizey*y));
+					}else if(res.type=='atlas'){
+						editor.file.readFile(projectpath+'/'+res.data,function(data){
+							var data=JSON.parse(data);
+							//editor.attr.setAttr(node,'nwidth',data[0]['frame']['w']);
+							//editor.attr.setAttr(node,'nheight',data[0]['frame']['h']);
+							nodeDiv.css('background-position','-{0}px -{1}px'.format(-data['frames'][0]['frame']['x'],-data['frames'][0]['frame']['y']));
+						});
 					}
 				}
 				//nodeDiv.css('background-size',"100% 100%");
@@ -146,6 +153,12 @@ AngoraEditor.GamePaneManager.prototype = {
 				nodeDiv.text(node.text);
 				nodeDiv.css('font-size',node.fontSize+'px');
 				break;
+			case 'tilemap':
+				nodeDiv.css('width',node.tileW*node.tilesetW);
+				nodeDiv.css('height',node.tileH*node.tilesetH);
+				nodeDiv.css('background-repeat','no-repeat'); 
+				editor.node.locked[node.id]=true;
+				break;
 			case 'sound': break;
 			default:break;
 		}
@@ -153,7 +166,7 @@ AngoraEditor.GamePaneManager.prototype = {
 		else nodeDiv.hide();
 		nodeDiv.css('border','1px solid orange');
 		nodeDiv.css({top: parseInt(node.y), left: parseInt(node.x), position:'absolute'});
-		nodeDiv.css('transform-origin', '50% 50%');
+		nodeDiv.css('transform-origin', '0 0');
 		//nodeDiv.css('transform', 'scale(1) rotate(0deg)');
 		nodeDiv.mousedown(function(e){
 			if(e.which==2)
@@ -208,12 +221,18 @@ AngoraEditor.GamePaneManager.prototype = {
 				break;
 			case 'image':
 				var res=editor.res.get(value);
-				var projectpath=editor.project.currentProject.path.replace(/\\/g, '/');
+				var projectpath=editor.project.currentProject.path;//.replace(/\\/g, '/');
 				nodeDiv.css('background-image',"url('{0}/{1}')".format(projectpath,res.path));
 				nodeDiv.css('background-repeat','no-repeat'); 
 				if(res.type=='spritesheet'){
 					editor.attr.setAttr(node,'nwidth',res.width/parseInt(res.Xframe));
 					editor.attr.setAttr(node,'nheight',res.height/parseInt(res.Yframe));	
+				}else if(res.type=='atlas'){
+					editor.file.readFile(projectpath+'/'+res.data,function(data){
+						var data=JSON.parse(data);
+						editor.attr.setAttr(node,'nwidth',data['frames'][0]['frame']['w']);
+						editor.attr.setAttr(node,'nheight',data['frames'][0]['frame']['h']);
+					});
 				}else{
 					editor.attr.setAttr(node,'nwidth',res.width);
 					editor.attr.setAttr(node,'nheight',res.height);
@@ -244,7 +263,29 @@ AngoraEditor.GamePaneManager.prototype = {
 			case 'scaleX':nodeDiv.css('transform', 'scale({0},{1})'.format(value,node.scaleY));break;
 			case 'scaleY':nodeDiv.css('transform', 'scale({0},{1})'.format(node.scaleX,value));break;
 			case 'rotation':nodeDiv.css('transform', 'rotate({0}deg)'.format(node.rotation,value));break;
+			case 'tilemap':
+				var res=editor.res.get(node.tilemap);
+				editor.file.readFile(editor.project.currentProject.path+'/'+res.data,function(data){
+					var map=JSON.parse(data);
+					editor.attr.setAttr(node,'tilesetH',map.tileheight);
+					editor.attr.setAttr(node,'tilesetW',map.tilewidth);
+					editor.attr.setAttr(node,'tileH',map.height);
+					editor.attr.setAttr(node,'tileW',map.width);
+					nodeDiv.css('height',map.tileheight*map.height);
+					nodeDiv.css('width',map.tilewidth*map.width);
+				});
+				break;
+			case 'mapcache':nodeDiv.css('background-image',"url('{0}')".format(value));break;
 			default: break;
+		}
+	},
+	updateWorld: function(attr,value){
+		switch(attr){
+		case 'x':this.pane.css('left',value);break;
+		case 'y':this.pane.css('top',value);break;
+		case 'width':this.pane.css('width',value);break;
+		case 'height':this.pane.css('height',value);break;
+		default:break;
 		}
 	},
 	/**

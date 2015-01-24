@@ -96,7 +96,7 @@ AngoraEditor.ResourceManager.prototype = {
 			break;
 		case 'audio':
 		case 'text':
-			this.globalres[id]['path'] = "data/{0}".format(res);
+			this.globalres[id]['path'] = "data/{0}".format(res.path);
 			break;
 		case 'spritesheet':
 			this.globalres[id]['path'] = "data/{0}".format(res.path);
@@ -109,17 +109,18 @@ AngoraEditor.ResourceManager.prototype = {
 			this.globalres[id]['path'] = "data/{0}".format(res.path);
 			this.globalres[id]['data'] = "data/{0}".format(res.data);
 			break;
-		case 'bitmapFont':
+		case 'bitmapfont':
 			this.globalres[id]['bitmap'] = "data/{0}".format(res.bitmap);
 			this.globalres[id]['data'] = "data/{0}".format(res.data);
 			break;
-		case 'tileMap':
-			this.globalres[id]['tileset'] = "data/{0}".format(res.tileset);
+		case 'tilemap':
+			this.globalres[id]['tileset'] = res.tileset;
 			this.globalres[id]['data'] = "data/{0}".format(res.data);
 			break;
 		default:
 			break;
 		}
+		this.editor.scene.isResourceChanged=true;
 		return this.globalres[id];
 	},
 	/**
@@ -129,6 +130,7 @@ AngoraEditor.ResourceManager.prototype = {
 	*/
 	remove : function (resID) {
 		delete localres[resID];
+		this.editor.scene.isResourceChanged=true;
 	},
 	/**
 	* clear all resource 

@@ -49,62 +49,74 @@ AngoraEditor.PropertyGridManager.prototype = {
 		data : '',
 		showGroup : true,
 		onBeginEdit: function(index,row){
-			editor.ui.propertyGrid.editingObject=editor.node.selected.id;
+			if(editor.node.selected!=null)
+				editor.ui.propertyGrid.editingObject=editor.node.selected.id;
+			else
+				editor.ui.propertyGrid.editingObject=null;
 		},
 		onEndEdit : function (index, field, changes) {
-			var editingObject=editor.node.get(editor.ui.propertyGrid.editingObject);
 			var name = field['name'];
 			var value = field['value'];
-			if(editingObject==null){
-				editor.scene.setConfig(name,field['group'],value);
-			}else{
-				switch (name) {
-				case 'id':
-					editor.ui.nodeTree.updateNode(editingObject.id, value);
-					editor.attr.setAttr(editingObject, 'id', value);
-					break;
-				default:
-					editor.attr.setAttr(editingObject,name,value);
-					break;
+			if(editor.ui.propertyGrid.editingObject!=null){
+				var editingObject=editor.node.get(editor.ui.propertyGrid.editingObject);
+				if(editingObject==null){
+					editor.scene.setConfig(name,field['group'],value);
+				}else{
+					switch (name) {
+					case 'id':
+						editor.ui.nodeTree.updateNode(editingObject.id, value);
+						editor.attr.setAttr(editingObject, 'id', value);
+						break;
+					default:
+						editor.attr.setAttr(editingObject,name,value);
+						break;
+					}
 				}
+				editingObject=null;
+			}else{
+				editor.scene.config[field['group']][name]=value;
+				if(field['group']=='world')
+					editor.ui.gamePane.updateWorld(name,value);
+				editor.scene.isConfigChanged=true;
 			}
-			editingObject=null;
 		},
 		onDblClickRow:function(index, field){
-			var editingObject=editor.node.get(editor.ui.propertyGrid.editingObject);
-			var name = field['name'];
-			var value = field['value'];
-			switch (name) {
-			case 'image':
-			case 'assetatlas':
-				editor.ui.showResourceEditor(function () {
-					var id = editor.res.selected['id'];
-					editor.attr.setAttr(editingObject, name, id);
-				});
-				break;
-			case 'animations':
-				editor.ui.showAnimationEditor(function(){});
-				break;
-			case 'font':
-				editor.ui.showResourceEditor(function(){
-					var id = editor.res.selected['id'];
-					editor.attr.setAttr(editingObject, name, id);
-				});
-				break;
-			case 'audio':
-				editor.ui.showResourceEditor(function () {
-					var id = editor.res.selected['id'];
-					editor.attr.setAttr(editingObject, 'audio', id);
-				});
-				break;
-			case 'tracks':
-				editor.ui.showAudioEditor(function () {
-					console.log('audio modify complete!');
-				});
-				break;
-			default:
-				break;
-			}				
+			if(editor.ui.propertyGrid.editingObject!=null){
+				var editingObject=editor.node.get(editor.ui.propertyGrid.editingObject);
+				var name = field['name'];
+				var value = field['value'];
+				switch (name) {
+				case 'image':
+				case 'assetatlas':
+				case 'font':
+				case 'audio':
+					editor.ui.showResourceEditor(function () {
+						var id = editor.res.selected['id'];
+						editor.attr.setAttr(editingObject, name, id);
+					});
+					break;
+				case 'tilemap':
+					editor.ui.showResourceEditor(function () {
+						var id = editor.res.selected['id'];
+						editor.attr.setAttr(editingObject, name, id);
+						var tileset=[];
+						for(imgid in editor.res.get(id).tileset)
+							tileset.push(imgid);
+						editor.attr.setAttr(editingObject, 'tileset', tileset);
+					});
+					break;
+				case 'animations':
+					editor.ui.showAnimationEditor(function(){});
+					break;
+				case 'tracks':
+					editor.ui.showAudioEditor(function () {
+						console.log('audio modify complete!');
+					});
+					break;
+				default:
+					break;
+				}
+			}			
 		}
 	});
 	},
@@ -165,17 +177,23 @@ AngoraEditor.PropertyGridManager.prototype = {
 			case 'y'	:	group='general';type='numberbox';break;
 			case 'width':	group='general';type='numberbox';break;
 			case 'height':	group='general';type='numberbox';break;
+			case 'rotation': group='general';type='numberbox';break;
+			case 'alpha': group='general';type='numberbox';break;
 			case 'scaleX':	group='general';type={"type":"numberbox","options":{"precision":1}};break;
 			case 'scaleY':	group='general';type={"type":"numberbox","options":{"precision":1}};break;
 			case 'physics':	group='physics';type={"type":"checkbox","options":{"on":true,"off":false}};break;
 			case 'dynamic':	group='physics';type={"type":"checkbox","options":{"on":true,"off":false}};break;
 			case 'enable':	group='physics';type={"type":"checkbox","options":{"on":true,"off":false}};break;
 			case 'collideWorldBounds':	group='world';type={"type":"checkbox","options":{"on":true,"off":false}};break;
+			case 'fixedRotation':group='physics';type={"type":"checkbox","options":{"on":true,"off":false}};break;
 			case 'mass'	:	group='physics';type='numberbox';break;
+			case 'body':	group='physics';type='none';break;
 			case 'text'	:	group='general';type='text';break;
 			case 'font' :	group='general';type='none';break;
 			case 'fontSize':group='font';type='numberbox';break;
-			case 'fontFamily':group='font';type='none';break;
+			case 'fontFamily':group='font';type='text';break;
+			case 'fontColor':group='font';type='text';break;
+			case 'textAlign':group='font';type='none';break;
 			case 'audio':	group='audio';type='none';break;
 			case 'tracks':	group='audio';type='none';break;
 			case 'delay':	group='general';type='numberbox';break;
@@ -188,6 +206,12 @@ AngoraEditor.PropertyGridManager.prototype = {
 			case 'maxspeedX':	group='particle';type='none';break;
 			case 'minspeedY':	group='particle';type='none';break;
 			case 'maxspeedY':	group='particle';type='none';break;
+			case 'maxparicles': group='particle';type='none';break;
+			case 'tileW': group='tilemap';type='numberbox';break;
+			case 'tileH': group='tilemap';type='numberbox';break;
+			case 'tilesetW': group='tilemap';type='numberbox';break;
+			case 'tilesetH': group='tilemap';type='numberbox';break;
+			case 'tilemap': group='tilemap';type='none';break;
 			default		:	group='custom';type='text';break;
 		}
 		if(typeof grp!='undefined')

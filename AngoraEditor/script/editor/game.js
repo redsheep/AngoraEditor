@@ -103,7 +103,7 @@ AngoraEditor.GameManager.prototype={
 		switch(id){
 			case 'display'	:	return {width:800,height:600}; break;
 			case 'sound'	:	return {slient:true,volume:1}; break;
-			case 'physics'	:	return 'p2'; break;
+			case 'physics'	:	return 'P2JS'; break;
 			case 'script'	: 	return 'javascript'; break;
 			case 'GUI'		:	return 'jqueryUI'; break;
 			case 'plugins'	:	return null; break;

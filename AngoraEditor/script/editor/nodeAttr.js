@@ -100,7 +100,7 @@ AngoraEditor.NodeAttrManager.prototype = {
 		node[attr]=value;
 		this.editor.ui.propertyGrid.updateRow(attr,value);
 		this.editor.ui.gamePane.update(node,attr,value);
-		
+		this.editor.scene.isNodeChanged=true;
 	},
 	/**
 	* add attribute to node
@@ -114,6 +114,7 @@ AngoraEditor.NodeAttrManager.prototype = {
 		node[attr] = value;
 		/*if (node.id == this.editor.node.selected.id)
 			this.editor.ui.propertyGrid.add(attr, value);*/
+		this.editor.scene.isNodeChanged=true;
 	},
 	/**
 	* add event attribute to node
@@ -126,6 +127,7 @@ AngoraEditor.NodeAttrManager.prototype = {
 		if(typeof node.events=='undefined')
 			node.events={};
 		node.events[attr]=value;
+		this.editor.scene.isNodeChanged=true;
 	},
 	/**
 	* remove attribute from node
@@ -143,6 +145,7 @@ AngoraEditor.NodeAttrManager.prototype = {
 			}
 		}*/
 		delete node[attr];
+		this.editor.scene.isNodeChanged=true;
 	},
 	/**
 	* get default value of attribute
@@ -156,12 +159,12 @@ AngoraEditor.NodeAttrManager.prototype = {
 			case 'height':return 64;
 			case 'width': return 64;
 			case 'image':return 'default';
+			case 'animations':return '';
 			case 'frame':return 0;
 			case 'scaleX':return 1;
 			case 'scaleY':return 1;
 			case 'rotation':return 0;
 			case 'physics':return false;
-			case 'body': return {dynamic:true,mass:0};
 			case 'text':return 'text';
 			case 'fontSize':return 12;
 			case 'fontFamily':return 'Arial';
@@ -179,6 +182,10 @@ AngoraEditor.NodeAttrManager.prototype = {
 			case 'maxspeedX':return 100;
 			case 'minspeedY':return 0;
 			case 'maxspeedY':return 100;
+			case 'dynamic':return true;
+			case 'body':return 'default';
+			case 'mass':return 10;
+			case 'fixedRotation':return true;
 			default:return null;
 		}
 	}

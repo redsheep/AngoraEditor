@@ -89,6 +89,7 @@ AngoraEditor.NodeManager.prototype = {
 		this.nodes[node.id] = node;
 		//this.editor.ui.nodeTree.addNode(node);
 		//this.editor.ui.gamepane.addNode(node);
+		this.editor.scene.isNodeChanged=true;
 	},
 	/**
 	* remove a node from node manager
@@ -98,6 +99,7 @@ AngoraEditor.NodeManager.prototype = {
 	remove : function (node) {
 		//this.editor.ui.nodeTree.remove(item);
 		delete this.nodes[node.id];
+		this.editor.scene.isNodeChanged=true;
 	},
 	/**
 	* reorder the nodes
@@ -112,6 +114,7 @@ AngoraEditor.NodeManager.prototype = {
 			this.editor.ui.gamePane.updateZOrder(this.nodes[id],i);
 		}
 		this.nodes=reorder;
+		this.editor.scene.isNodeChanged=true;
 	},
 	/**
 	* create a clone node
@@ -137,6 +140,7 @@ AngoraEditor.NodeManager.prototype = {
 		if(oldID==newID)return;
 		this.nodes[newID]=this.nodes[oldID];
 		delete this.nodes[oldID];
+		this.editor.scene.isNodeChanged=true;
 	},
 	/**
 	* set the node attribute
@@ -149,6 +153,7 @@ AngoraEditor.NodeManager.prototype = {
 			value=this.editor.attr.getDefault(attr);
 		}
 		return value;
+		this.editor.scene.isNodeChanged=true;
 	},
 	/**
 	* init the node attribute
@@ -169,6 +174,10 @@ AngoraEditor.NodeManager.prototype = {
 		var atlasWidth=this.setAttr('atlasWidth',node.atlasWidth);
 		var atlasHeight=this.setAttr('atlasHeight',node.atlasHeight);
 		var physics=this.setAttr('physics',node.physics);
+		var dynamic=this.setAttr('dynamic',node.dynamic);
+		var body=this.setAttr('body',node.body);
+		var mass=this.setAttr('mass',node.mass);
+		var fixedRotation=this.setAttr('fixedRotation',node.fixedRotation);
 		var image=this.setAttr('image',node.image);
 		var animations=this.setAttr('animations',node.animations);
 		var delay=this.setAttr('delay',node.delay);
@@ -186,36 +195,48 @@ AngoraEditor.NodeManager.prototype = {
 			case 'image':
 			case 'sprite':
 			case 'tilesprite':
-				node['x']=x;
-				node['y']=y;
-				node['width']=width;
-				node['height']=height;
-				node['image']=image;
-				node['frame']=0;
-				node['scaleX']=scaleX;
-				node['scaleY']=scaleY;
-				node['rotation']=rotation;
-				node['physics']=physics;
-				break;
 			case 'animate':
 				node['x']=x;
 				node['y']=y;
 				node['width']=width;
 				node['height']=height;
-				//node['atlasWidth']=atlasWidth;
-				//node['atlasHeight']=atlasHeight;
 				node['image']=image;
-				node['animations']=animations;
+				if(node.type=='animate')
+					node['animations']=animations;
+				else if(node.type=='sprite')
+					node['frame']=0;
 				node['scaleX']=scaleX;
 				node['scaleY']=scaleY;
 				node['rotation']=rotation;
-				node['physics']=physics;
+				if(node.type!='image'){
+					node['physics']=physics;
+					node['dynamic']=dynamic;
+					node['body']=body;
+					node['mass']=mass;
+					node['fixedRotation']=fixedRotation;
+				}
 				break;
 			case 'group':
 				node['x']=x;
 				node['y']=y;
-				node['ref']='group';
 				node['physics']=physics;
+				break;
+			case 'bitmapdata':
+				node['width']=width;
+				node['height']=height;
+				break;
+			case 'spritebatch':
+			case 'physicsgroup':
+			case 'graphics':
+				node['x']=x;
+				node['y']=y;
+				break;
+			case 'camera':
+				node['x']=x;
+				node['y']=y;
+				node['width']=width;
+				node['height']=height;
+				node['follow']='';
 				break;
 			case 'audio':
 				node['audio']='none';
@@ -249,6 +270,13 @@ AngoraEditor.NodeManager.prototype = {
 				node['scaleY']=scaleY;
 				node['rotation']=rotation;
 				//node['callback']=callback;
+				break;
+			case 'tilemap':
+				node['tileW']=32;
+				node['tileH']=32;
+				node['tilesetW']=32;
+				node['tilesetH']=32;
+				node['tilemap']='';
 				break;
 			case 'particle':
 				node['x']=x;
