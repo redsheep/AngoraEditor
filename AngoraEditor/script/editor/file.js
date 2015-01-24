@@ -104,7 +104,14 @@ AngoraEditor.FileManager.prototype = {
 	* @method removeFile
 	* @param {string} filepath
 	*/
-	removeFile : function (filepath) {
+	removeFile : function (filepath,func) {
+		var url='/remove'+filepath+'?'+ new Date().getTime()
+		if(typeof func==='undefined')
+			$.get(url);
+		else
+			$.get(url,function(data){
+				func(data);
+			});
 		//var file = Ti.Filesystem.getFile(filepath);
 		//return file.deleteFile();
 	},

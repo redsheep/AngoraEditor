@@ -114,7 +114,7 @@ AngoraEditor.SceneManager.prototype = {
 		var startPage = "{0}/mygame.html".format(editor.project.currentProject.path);
 		this.editor.file.readFile(startPage,function(script){
 			var n = script.lastIndexOf('<script type="text/javascript" src="mygame.js">');
-			var script = script.substring(0, n) + '<script type="text/javascript" src="{0}.js"></script>\n'.format(sceneName) + script.substring(n);
+			var script = script.substring(0, n) + '<script type="text/javascript" src="{0}.js"></script>'.format(sceneName) + script.substring(n);
 			editor.file.writeFile(startPage, script);	
 		});
 
@@ -122,7 +122,7 @@ AngoraEditor.SceneManager.prototype = {
 		var startPageScript = "{0}/mygame.js".format(editor.project.currentProject.path);
 		editor.file.readFile(startPageScript,function(script){
 			var insertpos = script.lastIndexOf('game.state.start');
-			script = script.substr(0, insertpos) + "game.state.add('{0}',{0});\n".format(sceneName) + script.substr(insertpos);
+			script = script.substr(0, insertpos) + "game.state.add('{0}',{0});".format(sceneName) + script.substr(insertpos);
 			editor.file.writeFile(startPageScript, script);		
 		});
 
@@ -152,17 +152,28 @@ AngoraEditor.SceneManager.prototype = {
 		var editor = this.editor;
 		var projectpath = editor.project.currentProject.path;
 		//editor.game.clear();
-		if (this.scenes[sceneName]){
+		if (typeof this.scenes[sceneName]!='undefined'){
 			delete this.scenes[sceneName];
-			this.editor.ui.scenePane.remove(sceneName);
-		}
-		if(delFile==true){
-			this.editor.file.removeFile("{0}/{1}.config".format(projectpath, sceneName));
-			this.editor.file.removeFile("{0}/{1}.js".format(projectpath, sceneName));
-			this.editor.file.removeFile("{0}/{1}.scn".format(projectpath, sceneName));
-			this.editor.file.removeFile("{0}/{1}.res".format(projectpath, sceneName));
-			//this.editor.file.removeFile("{0}/{1}.scripts".format(projectpath, sceneName));
-			this.editor.file.removeFile("{0}/{1}.script.js".format(projectpath, sceneName));
+			editor.ui.scenePane.remove(sceneName);
+			editor.file.writeFile("{0}/scenes.json".format(projectpath), JSON.stringify(this.scenes,null,4));
+			var startPage = "{0}/mygame.html".format(projectpath);
+			this.editor.file.readFile(startPage,function(script){
+				script = script.replace('<script type="text/javascript" src="{0}.js"></script>'.format(sceneName),' ');
+				editor.file.writeFile(startPage, script);
+			});
+			var startPageScript = "{0}/mygame.js".format(projectpath);
+			editor.file.readFile(startPageScript,function(script){
+				script = script.replace("game.state.add('{0}',{0});".format(sceneName),'');
+				editor.file.writeFile(startPageScript, script);
+			});
+			if(delFile==true){
+				editor.file.removeFile("{0}/{1}.config".format(projectpath, sceneName));
+				editor.file.removeFile("{0}/{1}.js".format(projectpath, sceneName));
+				editor.file.removeFile("{0}/{1}.scn".format(projectpath, sceneName));
+				editor.file.removeFile("{0}/{1}.res".format(projectpath, sceneName));
+				//this.editor.file.removeFile("{0}/{1}.scripts".format(projectpath, sceneName));
+				editor.file.removeFile("{0}/{1}.script.js".format(projectpath, sceneName));
+			}
 		}
 	},
 	/**
