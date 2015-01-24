@@ -21,6 +21,7 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 			//editor.ui.gamePane.offset.x+=(e.pageX - md.x);
 			//editor.ui.gamePane.offset.y+=(e.pageY - md.y);
 			$('#scene').css('transform', 'translate({0}px,{1}px)'.format(editor.ui.gamePane.offset.x+e.pageX - md.x,editor.ui.gamePane.offset.y+e.pageY - md.y));
+			$('#gamecanvas').css('transform', 'translate({0}px,{1}px)'.format(editor.ui.gamePane.offset.x+e.pageX - md.x,editor.ui.gamePane.offset.y+e.pageY - md.y));
 			$('#preview').css('background-position', '{0}px {1}px'.format(editor.ui.gamePane.offset.x+e.pageX - md.x,editor.ui.gamePane.offset.y+e.pageY - md.y));
 			//background-position:10px 10px;
 		}
@@ -164,10 +165,22 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 	}});
 	$("#submenu_file").menu({onClick:function (item) {
 		switch(item.id){
-		case 'newProject':editor.ui.showNewProjectDialog();break;
-		case 'openProject':editor.ui.showOpenProjectDialog();break;
+		case 'newProject':
+			$('#closeProject').trigger('click');
+			editor.ui.showNewProjectDialog();
+			break;
+		case 'openProject':
+			$('#closeProject').trigger('click');
+			editor.ui.showOpenProjectDialog();
+			break;
 		case 'saveProject':editor.project.save();break;
-		case 'closeProject':editor.project.close();break;
+		case 'closeProject':
+			if(editor.project.isChanged()){
+				var r = confirm("do you want to save changed?");
+				if(r) editor.project.save();
+			}
+			editor.project.close();
+			break;
 		default:break;
 		}
 	}});
