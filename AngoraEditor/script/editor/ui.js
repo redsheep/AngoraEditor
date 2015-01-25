@@ -40,6 +40,7 @@ AngoraEditor.UI = function (editor) {
 	 * @property {boolean}
 	 */
 	this.showGrid=true;
+	this.showRegion=false;
 	/**
 	 * @property {boolean}
 	 */	
@@ -171,6 +172,7 @@ AngoraEditor.UI.prototype = {
 		this.codeEditor = CodeMirror.fromTextArea(pane, {
 			lineNumbers : true,
 			mode : "javascript",
+			extraKeys: {"Shift-Space": "autocomplete"},
 			gutters : ["CodeMirror-lint-markers"],
 			lint : true
 		});
@@ -191,6 +193,7 @@ AngoraEditor.UI.prototype = {
 		$('#submenu_app').menu('enableItem', $('#submenu_app').menu('findItem', 'AppConfig').target);
 		$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Resource').target);
 		$('#submenu_file').menu('enableItem', $('#submenu_file').menu('findItem','Save').target);
+		$('#submenu_file').menu('enableItem', $('#submenu_file').menu('findItem','Close').target);
 	},
 	/**
 	 * reset state of menubutton(not work in current easyui version)
