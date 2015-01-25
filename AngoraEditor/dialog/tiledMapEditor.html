@@ -45,24 +45,9 @@
 		}
         </style>
     <div class="easyui-layout" fit="true">
-        <div id="topContainer" data-options="region:'north'" style="overflow:hidden">
-		    <div style="width:100%;">
-				<a href="#" class="easyui-menubutton" menu="#mm1" iconCls="icon-edit">Edit</a>
-				<a href="#" class="easyui-menubutton" menu="#mm2" iconCls="icon-help">Help</a>
-				</div>
-				<div id="mm1" style="width:150px;">
-				<div iconCls="icon-undo">Undo</div>
-				<div iconCls="icon-redo">Redo</div>
-				<div class="menu-sep"></div>
-				<div>Cut</div>
-				<div>Copy</div>
-				<div>Paste</div>
-				</div>
-				<div id="mm2" style="width:100px;">
-				<div>Help</div>
-				<div>Update</div>
-				<div>About</div>
-			</div>
+        <div data-options="region:'south'" style="overflow:hidden">
+		    <button id="btn_ok" style="float:left;margin-top:10px;">OK</button>
+			<button id="btn_cancel" style="float:right;margin-top:10px;">Cancel</button>
         </div>
         <div id="map" data-options="region:'center'">
 		    <div id="tilemapdiv"></div>
@@ -83,14 +68,17 @@
 	<script>
 	$(document).ready(function () {
 		var editor=edt;
+		if(editor.node.selected==null){
+			$('#dd').dialog('close');
+			return false;
+		}
 		var mymarker=document.getElementById("marker");
 		var tiles=document.getElementById("tiles");
 		var tilesets=document.getElementById('tilesets');
 		var pos = [0, 0];
 		var tileid = { x: 0, y: 0 };
 		var tileRect = null;
-		var tilesetPath="/data/tmw_desert_spacing.png";
-		var mapPath="/data/features_test.json";
+		var mapPath=editor.project.currentProject.path+"/"+editor.res.get(editor.node.selected.tilemap).data;//"/data/features_test.json";
 		var mapObject;
 		var mapLayers;
 		var mapTileSets;
@@ -138,9 +126,9 @@
 			for( i in mapLayers){
 				$('#layer').append("<div class='layer'>"+mapLayers[i].name+"</div>");
 			}
-			for( i in mapTileSets){
+			/*for( i in mapTileSets){
 				$('#tilesets').append('<img id="'+mapTileSets[i].name+'" src="data/'+mapTileSets[i].image+'"/>');
-			}
+			}*/
 			$('.layer').on('click',function(){
 				var selected=$(".layer.selected");
 				if(selected.length>0)
@@ -153,13 +141,16 @@
 				currentLayer = layer;
 			});
 			
-			var game = new Phaser.Game(800, 600, Phaser.AUTO, 'tilemapdiv', { preload: preload, create: create, update: update });
+			var game = new Phaser.Game(mapObject.tilewidth*mapObject.width, mapObject.tileheight*mapObject.height, Phaser.CANVAS, 'tilemapdiv', { preload: preload, create: create, update: update });
 
 			function preload() {
 				for(i in mapTileSets){
-					game.load.image(mapTileSets[i].name, 'data/'+mapTileSets[i].image);
+					var key=mapTileSets[i].name;
+					var imgsrc=editor.project.currentProject.path+"/"+editor.res.get(editor.node.selected.tilemap).tileset[key];
+					game.load.image(mapTileSets[i].name, imgsrc);
+					$('#tilesets').append('<img id="'+mapTileSets[i].name+'" src="'+imgsrc+'"/>');
 				}
-				game.load.tilemap('map', 'data/features_test.json', null, Phaser.Tilemap.TILED_JSON);
+				game.load.tilemap('map', mapPath, null, Phaser.Tilemap.TILED_JSON);
 			}
 			
 			function create() {
@@ -169,7 +160,7 @@
 					map.addTilesetImage(mapTileSets[i].name);
 				}
 
-				map.createLayer('Tile Layer 3');
+				//map.createLayer('Tile Layer 3');
 				layer = map.createLayer('Tile Layer 1');
 
 				layer.resizeWorld();
@@ -190,10 +181,12 @@
 				marker.x = currentLayer.getTileX(game.input.activePointer.worldX) * 32;
 				marker.y = currentLayer.getTileY(game.input.activePointer.worldY) * 32;
 				if (game.input.mousePointer.isDown){
-					map.putTile(currentTile, currentLayer.getTileX(marker.x), currentLayer.getTileY(marker.y), currentLayer);
+					var offsetx=currentLayer.getTileX(marker.x);
+					var offsety=currentLayer.getTileY(marker.y);
+					map.putTile(currentTile, offsetx, offsety, currentLayer);
+					mapObject.layers[map.currentLayer].data[offsety*mapObject.width+offsetx]=currentTile;
 				}
 			}
-
 			function update() {
 				//console.log(pos[0],pos[1],tileRect.width,tileRect.height);
 				tileRect=$("#tilesets").offset();
@@ -209,5 +202,11 @@
 				mymarker.style.top = game.math.snapToFloor(pos[1] - tilesets.clientHeight - tileRect.top, h) - 1 + 'px';
 			}
 		});	
+		$("#btn_ok").click(function(){
+			var canvas = document.getElementById('tilemapdiv').children[0];
+			editor.ui.gamePane.update(editor.node.selected,'mapcache',canvas.toDataURL());
+			editor.file.writeFile(mapPath,JSON.stringify(mapObject));
+			$('#dd').dialog('close');
+		});
 	});
 	</script>

@@ -101,6 +101,17 @@
 	</script>
 	<script>
 	$(document).ready(function () {
+		var editor=edt;
+		if(editor.node.selected==null){
+			$('#dd').dialog('close');
+			return false;
+		}
+		var res=editor.res.get(editor.node.selected.image);
+		var path=editor.project.currentProject.path+"/"+res.path;
+		var body=editor.node.selected.body;
+		var scalex=res.width/256;
+		var scaley=res.height/256;
+		
 		var convas=document.getElementById("convex");
 		var ctx=convas.getContext("2d");	
 		ctx.canvas.height=256;
@@ -113,16 +124,11 @@
 				ctx.stroke(); 
 			});
 		}
-		loadImage('/data/default.png', 64, 64, '#sprite');
-		$('#convex').click(function(e){
-			var offset = $(this).offset();
-			//ctx.beginPath();
-			//ctx.arc(e.clientX-offset.left, e.clientY-offset.top, 4, 0, 2 * Math.PI, false);
-			//ctx.stroke();
-			convex.addpoint(e.clientX-offset.left, e.clientY-offset.top);
+		function addPointToConvex(x,y){
+			convex.addpoint(x,y);
 			if(convex.points.length<=2){
 				ctx.beginPath();
-				ctx.arc(e.clientX-offset.left, e.clientY-offset.top, 4, 0, 2 * Math.PI, false);
+				ctx.arc(x, y, 4, 0, 2 * Math.PI, false);
 				ctx.stroke();
 			}else{
 				convex.calculate();
@@ -137,11 +143,28 @@
 					ctx.stroke();
 				}
 			}
+		}
+		loadImage(path, 64, 64, '#sprite');
+		if(typeof body=="object"){
+			for(p in body){
+				addPointToConvex(body[p][0]/scalex,body[p][1]/scaley);
+			}
+		}
+		$('#convex').click(function(e){
+			var offset = $(this).offset();
+			addPointToConvex(e.clientX-offset.left, e.clientY-offset.top);
 		});
 		$("#btn_ok").click(function(){
-			var polygon=convex.hull;
+			var polygon=[];//convex.hull;
+			var prepoint=[null,null];
+			for(p in convex.hull){
+				var point = [parseInt(convex.hull[p].x*scalex),parseInt(convex.hull[p].y*scaley)];
+				if(point[0]!=prepoint[0]&&point[1]!=prepoint[1])
+					polygon.push(point);
+				prepoint=point;
+			}
 			//console.log(polygon);
-			//editor.attr.setAttr(editor.node.selected,'tracks',tracks);
+			editor.attr.setAttr(editor.node.selected,'body',polygon);
 			$('#dd').dialog('close');
 		});
 		$("#btn_cancel").click(function(){
