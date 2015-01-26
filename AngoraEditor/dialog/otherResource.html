@@ -14,15 +14,14 @@
 	  height: 20px;
 	}
 	</style>
-	<div class="easyui-panel" title="New Project" style="width:480px">
 	<div style="padding:10px 30px 20px 30px">
 	<div id='form' style="text-align:center;">
 		<p>ID:<input id='resID' class='.easyui-textbox'/><p>
 		<select id="cc" class="easyui-combobox" name="dept" style="width:200px;">
 			<option>spritesheet</option>
 			<option>atlas</option>
-			<option>bitmapFont</option>
-			<option>tileMap</option>
+			<option>bitmapfont</option>
+			<option>tilemap</option>
 			<option>text</option>
 		</select>
 		<div id='options'>
@@ -35,7 +34,6 @@
 	<div style="text-align:center;padding:5px">
 	<a id="confirm" class="easyui-linkbutton" >OK</a>
 	<a id="cancel" class="easyui-linkbutton" >Cancel</a>
-	</div>
 	</div>
 	</div>
   <script>
@@ -52,13 +50,12 @@
 			options="<p>asset:<input id='asset' class='file' readonly/></p>"+
 					"<p>atlasData:<input id='data' class='file' readonly/></p>";
 			break;
-		case 'bitmapFont':
+		case 'bitmapfont':
 			options="<p>bitmap:<input id='bitmap' class='file' readonly/></p>"+
 					"<p>fontData:<input id='data' class='file' readonly/></p>";
 			break;
-		case 'tileMap':
-			options="<p>tileset:<input id='tileset' class='file' readonly/></p>"+
-					"<p>tileData:<input id='data' class='file' readonly/></p>";
+		case 'tilemap':
+			options="<p>tileData:<input id='data' class='file' readonly/></p>";
 			break;
 		case 'text':
 			options="<p>file:<input id='data' class='file' readonly/></p>";
@@ -74,11 +71,14 @@
 		var height;
 		var width;
 		var type='spritesheet';
+		var tileset={};
 		$('#cc').combobox({
 			onSelect:function(record){
 				showPane(record.value);
 				$('#assetpreview').attr('src','');
 				type=record.value;
+				if(record.value!='tilemap')
+					tileset={};
 			}
 		});
 		$("#options").delegate('.file','dblclick',function(){
@@ -96,21 +96,27 @@
 						height=this.naturalHeight;
 						width=this.naturalWidth;
 					});
+				}else if(type=='tilemap'){
+					if(selected.attr('id')=='data'){
+						var projectpath = editor.project.currentProject.path;
+						var respath = "{0}/data/{1}".format(projectpath,filename);
+						editor.file.readFile(respath,function(data){
+							map=JSON.parse(data);
+							for(i in map.tilesets){
+								var img=map.tilesets[i].image;
+								var imgid=img.substr(0, img.lastIndexOf('.')) || img;
+								$('#options').append("<p>{0}:<input id='{0}' class='file' readonly/></p>".format(imgid));
+							}
+						});
+					}else{
+						var resid=filename.substr(0, filename.lastIndexOf('.')) || filename;
+						tileset[resid]='data/'+filename;
+					}
 				}
 			});
 		});
 		$('#confirm').click(function(){
-			/*for(i=0;i<$(".file").size();i++){
-				var div=$(".file").get(i);
-				var path=div.value;
-				var filename = path.replace(/^.*[\\\/]/, '');
-				var dest=editor.project.currentProject.path+'\\data\\'+filename;
-				editor.file.copyFile(path,dest);
-				$(".file").get(i).value=filename;
-			}*/
 			var resID=$('#resID').val();
-			//var type=$('#cc').val();
-			//var res= {"id":resID,"type":type}
 			switch(type){
 			case 'spritesheet':
 				res={
@@ -127,32 +133,35 @@
 					data:$('#data').val()
 				}
 				break;
-			case 'bitmapFont':
+			case 'bitmapfont':
 				res={
 					bitmap:$('#bitmap').val(),
 					data:$('#data').val()
 				}
 				break;
-			case 'tileMap':
+			case 'tilemap':
 				res={
-					tileset:$('#tileset').val(),
+					tileset:tileset,
 					data:$('#data').val()
 				}
 				break;
 			case 'text':
-				res=$('#data').val();
+				res={
+					path:$('#data').val()
+				};
 				break;
 			default:
 				res=null;
 				break;
 			}
-			//editor.res.add($('#resID').val(),type,res);
+			res.id=resID;
+			res.type=type;
 			editor.res.add(resID,type,res);
 			editor.res.selected=res;
-			$('#dd').dialog('close');
+			$('#otherdd').dialog('close');
 		});
 		$('#cancel').click(function(){
-			$('#dd').dialog('close');
+			$('#otherdd').dialog('close');
 		});
 	  });
   </script>

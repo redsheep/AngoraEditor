@@ -77,16 +77,19 @@
 		var tilesets=document.getElementById('tilesets');
 		var pos = [0, 0];
 		var tileid = { x: 0, y: 0 };
-		var tileRect = null;
+		//var tileRect = null;
 		var mapPath=editor.project.currentProject.path+"/"+editor.res.get(editor.node.selected.tilemap).data;//"/data/features_test.json";
 		var mapObject;
 		var mapLayers;
 		var mapTileSets;
+		var mapLayerIndex={};
 		
 		var map;
+		var layers={};
 		var marker;
 		var currentTile = 2;
 		var currentLayer;
+		var currentLayerName;
 		var cursors;
 		var selectedTab;
 		var tilerows=0;
@@ -119,12 +122,23 @@
 				currentTile = tileid.y * tilecols + tileid.x + tilestart;
 			}
 		});
+		$('#map').mouseout(function(){
+			if(typeof marker!='undefined')
+				marker.visible=false;
+		});
+		$('#map').mouseover(function(){
+			if(typeof marker!='undefined')
+				marker.visible=true;
+		});
 		editor.file.readFile(mapPath, function(json) {
 			mapObject=JSON.parse(json);
 			mapLayers=mapObject['layers'];
 			mapTileSets=mapObject['tilesets'];
 			for( i in mapLayers){
+				if(mapLayers[i].type=='tilelayer'){
 				$('#layer').append("<div class='layer'>"+mapLayers[i].name+"</div>");
+				mapLayerIndex[mapLayers[i].name]=i;
+				}
 			}
 			/*for( i in mapTileSets){
 				$('#tilesets').append('<img id="'+mapTileSets[i].name+'" src="data/'+mapTileSets[i].image+'"/>');
@@ -134,13 +148,21 @@
 				if(selected.length>0)
 					selected.removeClass("selected");
 				$(this).addClass("selected");
-				var layername=$(this).innerHTML;
-				map.createLayer('Tile Layer 3');
-				layer = map.createLayer('Tile Layer 1');
-				layer.resizeWorld();
-				currentLayer = layer;
+				var layername=this.innerHTML;
+				changeLayer(layername);
 			});
-			
+			function changeLayer(layername){
+				for( i in layers){
+					if(i==layername)
+						layers[i].alpha=1.0;
+					else
+						layers[i].alpha=0.2;
+				}
+				currentLayerName=layername;
+				currentLayer = layers[layername];
+				map.setLayer(currentLayer);
+				currentLayer.resizeWorld();
+			}
 			var game = new Phaser.Game(mapObject.tilewidth*mapObject.width, mapObject.tileheight*mapObject.height, Phaser.CANVAS, 'tilemapdiv', { preload: preload, create: create, update: update });
 
 			function preload() {
@@ -150,7 +172,7 @@
 					game.load.image(mapTileSets[i].name, imgsrc);
 					$('#tilesets').append('<img id="'+mapTileSets[i].name+'" src="'+imgsrc+'"/>');
 				}
-				game.load.tilemap('map', mapPath, null, Phaser.Tilemap.TILED_JSON);
+				game.load.tilemap('map', mapPath+'?_='+new Date().getTime(), null, Phaser.Tilemap.TILED_JSON);
 			}
 			
 			function create() {
@@ -159,13 +181,13 @@
 				for(i in mapTileSets){
 					map.addTilesetImage(mapTileSets[i].name);
 				}
-
-				//map.createLayer('Tile Layer 3');
-				layer = map.createLayer('Tile Layer 1');
-
-				layer.resizeWorld();
-
-				currentLayer = layer;
+				for(i in mapLayers){
+					if(mapLayers[i].type=='tilelayer'){
+						var layername=mapLayers[i].name;
+						layers[layername] = map.createLayer(layername);
+					}
+				}
+				changeLayer(mapLayers[0].name);
 				
 				//  Our painting marker
 				marker = game.add.graphics();
@@ -176,20 +198,25 @@
 				cursors = game.input.keyboard.createCursorKeys();
 
 			}
-
+			
 			function updateMarker() {
 				marker.x = currentLayer.getTileX(game.input.activePointer.worldX) * 32;
 				marker.y = currentLayer.getTileY(game.input.activePointer.worldY) * 32;
 				if (game.input.mousePointer.isDown){
 					var offsetx=currentLayer.getTileX(marker.x);
 					var offsety=currentLayer.getTileY(marker.y);
+					if(game.input.mouse.button==Phaser.Mouse.LEFT_BUTTON){
 					map.putTile(currentTile, offsetx, offsety, currentLayer);
-					mapObject.layers[map.currentLayer].data[offsety*mapObject.width+offsetx]=currentTile;
+					mapObject.layers[mapLayerIndex[currentLayerName]].data[offsety*mapObject.width+offsetx]=currentTile;}
+					else if(game.input.mouse.button==Phaser.Mouse.RIGHT_BUTTON){
+					map.putTile(null, offsetx, offsety, currentLayer);
+					mapObject.layers[mapLayerIndex[currentLayerName]].data[offsety*mapObject.width+offsetx]=0;					
+					}
 				}
 			}
 			function update() {
 				//console.log(pos[0],pos[1],tileRect.width,tileRect.height);
-				tileRect=$("#tilesets").offset();
+				var tileRect=$("#tilesets").offset();
 				var h=mymarker.clientHeight;
 				var w=mymarker.clientWidth;
 				var mtop=tileRect.top;

@@ -7,18 +7,33 @@ var {sceneName} = function(game) {
   this.isLoadComplete=false;
   this.isCreateFinished=false;
   this.objects={};
+  this.physicType="ARCADE";
 };
 {sceneName}.prototype = {
   preload: function() {
 	this.customLoad();
   },
   create: function() {
- 	for(ev in this.worldConfig.input){
-		if(this.worldConfig.input[ev]!="")
-		this.game.input[ev].add(this[this.worldConfig.input[ev]],this);
+	var worldConfig=this.worldConfig;
+  	if(parseBoolean(worldConfig.physics.enable)){
+		this.physicType=worldConfig.physics.type;
+		if(this.worldConfig.physics.type=="ARCADE"){
+		this.game.physics.startSystem(Phaser.Physics.ARCADE);
+		this.game.physics.arcade.gravity.x = parseInt(worldConfig.physics.gravityX);
+		this.game.physics.arcade.gravity.y = parseInt(worldConfig.physics.gravityY);
+		}else if(worldConfig.physics.type=="P2JS"){
+		this.game.physics.startSystem(Phaser.Physics.P2JS);
+		this.game.physics.p2.gravity.x = parseInt(worldConfig.physics.gravityX);
+		this.game.physics.p2.gravity.y = parseInt(worldConfig.physics.gravityY);
+		}
 	}
-    this.stage.backgroundColor = this.worldConfig.backgroundColor;
-	this.world.setBounds(0, 0, this.worldConfig.world.width, this.worldConfig.world.height);
+ 	for(ev in worldConfig.input){
+		if(worldConfig.input[ev]!="")
+		this.game.input[ev].add(this[worldConfig.input[ev]],this);
+	}
+    this.stage.backgroundColor = worldConfig.backgroundColor;
+	this.world.setBounds(parseInt(worldConfig.world.x), parseInt(worldConfig.world.y), parseInt(worldConfig.world.width), parseInt(worldConfig.world.height));
+	this.camera.bounds=new Phaser.Rectangle(parseInt(worldConfig.camera.x), parseInt(worldConfig.camera.y), parseInt(worldConfig.camera.width), parseInt(worldConfig.camera.height));
 	this.load.onLoadComplete.addOnce(this.loadComplete,this);
 	for(i in this.sceneRes){
 	  LoadRes(this,this.sceneRes[i]);

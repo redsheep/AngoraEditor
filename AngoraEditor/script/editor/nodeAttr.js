@@ -96,16 +96,14 @@ AngoraEditor.NodeAttrManager.prototype = {
 			node[attr]=value;
 			return;
 		case 'dx':
-			if(typeof node.anchorX!='undefined'){
+			if(typeof node.anchorX!='undefined')
 			value=parseInt(value)+parseInt(node.width)*parseFloat(node.anchorX);
 			attr='x';
-			}
 			break;
 		case 'dy':
-			if(typeof node.anchorY!='undefined'){
+			if(typeof node.anchorY!='undefined')
 			value=parseInt(value)+parseInt(node.height)*parseFloat(node.anchorY);
 			attr='y';
-			}
 			break;
 		case 'anchorX':
 			var x=parseInt(node.x)-parseInt(node.width)*parseFloat(node.anchorX)+parseInt(node.width)*parseFloat(value);
@@ -196,7 +194,7 @@ AngoraEditor.NodeAttrManager.prototype = {
 			case 'atlasWidth':return 64;
 			case 'atlasHeight':return 64;
 			case 'delay':return 100;
-			case 'maxparicles':return 30;
+			case 'maxParticles':return 30;
 			case 'lifespan':return 100;
 			case 'gravity': return 900;
 			case 'frequency':return 100;

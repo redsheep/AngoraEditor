@@ -125,6 +125,72 @@
 	background-image: url("icons/types.png");
 	background-position: -16px 0px;
 }
+.icon-ae-config{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: -16px -80px;
+}
+.icon-ae-view{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: -64px -80px;
+}
+.icon-ae-resource{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: -48px -80px;
+}
+.icon-ae-release{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: -48px -64px;
+}
+.icon-ae-bitmaptext{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: -16px -64px;
+}
+.icon-ae-tilesprite{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: 0px -64px;
+}
+.icon-ae-physics{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: -64px -48px;
+}
+.icon-ae-snap{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: -48px -48px;
+}
+.icon-ae-resize{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: -32px -48px;
+}
+.icon-ae-grid{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: 0px -48px;
+}
+.icon-ae-stamp{
+	width: 16px;
+	height: 16px;
+	background-image: url("icons/types.png");
+	background-position: -48px -32px;
+}
 .icon-ae-sprite{
 	width: 16px;
 	height: 16px;
@@ -135,7 +201,7 @@
 	width: 16px;
 	height: 16px;
 	background-image: url("icons/types.png");
-	background-position: 0px 0px;
+	background-position: -64px -32px;
 }
 .icon-ae-image{
 	width: 16px;

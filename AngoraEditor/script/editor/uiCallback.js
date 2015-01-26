@@ -211,6 +211,15 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 				editor.ui.showGrid=false;
 			}
 			break;
+		case 'showregion':
+			if(editor.ui.showRegion==false){
+				$('#gamecanvas').css('visibility','visible');
+				editor.ui.showRegion=true;
+			}else{
+				$('#gamecanvas').css('visibility','hidden');
+				editor.ui.showRegion=false;
+			}
+			break;
 		default:break;
 		}
 	}});

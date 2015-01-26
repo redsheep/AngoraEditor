@@ -132,6 +132,10 @@ AngoraEditor.PropertyGridManager.prototype = {
 		for( i in data){
 			if(i=='events'||i=='input'){
 				continue;
+			}else if(i=='body'||i=='tileset'){
+				this.add(i, data[i].toString());
+				this.propertyIndex[i]=count;
+				count++;
 			}else if(typeof data[i]==='object'){
 				for(j in data[i]){
 					this.add(j, data[i][j], i);
@@ -199,16 +203,15 @@ AngoraEditor.PropertyGridManager.prototype = {
 			case 'audio':	group='audio';type='none';break;
 			case 'tracks':	group='audio';type='none';break;
 			case 'delay':	group='general';type='numberbox';break;
-			case 'maxParicles':	group='emitter';type='numberbox';break;
-			case 'frequency':	group='emitter';type='none';break;
-			case 'angle':	group='emitter';type='none';break;
-			case 'lifespan':	group='particle';type='none';break;
-			case 'gravity':	group='particle';type='none';break;
-			case 'minspeedX':	group='particle';type='none';break;
-			case 'maxspeedX':	group='particle';type='none';break;
-			case 'minspeedY':	group='particle';type='none';break;
-			case 'maxspeedY':	group='particle';type='none';break;
-			case 'maxparicles': group='particle';type='none';break;
+			case 'maxParticles':	group='emitter';type='numberbox';break;
+			case 'frequency':	group='emitter';type='numberbox';break;
+			case 'angle':	group='emitter';type='numberbox';break;
+			case 'lifespan':	group='particle';type='numberbox';break;
+			case 'gravity':	group='particle';type='numberbox';break;
+			case 'minspeedX':	group='particle';type='numberbox';break;
+			case 'maxspeedX':	group='particle';type='numberbox';break;
+			case 'minspeedY':	group='particle';type='numberbox';break;
+			case 'maxspeedY':	group='particle';type='numberbox';break;
 			case 'tileW': group='tilemap';type='numberbox';break;
 			case 'tileH': group='tilemap';type='numberbox';break;
 			case 'tilesetW': group='tilemap';type='numberbox';break;

@@ -174,6 +174,7 @@ AngoraEditor.SceneManager.prototype = {
 				//this.editor.file.removeFile("{0}/{1}.scripts".format(projectpath, sceneName));
 				editor.file.removeFile("{0}/{1}.script.js".format(projectpath, sceneName));
 			}
+			this.reset();
 		}
 	},
 	/**
@@ -260,6 +261,7 @@ AngoraEditor.SceneManager.prototype = {
 	save : function () {
 		//alert('try saving');
 		var editor = this.editor;
+		if(editor.project.currentProject==null) return;
 		var projectpath = editor.project.currentProject.path;
 		var sceneName = this.curScene;
 		//editor.file.writeFile("{0}/{1}.js".format(projectpath,sceneName),);

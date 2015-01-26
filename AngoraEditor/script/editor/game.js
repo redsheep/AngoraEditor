@@ -68,6 +68,8 @@ AngoraEditor.GameManager.prototype={
 		this.set('plugins',config.plugins);
 		this.set('startScene', config.startScene);
 		this.editor.file.writeFile(configfile,JSON.stringify(config,null,2));
+		$('#gamecanvas').css('width',editor.game.display.width);
+		$('#gamecanvas').css('height',editor.game.display.height);
 	},
 	/**
 	* Description 

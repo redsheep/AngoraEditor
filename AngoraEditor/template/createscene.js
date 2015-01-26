@@ -1,50 +1,49 @@
-
-/*function LoadNode(game,node){
-return createObject(game,node);
-//return objects[node.name];
-//   if(node.parent in objects){
-// 	objects[node.parent].add(objects[node.name]);
-//   }
-//   else{
-// 	objects[node.parent]=game.add.group();
-//   }
-}*/
 function createObject(state, node) {
 	var object = null;
 	switch (node.type) {
 	case 'tilesprite':
-		object = state.add.tileSprite(parseInt(node.x), parseInt(node.y), parseInt(node.width), parseInt(node.height), node.image);
-		object.visible = Boolean(node.visible);
-		if(typeof node.frame!='undefined')
-			object.frame=node.frame;
+	case 'sprite':
+	case 'animate':
+		if(node.type=='tilesprite'){
+			object = state.add.tileSprite(parseInt(node.x), parseInt(node.y), parseInt(node.width), parseInt(node.height), node.image);
+			if(typeof node.frame!='undefined')
+				object.frame=node.frame;
+		}else if(node.type=='sprite'){
+			object = state.add.sprite(parseInt(node.x), parseInt(node.y), node.image);
+			object.width=parseInt(node.width);
+			object.height=parseInt(node.height);
+			if(typeof node.frame!='undefined')
+				object.frame=node.frame;
+		}else if(node.type=='animate'){
+			object = state.add.sprite(parseInt(node.x), parseInt(node.y), node.image);
+			for (key in node.animations) {
+				object.animations.add(key, node.animations[key].sequence, 10, true);
+			}
+		}
+		//object.width = parseInt(node.width);
+		//object.height = parseInt(node.height);
+		if(typeof node.anchorX!='undefined'&&typeof node.anchorY!='undefined')
+			object.anchor.set(parseFloat(node.anchorX),parseFloat(node.anchorY));
+		if(String(node.physics)=='true'){
+			if(state.physicType=="ARCADE"){
+				state.game.physics.arcade.enable(object);
+				object.body.immovable=!parseBoolean(node.dynamic);
+				object.body.allowGravity=parseBoolean(node.dynamic);
+				object.body.mass=parseInt(node.mass);
+				object.body.allowRotation=!parseBoolean(node.fixedRotation);
+			}else if(state.physicType=="P2JS"){
+				state.game.physics.p2.enable(object);
+				object.body.dynamic=parseBoolean(node.dynamic);
+				object.body.mass=parseInt(node.mass);
+				object.body.fixedRotation=parseBoolean(node.fixedRotation);
+			}
+			//object.body.collideWorldBounds = true;
+		}
 		break;
 	case 'image':
-	case 'sprite':
-		object = state.add.sprite(parseInt(node.x), parseInt(node.y), node.image);
-		//object.width = parseInt(node.width);
-		//object.height = parseInt(node.height);
-		if(typeof node.frame!='undefined')
-			object.frame=node.frame;
-		object.visible = Boolean(node.visible);
-		state.game.physics.arcade.enable(object);
-		object.body.collideWorldBounds = true;
-		object.body.enable = node.physics;
-		//game.physics.arcade.enable(object);
-		//object.body.allowGravity = false;
-		break;
-	case 'animate':
-		object = state.add.sprite(parseInt(node.x), parseInt(node.y), node.image);
-		//object.width = parseInt(node.width);
-		//object.height = parseInt(node.height);
-		object.visible = Boolean(node.visible);
-		state.game.physics.arcade.enable(object);
-		object.body.collideWorldBounds = true;
-		object.body.enable = node.physics;
-		for (key in node.animations) {
-			object.animations.add(key, node.animations[key].sequence, 10, true);
-		}
-		//game.physics.arcade.enable(object);
-		//object.body.allowGravity = false;
+		object = state.add.image(parseInt(node.x), parseInt(node.y), node.image);
+		object.width=parseInt(node.width);
+		object.height=parseInt(node.height);
 		break;
 	case 'group':
 		object = state.add.group();
@@ -56,12 +55,10 @@ function createObject(state, node) {
 		object.font = node.fontFamily;
 		object.fill = node.fontColor;
 		object.fontSize = node.fontSize;
-		object.visible = Boolean(node.visible);
 		break;
 	case 'bitmaptext':
 		object = state.add.bitmapText(parseInt(node.x), parseInt(node.y), node.font, node.text);
 		object.fontSize = node.fontSize;
-		object.visible = Boolean(node.visible);
 		break;
 	case 'audio':
 		object = state.add.audio(node.audio);
@@ -74,7 +71,6 @@ function createObject(state, node) {
 		object = state.add.button(parseInt(node.x), parseInt(node.y), node.image);
 		object.width = parseInt(node.width);
 		object.height = parseInt(node.height);
-		object.visible = Boolean(node.visible);
 		if(typeof node.frame!='undefined')
 			object.frame=node.frame;
 		break;
@@ -85,9 +81,19 @@ function createObject(state, node) {
 		object = state.time.create(false);
 		object.loop(parseInt(node.delay), node.events.callback, state);
 		return object;
+	case 'tilemap':
+		object = state.add.tilemap(node.tilemap);
+		for(var i in node.tileset){
+			object.addTilesetImage(node.tileset[i]);
+		}
+		break;
 	default:
 		break;
 	}
+	if (typeof node.rotation !== 'undefined')
+		object.angle=parseInt(node.rotation);
+	if (typeof node.visible !== 'undefined')
+		object.visible = parseBoolean(node.visible);
 	if (typeof node.events !== 'undefined') {
 		for (e in node.events) {
 			object.inputEnabled = true;
@@ -110,6 +116,10 @@ function LoadRes(game, res) {
 		return game.load.atlas(res.id, res.path, res.data);
 	case 'text':
 		return game.load.text(res.id,res.path);
+	case 'tilemap':
+		for(img in res.tileset)
+			game.load.image(img,res.tileset[img]);
+		return game.load.tilemap(res.id, res.data, null, Phaser.Tilemap.TILED_JSON);
 	default:
 		return false;
 	}

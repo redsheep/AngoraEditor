@@ -63,14 +63,14 @@ AngoraEditor.ProjectManager.prototype = {
 				p.config=JSON.parse(json);
 				p.editor.game.setup(p.config);
 				//p.editor.ui.gamePane.setupConfig();
-				console.log('game setup ready');
+				console.log('load config success');
 				p.editor.scene.setup(finished);
 				console.log('New Project Create Success!');
 			});			
 		}else{
 			p.editor.game.setup(p.config);
 			//p.editor.ui.gamePane.setupConfig();
-			console.log('game setup ready');
+			console.log('update config success');
 			p.editor.scene.setup(finished);
 			console.log('New Project Create Success!');
 		}

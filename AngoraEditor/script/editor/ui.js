@@ -115,7 +115,7 @@ AngoraEditor.UI.prototype = {
 		var dlg=this.showDialog('/dialog/tiledmapEditor',800,600,func);
 	},
 	showParticleEditor: function(func){
-		var dlg=this.showDialog('/dialog/particleEditor',480,480,func);
+		var dlg=this.showDialog('/dialog/particleEditor',520,480,func);
 	},
 	showPhysicsEditor: function(func){
 		var dlg=this.showDialog('/dialog/physicsEditor',640,480,func);
@@ -140,7 +140,7 @@ AngoraEditor.UI.prototype = {
 		//	var startPage = "{0}/mygame.html".format(editor.project.currentProject.path);
 		//	window.open (startPage,'','height={0},width={1},top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no'.format(editor.project.config.display.height,editor.project.config.display.width)); 
 		//});
-		var startPage = "{0}/mygame.html".format(editor.project.currentProject.path);
+		var startPage = "{0}/mygame.html?{1}".format(editor.project.currentProject.path,new Date().getTime());
 		window.open (startPage,'','height={0},width={1},top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no'.format(editor.project.config.display.height,editor.project.config.display.width)); 
 	},
 	/**
@@ -225,7 +225,7 @@ AngoraEditor.UI.prototype = {
 		if(menuitem!=null){
 			$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Stamp').target);
 			switch(menuitem){
-			case 'animate':$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Animation').target);break;
+			case 'animate':$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Animation').target);
 			case 'sprite':$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Physics').target);break;
 			case 'particle':$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Particle').target);break;
 			case 'audio':$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Audio').target);break;

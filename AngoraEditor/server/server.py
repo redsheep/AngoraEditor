@@ -49,6 +49,13 @@ def readFile(filename):
     print 'read from %s success'%filename
     return static_file(filename, root='../',mimetype='text')
 
+@route('/remove/<filename:path>')
+def removeFile(filename):
+    #response.content_type = 'text/html; charset=UTF-8'
+    os.remove('../'+filename)
+    print 'remove from %s success'%filename
+    return 'sucess'
+
 @route('/write', method='POST')
 def writeFile():
     path = request.forms.get('path')

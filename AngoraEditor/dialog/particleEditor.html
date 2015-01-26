@@ -1,6 +1,7 @@
 <div id="container" class="easyui-layout" fit="true">
-	<div data-options="region:'north'" style="overflow:hidden;">
-		<a id="btn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'"></a>
+	<div data-options="region:'south'" style="overflow:hidden">
+		<button id="btn_ok" style="float:left;margin-top:10px;">OK</button>
+		<button id="btn_cancel" style="float:right;margin-top:10px;">Cancel</button>
 	</div>
 
 	<div id="particles" data-options="region:'center'" style="overflow:hidden;width:350px;height:480px;">
@@ -12,15 +13,18 @@
 <script>
 	$(document).ready(function(){
 		var editor=edt;
+		if(editor.node.selected==null){
+			$('#dd').dialog('close');
+			return false;
+		}
 		var selected=editor.node.selected;
 		var emitter;
 		var data=[];
 		for( key in selected){
+			if(key=='x'||key=='y')continue;
 			switch(key){
 			case 'id':
 			case 'type':
-			case 'x':
-			case 'y':
 			case 'visible':type='none';break;
 			default:type='numberbox';break;
 			}
@@ -41,11 +45,19 @@
 		}
 		function create() {
 			game.stage.backgroundColor = '#000000';
-			emitter = game.add.emitter(game.world.centerX, game.world.centerY, 30);
+			emitter = game.add.emitter(game.world.centerX, game.world.centerY);
 			emitter = emitter.makeParticles('particle');
 			emitter.start(false);
 			for(key in selected){
+				if(key=='x'||key=='y')continue;
 				emitter[key]=selected[key];
+			}
+			game.input.onDown.add(updatePoint, this);
+		}
+		function updatePoint(e){
+			if (game.input.mousePointer.isDown){
+				emitter.x=game.input.activePointer.worldX;
+				emitter.y=game.input.activePointer.worldY;
 			}
 		}
 		function render() {

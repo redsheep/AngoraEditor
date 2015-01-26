@@ -18,15 +18,11 @@
 	<form id="ff" method="post">
 	<table cellpadding="5">
 	<tr>
-	<td>Name:</td>
-	<td><input id='name' class="easyui-textbox" ></input></td>
-	</tr>
-	<tr>
-	<td>DisplayX:</td>
+	<td>Width:</td>
 	<td><input id='DisplayX' class="easyui-numberspinner" value='800'></input></td>
 	</tr>
 	<tr>
-	<td>DisplayY:</td>
+	<td>Height:</td>
 	<td><input id='DisplayY' class="easyui-numberspinner" value='600'></input></td>
 	</tr>
 	<tr>
@@ -47,9 +43,6 @@
 	<select id='Physics' >
 	<option>ARCADE</option>
 	<option>P2JS</option>
-	<option>BOX2D</option>
-	<option>CHIPMUNK</option>
-	<option>NINJA</option>
 	</select>
 	</td>
 	</tr>
@@ -65,19 +58,11 @@
 	$(document).ready(function(){
 		var editor = edt;
 		$('#confirm').click(function(){
-			var name=$('#name').val();
-			var path=editor.system.workspacePath+'/'+name;
 			var DisplayX=$('#DisplayX').val();
 			var DisplayY=$('#DisplayY').val();
 			var Render=$('#Render').val();
 			var AntiAlias=$('#AntiAlias').is(':checked');
 			var Physics=$('#Physics').val();
-			var project={
-				name: name,
-				path: path,
-				icons: '',
-				descript:''
-			};
 			var config={
 				display:{width:DisplayX,height:DisplayY},
 				render:Render,
@@ -85,7 +70,6 @@
 				physics:Physics,
 				plugins:''
 			};
-			//editor.project.load(project);
 			$('#dd').dialog('close');
 		});
 		$('#cancel').click(function(){

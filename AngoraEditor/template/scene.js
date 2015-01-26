@@ -1,45 +1,46 @@
 var {sceneName} = function(game) {
   this.game = game;
   this.sceneName="{sceneName}";
-  this.sceneResFile="{sceneName}.res";
-  this.sceneNodeFile="{sceneName}.scn";
-  this.sceneScriptsFile="{sceneName}.scripts";
-  this.configFile="config.json";
-  this.worldConfigFile="{sceneName}.config";
+  this.sceneResFile="{sceneName}.res"+'?'+ new Date().getTime();
+  this.sceneNodeFile="{sceneName}.scn"+'?'+ new Date().getTime();
+  this.worldConfigFile="{sceneName}.config"+'?'+ new Date().getTime();
   this.isLoadComplete=false;
   this.isCreateFinished=false;
   this.objects={};
+  this.physicType="ARCADE";
 };
 {sceneName}.prototype = {
   preload: function() {
 	this.load.text('sceneRes', this.sceneResFile);
 	this.load.text('sceneNode', this.sceneNodeFile);
-	this.load.text('sceneScripts', this.sceneScriptsFile);
-	this.load.text('config',this.configFile);
 	this.load.text('worldConfig',this.worldConfigFile);
 	this.customLoad();
   },
   create: function() {
-	var config=JSON.parse(this.cache.getText('config'));
 	var worldConfig=JSON.parse(this.cache.getText('worldConfig'));
 	/*this.game.scale.width = parseInt(config.display.width);
     this.game.scale.height = parseInt(config.display.height);
 	this.game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
     this.game.scale.setScreenSize();*/
-	if(config.physics.enable){
+	if(parseBoolean(worldConfig.physics.enable)){
+		this.physicType=worldConfig.physics.type;
+		if(worldConfig.physics.type=="ARCADE"){
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
-		this.game.physics.arcade.gravity.x = 0;//worldConfig.gravity.x;
-		this.game.physics.arcade.gravity.y = 100;//worldConfig.gravity.y;
+		this.game.physics.arcade.gravity.x = parseInt(worldConfig.physics.gravityX);
+		this.game.physics.arcade.gravity.y = parseInt(worldConfig.physics.gravityY);
+		}else if(worldConfig.physics.type=="P2JS"){
+		this.game.physics.startSystem(Phaser.Physics.P2JS);
+		this.game.physics.p2.gravity.x = parseInt(worldConfig.physics.gravityX);
+		this.game.physics.p2.gravity.y = parseInt(worldConfig.physics.gravityY);
+		}
 	}
  	for(ev in worldConfig.input){
 		if(worldConfig.input[ev]!="")
 		this.game.input[ev].add(this[worldConfig.input[ev]],this);
-	} 
-	//this.game.sound.volume=config.sound.volume;
-	//if(config.sound.enable==false)
-	//	this.game.sound.volume=0;
+	}
     this.stage.backgroundColor = worldConfig.backgroundColor;
-	this.world.setBounds(0, 0, worldConfig.world.width, worldConfig.world.height);
+	this.world.setBounds(parseInt(worldConfig.world.x), parseInt(worldConfig.world.y), parseInt(worldConfig.world.width), parseInt(worldConfig.world.height));
+	this.camera.bounds=new Phaser.Rectangle(parseInt(worldConfig.camera.x), parseInt(worldConfig.camera.y), parseInt(worldConfig.camera.width), parseInt(worldConfig.camera.height));
 	this.load.onLoadComplete.addOnce(this.loadComplete,this);
 	var sceneRes = JSON.parse(this.cache.getText('sceneRes'));
 	for(i in sceneRes){
@@ -86,7 +87,3 @@ var {sceneName} = function(game) {
   }
 };
 LoadScript('{sceneName}.script.js');
-// State1.prototype.update=function(){
-//   if(this.isLoadComplete)
-// 	objects['MushRoom'].x++;
-// }
