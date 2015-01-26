@@ -12,10 +12,10 @@
 		background:#ccc;
 		position:absolute;
 		width:64px;
-
 		left:0px;
-		top:48px;
-		font-size:14px;
+		bottom:0px;
+		font-size:12px;
+		height:20px;
 	}
 	.resrect img{
 		height:64px;
@@ -26,7 +26,7 @@
 	}
 	.selectedrect{
 		background-color:lightgray;!important
-		border-color:red;!important
+		border:2px solid red;!important
 	}
 </style>
 <div class="easyui-layout" fit="true">
@@ -48,6 +48,16 @@
 		<button id="cancelbtn">Cancel</button>
 	</div>
 	<div id="otherdd"></div>
+	<div id="cm_res" class="easyui-menu">
+		<div id="cm_remove_res">Remove</div>
+		<div>
+			<span>SetAs</span>
+			<div>
+			<div id="cm_set_local">LocalResource</div>
+			<div id="cm_set_global">GlobalResource</div>
+			</div>
+		</div>
+	</div>
 </div>
 <script>
  $(document).ready(function(){
@@ -56,16 +66,16 @@
 		$('#dd').dialog('close');
 		return false;
 	}
-	var res=editor.res.globalres;
 	var projectpath = editor.project.currentProject.path;
 	function addObjectToPane(resID,pane,respath){
 		var path=respath;
 		if(typeof respath==='undefined')
-			path=editor.project.currentProject.path+"/"+res[resID]['path'];
+			path=editor.project.currentProject.path+"/"+editor.res.get(resID)['path'];
 		$('#res_'+pane).prepend("<div class='resrect'><img id='{0}' src='{1}'/><span>{0}</span></div>".format(resID,path));
 	}
-	for( resID in res){
-		var type=res[resID].type;
+	var globalres=editor.res.globalres;
+	for( resID in globalres){
+		var type=globalres[resID].type;
 		if(type=='image'||type=='spritesheet'||type=='atlas'){
 			addObjectToPane(resID,'image');
 		}else if(type=='audio'){
@@ -85,7 +95,7 @@
 			addObjectToPane(resID,'other',"/data/{0}.png".format(type));
 		}
 	}
-	$('#resourcepane').delegate('.resrect',"click",function(){
+	$('#resourcepane').delegate('.resrect',"mousedown",function(){
 		var selected=$(".selectedrect");
 		if(selected.length>0)
 			selected.removeClass("selectedrect");
@@ -107,6 +117,27 @@
 			var resID = filename.substr(0, filename.lastIndexOf('.')) || filename;
 			addObjectToPane(resID,'audio',"/data/audio.png".format(type));
 			editor.res.add(resID,'audio',filename);
+		});
+	});
+	$("#cm_res").menu({onClick:function (item) {
+		switch(item.id){
+		case 'cm_remove_res':
+			editor.res.remove($(".selectedrect img").attr('id'));
+			$(".selectedrect").remove();break;
+		case 'cm_set_global':
+			editor.res.setAsGlobalRes($(".selectedrect img").attr('id'));
+			break;
+		case 'cm_set_local':
+			editor.res.setAsLocalRes($(".selectedrect img").attr('id'));
+			break;
+		default:break;
+		}
+	}});
+	$(".resrect").bind('contextmenu',function(e){
+		e.preventDefault();
+		$('#cm_res').menu('show', {
+			left: e.pageX,
+			top: e.pageY
 		});
 	});
 	$('#addotherbtn').click(function(){
