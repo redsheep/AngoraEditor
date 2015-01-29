@@ -289,11 +289,12 @@ AngoraEditor.GamePaneManager.prototype = {
 		}
 	},
 	updateWorld: function(attr,value){
+		value=parseInt(value);
 		switch(attr){
-		case 'x':this.pane.css('left',value);break;
-		case 'y':this.pane.css('top',value);break;
-		case 'width':this.pane.css('width',value);break;
-		case 'height':this.pane.css('height',value);break;
+		case 'x':$('#worldbounds').css('left',value);break;
+		case 'y':$('#worldbounds').css('top',value);break;
+		case 'width':$('#worldbounds').css('width',value);break;
+		case 'height':$('#worldbounds').css('height',value);break;
 		default:break;
 		}
 	},
@@ -311,9 +312,12 @@ AngoraEditor.GamePaneManager.prototype = {
 	* @param {string} id
 	*/	
 	select: function(id){
-		$('.selected').removeClass('selected');
+		$('.nodeselected').removeClass('nodeselected');
 		this.selected=$('#'+id);
-		this.selected.addClass('selected');
+		this.selected.addClass('nodeselected');
+	},
+	unselect:function(){
+		$('.nodeselected').removeClass('nodeselected');
 	},
 	/**
 	* scale the game pane DOM

@@ -46,7 +46,7 @@ AngoraEditor.NodeTreeManager.prototype = {
 				editor.node.select(node.id);
 				editor.ui.propertyGrid.loadData(editor.node.selected);
 				editor.ui.eventPane.loadData(editor.node.selected);
-				//editor.game.updateSelectNode(node.id);
+				editor.ui.gamePane.select(node.id);
 				editor.ui.nodeTree.selected=editor.ui.nodeTree.tree.tree('find', node.id);
 				editor.ui.activeMenuItem(editor.node.selected.type);
 			},
@@ -130,6 +130,7 @@ AngoraEditor.NodeTreeManager.prototype = {
 		this.selected=null;
 		this.editor.node.selected=null;
 		this.editor.ui.activeMenuItem(null);
+		this.editor.ui.gamePane.unselect();
 		//this.tree.tree('unSelect', selected.target);
 	},
 	/**

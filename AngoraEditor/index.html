@@ -67,7 +67,7 @@
 				user-select: none;
 				cursor: default;
 			}
-			#gamecanvas{
+			#worldbounds{
 				position:absolute;
 				left:0px;
 				top:0px;
@@ -78,6 +78,9 @@
 				visibility:hidden;
 				opacity: 0.2;
 				pointer-events: none;
+			}
+			.nodeselected{
+				border:3px solid red !important;
 			}
 		</style>
 	</head>
@@ -102,7 +105,7 @@
 			<div id="showgrid" iconCls="icon-ae-grid">ShowGrid</div>
 			<div id="snaptogrid" iconCls="icon-ae-snap">SnapToGrid</div>
 			<div id="setgridsize" iconCls="icon-ae-resize">ConfigGrid</div>
-			<div id="showregion" iconCls="icon-ae-view">GameBounds</div>
+			<div id="showregion" iconCls="icon-ae-view">WorldBounds</div>
 			</div>
 			<div id="submenu_tools" style="width:100px;">
 			<div id="stamp" iconCls="icon-ae-stamp" data-options="disabled:true">Stamp</div>
@@ -186,7 +189,7 @@
 						<div id="scene" style="position:relative;width:800px;height:600px;border:2px solid red;">
 							
 						</div>
-						<div id="gamecanvas"></div>
+						<div id="worldbounds"></div>
 					</div>
 				</div>
 			</div>
