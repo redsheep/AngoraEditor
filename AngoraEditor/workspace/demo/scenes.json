@@ -1,0 +1,18 @@
+{
+    "preload": {
+        "name": "preload",
+        "id": "preload"
+    },
+    "main": {
+        "name": "main",
+        "id": "main"
+    },
+    "gameplay": {
+        "name": "gameplay",
+        "id": "gameplay"
+    },
+    "gameover": {
+        "name": "gameover",
+        "id": "gameover"
+    }
+}

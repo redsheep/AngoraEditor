@@ -1,0 +1,28 @@
+gameplay.prototype.customUpdate=function(){
+  if(game.input.mousePointer.isDown)
+    this.objects.bird.body.velocity.y=-150;
+  else
+    this.objects.bird.body.velocity.y=150;
+  if(this.objects.pipe_up1.x<=-this.objects.pipe_up1.width)
+    this.objects.pipe_up1.x=game.world.width;
+  if(this.objects.pipe_up2.x<=-this.objects.pipe_up2.width)
+    this.objects.pipe_up2.x=game.world.width;
+  if(this.objects.pipe_down1.x<=-this.objects.pipe_down1.width)
+    this.objects.pipe_down1.x=game.world.width;
+  if(this.objects.pipe_down2.x<=-this.objects.pipe_down2.width)
+    this.objects.pipe_down2.x=game.world.width;
+  game.physics.arcade.collide(this.objects.bird,this.objects.pipe_up1);
+  game.physics.arcade.collide(this.objects.bird,this.objects.pipe_up2);
+  game.physics.arcade.collide(this.objects.bird,this.objects.pipe_down1);
+  game.physics.arcade.collide(this.objects.bird,this.objects.pipe_down2);
+  if(this.objects.bird.x<=-this.objects.bird.width)
+    game.state.start('gameover');
+  
+}
+gameplay.prototype.customCreate=function(){
+  this.objects.bird.animations.play('fly');
+  this.objects.pipe_up1.body.velocity.x=-150;
+  this.objects.pipe_up2.body.velocity.x=-150;
+  this.objects.pipe_down1.body.velocity.x=-150;
+  this.objects.pipe_down2.body.velocity.x=-150;
+}
