@@ -36,6 +36,7 @@ AngoraEditor.PropertyGridManager = function (editor) {
 	this.setup();
 	
 	this.editingObject=null;
+
 }
 AngoraEditor.PropertyGridManager.prototype = {
 	/**
@@ -91,12 +92,14 @@ AngoraEditor.PropertyGridManager.prototype = {
 				case 'font':
 				case 'audio':
 					editor.ui.showResourceEditor(function () {
+						if(editor.res.selected==null)return;
 						var id = editor.res.selected['id'];
 						editor.attr.setAttr(editingObject, name, id);
 					});
 					break;
 				case 'tilemap':
 					editor.ui.showResourceEditor(function () {
+						if(editor.res.selected==null)return;
 						var id = editor.res.selected['id'];
 						editor.attr.setAttr(editingObject, name, id);
 						var tileset=[];
@@ -109,9 +112,7 @@ AngoraEditor.PropertyGridManager.prototype = {
 					editor.ui.showAnimationEditor(function(){});
 					break;
 				case 'tracks':
-					editor.ui.showAudioEditor(function () {
-						console.log('audio modify complete!');
-					});
+					editor.ui.showAudioEditor(function () {});
 					break;
 				default:
 					break;
@@ -231,13 +232,14 @@ AngoraEditor.PropertyGridManager.prototype = {
 	 * @param {string} attr
 	 * @param {string} value
 	 */
-	updateRow : function (attr, value) {
+	updateRow : function (attr, value, delay) {
+		if(delay) return;
 		var index = this.propertyIndex[attr];
-		var rows = $('#attributes').propertygrid('getRows');
-		rows[index]['value'] = value;
+		//var rows = $('#attributes').propertygrid('getRows');
+		//rows[index]['value'] = value;
 		this.grid.propertygrid('updateRow', {
 			index : index,
-			row : rows[index]
+			row : {value:value}
 		});
 	},
 	/**
