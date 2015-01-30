@@ -12,6 +12,9 @@ AngoraEditor is a simple phaser scene editor based on jquery and easyui.
 * **Particle Editor**
 * **State Script editor**
 
+#Tutorial
+the demo is under the workspace directory.
+a tutorial video is public in http://youtu.be/g6fHNZv5QD4
 
 #requirement
 * **Python:** The server is running with bottlepy. Make sure python is installed in your computer.
