@@ -67,5 +67,10 @@ var {sceneName} = function(game) {
 	for( obj in this.objects){
 		game.world.remove(this.objects[obj]);
 	}
+	this.objects={};
+	for( res in this.sceneRes ){
+		removeRes(this,this.sceneRes[res]);
+	}
+	this.sceneRes={};
   }
 };

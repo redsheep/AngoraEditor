@@ -2,6 +2,7 @@ from bottle import route, run, static_file, request, response
 import os
 import shutil
 import releaseJS
+import docs
 
 @route('/style/<filename:path>')
 def send_style(filename):
@@ -21,6 +22,12 @@ def send_demo(filename):
 @route('/workspace/<filename:path>')
 def send_file(filename):
     return static_file(filename, root='../workspace')
+@route('/docs/<filename:path>')
+def searchdocs(filename):
+    cls = request.query.get('cls')
+    args = request.query.get('args')
+    return docs.search(cls,args)
+
 
 @route('/main')
 def hello():
@@ -55,6 +62,14 @@ def removeFile(filename):
     os.remove('../'+filename)
     print 'remove from %s success'%filename
     return 'sucess'
+
+@route('/exist/<filename:path>')
+def removeFile(filename):
+    #response.content_type = 'text/html; charset=UTF-8'
+    if(os.path.exists('../'+filename)):
+        return 'true'
+    else:
+        return 'false'
 
 @route('/write', method='POST')
 def writeFile():
