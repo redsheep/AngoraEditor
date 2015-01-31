@@ -8,7 +8,7 @@
 		position:relative;
 		overflow:hidden;
 	}
-	.resrect span{
+	.resrect .key{
 		background:#ccc;
 		position:absolute;
 		width:64px;
@@ -16,6 +16,30 @@
 		bottom:0px;
 		font-size:12px;
 		height:20px;
+	}
+	.resrect .global{
+		background:green;
+		position:absolute;
+		width:16px;
+		height:16px;
+		right:0px;
+		top:0px;
+		color:white;
+	}
+	.resrect .global:after{
+		content:"global";
+	}
+	.resrect .local{
+		background:red;
+		position:absolute;
+		width:16px;
+		height:16px;
+		right:0px;
+		top:0px;
+		color:white;
+	}
+	.resrect .local:after{
+		content:"local";
 	}
 	.resrect img{
 		height:64px;
@@ -25,11 +49,11 @@
 		border:2px dashed gray;
 	}
 	.selectedrect{
-		background-color:lightgray;!important
-		border:2px solid red;!important
+		background-color:lightgray;
+		border:2px solid red;
 	}
 </style>
-<div class="easyui-layout" fit="true">
+<div id="page" class="easyui-layout" fit="true">
 	<div data-options="region:'center'">
 		<div id="resourcepane" class="easyui-accordion" fit="true">
 			<div id="res_image" title="Image">
@@ -67,32 +91,45 @@
 		return false;
 	}
 	var projectpath = editor.project.currentProject.path;
-	function addObjectToPane(resID,pane,respath){
+	function addObjectToPane(resID,pane,respath,which){
 		var path=respath;
-		if(typeof respath==='undefined')
+		if(respath==null)
 			path=editor.project.currentProject.path+"/"+editor.res.get(resID)['path'];
-		$('#res_'+pane).prepend("<div class='resrect'><img id='{0}' src='{1}'/><span>{0}</span></div>".format(resID,path));
+		$('#res_'+pane).prepend("<div class='resrect'><img id='{0}' src='{1}'/><span class='key'>{0}</span><span class='{2}'></span></div>".format(resID,path,which));
 	}
 	var globalres=editor.res.globalres;
 	for( resID in globalres){
 		var type=globalres[resID].type;
 		if(type=='image'||type=='spritesheet'||type=='atlas'){
-			addObjectToPane(resID,'image');
+			addObjectToPane(resID,'image',null,'global');
 		}else if(type=='audio'){
-			addObjectToPane(resID,'audio','/data/audio.png');
+			addObjectToPane(resID,'audio','/data/audio.png','global');
 		}else{
-			addObjectToPane(resID,'other',"/data/{0}.png".format(type));
+			addObjectToPane(resID,'other',"/data/{0}.png".format(type),'global');
 		}
 	}
 	var localres=editor.res.localres;
 	for( resID in localres){
 		var type=localres[resID].type;
 		if(type=='image'||type=='spritesheet'||type=='atlas'){
-			addObjectToPane(resID,'image');
+			addObjectToPane(resID,'image',null,'local');
 		}else if(type=='audio'){
-			addObjectToPane(resID,'audio','/data/audio.png');
+			addObjectToPane(resID,'audio','/data/audio.png','local');
 		}else{
-			addObjectToPane(resID,'other',"/data/{0}.png".format(type));
+			addObjectToPane(resID,'other',"/data/{0}.png".format(type),'local');
+		}
+	}
+	if(editor.node.selected!=null){
+		switch(editor.node.selected.type){
+			case 'sprite':
+			case 'tilesprite':
+			case 'image':
+			case 'animate':
+				$('#resourcepane').accordion({selected:0});break;
+			case 'audio':
+				$('#resourcepane').accordion({selected:1});break;
+			default:
+				$('#resourcepane').accordion({selected:2});break;
 		}
 	}
 	$('#resourcepane').delegate('.resrect',"mousedown",function(){
@@ -105,7 +142,7 @@
 		editor.file.openFileDialog('',function(filename){
 			var resID = filename.substr(0, filename.lastIndexOf('.')) || filename;
 			var respath = "{0}/data/{1}".format(projectpath,filename);
-			addObjectToPane(resID,'image',respath);
+			addObjectToPane(resID,'image',respath,'global');
 			$('#'+resID).load(function(){
 				var res={path:filename,height:this.naturalHeight,width:this.naturalWidth};
 				editor.res.add(resID,'image',res);
@@ -115,7 +152,7 @@
 	$('#addsndbtn').click(function(){
 		editor.file.openFileDialog('',function(filename){
 			var resID = filename.substr(0, filename.lastIndexOf('.')) || filename;
-			addObjectToPane(resID,'audio',"/data/audio.png".format(type));
+			addObjectToPane(resID,'audio',"/data/audio.png".format(type),'global');
 			editor.res.add(resID,'audio',filename);
 		});
 	});
@@ -126,9 +163,17 @@
 			$(".selectedrect").remove();break;
 		case 'cm_set_global':
 			editor.res.setAsGlobalRes($(".selectedrect img").attr('id'));
+			if($(".selectedrect").children().eq(2).hasClass('local')){
+				$(".selectedrect").children().eq(2).removeClass('local')
+				$(".selectedrect").children().eq(2).addClass('global')
+			}
 			break;
 		case 'cm_set_local':
 			editor.res.setAsLocalRes($(".selectedrect img").attr('id'));
+			if($(".selectedrect").children().eq(2).hasClass('global')){
+				$(".selectedrect").children().eq(2).removeClass('global')
+				$(".selectedrect").children().eq(2).addClass('local')
+			}
 			break;
 		default:break;
 		}
@@ -155,10 +200,10 @@
 				switch(newres.type){
 				case 'spritesheet':
 				case 'atlas':
-					addObjectToPane(resID,'image');
+					addObjectToPane(resID,'image',null,'global');
 					break;
 				default:
-					addObjectToPane(resID,'other',"/data/{0}.png".format(newres.type));
+					addObjectToPane(resID,'other',"/data/{0}.png".format(newres.type),'global');
 					break;
 				}
 

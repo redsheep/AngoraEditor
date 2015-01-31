@@ -36,6 +36,7 @@
 				var name = field['name'];
 				var value = field['value'];
 				emitter[name]=parseInt(value);
+				selected[name]=parseInt(value);
 			}
 		});
 		var game = new Phaser.Game(300, 400, Phaser.CANVAS, 'particles', { preload: preload, create: create, render: render});
@@ -63,5 +64,15 @@
 		function render() {
 			game.debug.text(emitter.total, 32, 32);
 		}
+		$("#btn_ok").click(function(){
+			for(key in selected){
+				if(key=='x'||key=='y')continue;
+				editor.attr.setAttr(editor.node.selected,key,selected[key]);
+			}
+			$('#dd').dialog('close');
+		});
+		$("#btn_cancel").click(function(){
+			$('#dd').dialog('close');
+		});
 	});
 </script>
