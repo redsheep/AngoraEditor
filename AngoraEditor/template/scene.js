@@ -42,9 +42,9 @@ var {sceneName} = function(game) {
 	this.world.setBounds(parseInt(worldConfig.world.x), parseInt(worldConfig.world.y), parseInt(worldConfig.world.width), parseInt(worldConfig.world.height));
 	this.camera.bounds=new Phaser.Rectangle(parseInt(worldConfig.camera.x), parseInt(worldConfig.camera.y), parseInt(worldConfig.camera.width), parseInt(worldConfig.camera.height));
 	this.load.onLoadComplete.addOnce(this.loadComplete,this);
-	var sceneRes = JSON.parse(this.cache.getText('sceneRes'));
-	for(i in sceneRes){
-	  LoadRes(this,sceneRes[i]);
+	this.sceneRes = JSON.parse(this.cache.getText('sceneRes'));
+	for(i in this.sceneRes){
+	  LoadRes(this,this.sceneRes[i]);
 	}
 	this.load.start();
   },
@@ -84,6 +84,11 @@ var {sceneName} = function(game) {
 	for( obj in this.objects){
 		game.world.remove(this.objects[obj]);
 	}
+	this.objects={};
+	for( res in this.sceneRes ){
+		removeRes(this,this.sceneRes[res]);
+	}
+	this.sceneRes={};
   }
 };
 LoadScript('{sceneName}.script.js');

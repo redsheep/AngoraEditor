@@ -90,8 +90,11 @@ function createObject(state, node) {
 	default:
 		break;
 	}
-	if (typeof node.rotation !== 'undefined')
+	if (typeof node.rotation !== 'undefined'){
 		object.angle=parseInt(node.rotation);
+		if(object.body!=null)
+			object.body.angle=parseInt(node.rotation);
+	}
 	if (typeof node.visible !== 'undefined')
 		object.visible = parseBoolean(node.visible);
 	if (typeof node.events !== 'undefined') {
@@ -120,6 +123,24 @@ function LoadRes(game, res) {
 		for(img in res.tileset)
 			game.load.image(img,res.tileset[img]);
 		return game.load.tilemap(res.id, res.data, null, Phaser.Tilemap.TILED_JSON);
+	default:
+		return false;
+	}
+}
+function removeRes(game, res) {
+	switch (res.type) {	
+	case 'image':
+	case 'atlas':
+	case 'spritesheet':
+		return game.cache.removeImage(res.id);
+	case 'bitmapFont':
+		return game.cache.removeBitmapFont(res.id);
+	case 'audio':
+		return game.cache.removeSound(res.id);
+	case 'text':
+		return game.cache.removeText(res.id);
+	case 'tilemap':
+		return game.cache.removeTilemap(res.id);
 	default:
 		return false;
 	}
