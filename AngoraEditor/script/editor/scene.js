@@ -103,8 +103,6 @@ AngoraEditor.SceneManager.prototype = {
 		}
 		this.loadDefaultConfig();
 		console.log('setup config success');
-		//this.editor.file.copyFile(Ti.App.appURLToPath('app://template/scene.js'),"{0}/{1}.js".format(projectpath,sceneName));
-		//this.editor.file.copyFile(Ti.App.appURLToPath('app://template/scene.script.js'),"{0}/{1}.script.js".format(projectpath,sceneName));
 		this.editor.script.createScript(sceneName);
 		this.editor.file.createTemplate(projectpath, 'scene.scn', "{0}.scn".format(sceneName));
 		this.editor.file.createTemplate(projectpath, 'scene.res', "{0}.res".format(sceneName));
@@ -252,6 +250,10 @@ AngoraEditor.SceneManager.prototype = {
 				onUp: ""
 			}
 		}
+	},
+	isChanged:function(){
+		var curscene=this.editor.scene;
+		return curscene.isNodeChanged||curscene.isResourceChanged||curscene.isScriptChanged||curscene.isConfigChanged;
 	},
 	/**
 	* save current scene

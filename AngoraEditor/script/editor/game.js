@@ -53,12 +53,14 @@ AngoraEditor.GameManager.prototype={
 		var editor=this.editor;
 		var configfile=editor.project.currentProject.configFile;
 		if(typeof config==='undefined'){
-			if(editor.file.existFile(configfile)){
-				config=JSON.parse(editor.file.readFile(configfile));
-			}else{
-				editor.file.createFile(configfile);
-				config={};			
-			}
+			editor.file.existFile(configfile,function(result){
+				if(result=='true'){
+					config=JSON.parse(editor.file.readFile(configfile));
+				}else{
+					editor.file.createFile(configfile);
+					config={};			
+				}
+			});
 		}
 		this.set('display',config.display);
 		this.set('sound',config.sound);
@@ -68,8 +70,8 @@ AngoraEditor.GameManager.prototype={
 		this.set('plugins',config.plugins);
 		this.set('startScene', config.startScene);
 		this.editor.file.writeFile(configfile,JSON.stringify(config,null,2));
-		$('#gamecanvas').css('width',editor.game.display.width);
-		$('#gamecanvas').css('height',editor.game.display.height);
+		$('#worldbounds').css('width',editor.game.display.width);
+		$('#worldbounds').css('height',editor.game.display.height);
 	},
 	/**
 	* Description 

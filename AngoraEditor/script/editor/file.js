@@ -33,10 +33,9 @@ AngoraEditor.FileManager.prototype = {
 	* @method createFile
 	* @param {string} filepath
 	*/
-	createFile : function (filepath) {
-		//var file = Ti.Filesystem.getFile(filepath);
-		//file.touch();
-		//return file;
+	existFile : function (filepath,func) {
+		var url='/exist'+filepath+'?'+ new Date().getTime()
+		return $.get(url,func);
 	},
 	/**
 	* 
@@ -76,7 +75,7 @@ AngoraEditor.FileManager.prototype = {
 		//var file = Ti.Filesystem.getFile(filepath);
 		//return file.read().toString();
 		//var m_data;
-		var url='/read'+filepath+'?'+ new Date().getTime()
+		var url='/read'+filepath+'?'+ new Date().getTime();
 		if(typeof func==='undefined')
 			$.get(url);
 		else

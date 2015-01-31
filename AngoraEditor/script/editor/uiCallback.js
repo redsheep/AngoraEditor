@@ -21,7 +21,7 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 			//editor.ui.gamePane.offset.x+=(e.pageX - md.x);
 			//editor.ui.gamePane.offset.y+=(e.pageY - md.y);
 			$('#scene').css('transform', 'translate({0}px,{1}px)'.format(editor.ui.gamePane.offset.x+e.pageX - md.x,editor.ui.gamePane.offset.y+e.pageY - md.y));
-			$('#gamecanvas').css('transform', 'translate({0}px,{1}px)'.format(editor.ui.gamePane.offset.x+e.pageX - md.x,editor.ui.gamePane.offset.y+e.pageY - md.y));
+			$('#worldbounds').css('transform', 'translate({0}px,{1}px)'.format(editor.ui.gamePane.offset.x+e.pageX - md.x,editor.ui.gamePane.offset.y+e.pageY - md.y));
 			$('#preview').css('background-position', '{0}px {1}px'.format(editor.ui.gamePane.offset.x+e.pageX - md.x,editor.ui.gamePane.offset.y+e.pageY - md.y));
 			//background-position:10px 10px;
 		}
@@ -126,7 +126,10 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		case 'audio':editor.ui.showAudioEditor(function(){});break;
 		case 'physics':editor.ui.showPhysicsEditor();break;
 		case 'particle':editor.ui.showParticleEditor();break;
-		case 'tilemap':editor.ui.showTiledMapEditor();break;
+		case 'tilemap':
+			if(editor.node.selected.tilemap!="")
+				editor.ui.showTiledMapEditor();
+			break;
 		case 'resource':editor.ui.showResourceEditor();break;
 		case 'stamp':
 			if(editor.ui.gamePane.stamping){
@@ -156,7 +159,8 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 	$("#submenu_help").menu({onClick:function (item) {
 		switch(item.id){
 		case 'about':editor.ui.showDialog("/dialog/about",420,320,function(){});break;
-		case 'help':editor.ui.showDialog("http://docs.phaser.io/");break;
+		case 'preferences':editor.ui.showDialog("/dialog/preferences",420,320,function(){});break;
+		case 'help':editor.ui.showDialog("/dialog/help",240,320,function(){},false);break;
 		default:break;
 		}
 	}});
@@ -175,7 +179,7 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 			break;
 		case 'saveProject':editor.project.save();break;
 		case 'closeProject':
-			if(editor.project.isChanged()){
+			if(editor.scene.isChanged()){
 				var r = confirm("do you want to save changed?");
 				if(r) editor.project.save();
 			}
@@ -213,10 +217,10 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 			break;
 		case 'showregion':
 			if(editor.ui.showRegion==false){
-				$('#gamecanvas').css('visibility','visible');
+				$('#worldbounds').css('visibility','visible');
 				editor.ui.showRegion=true;
 			}else{
-				$('#gamecanvas').css('visibility','hidden');
+				$('#worldbounds').css('visibility','hidden');
 				editor.ui.showRegion=false;
 			}
 			break;

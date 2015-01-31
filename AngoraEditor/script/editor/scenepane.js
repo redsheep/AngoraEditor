@@ -35,6 +35,10 @@ AngoraEditor.ScenePaneManager.prototype = {
 			this.pane.append(newdiv.format(i, scenes[i].name));
 		}
 		this.pane.delegate('.sceneitem', 'click', function () {
+			if(editor.scene.isChanged()){
+				var r = confirm("do you want to save changed?");
+				if(r) editor.project.save();
+			}
 			var sceneDiv=$('.selectedsceneitem');
 			if(sceneDiv.length>0){
 				sceneDiv.removeClass('selectedsceneitem');

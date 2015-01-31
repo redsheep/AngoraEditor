@@ -100,7 +100,9 @@ AngoraEditor.ProjectManager.prototype = {
 			data = data.replace(/{h}/g, config.display.height);
 			editor.file.writeFile(project.path+'/mygame.js',data);
 			if(load==true){
-				editor.project.load(project,function(){editor.scene.add('preload');});
+				editor.project.load(project,function(){
+					editor.scene.add('preload');
+				});
 				//editor.scene.add('preload');
 			}
 		});
@@ -122,10 +124,6 @@ AngoraEditor.ProjectManager.prototype = {
 	save : function () {
 		this.editor.scene.save();
 	},
-	isChanged:function(){
-		var curscene=this.editor.scene;
-		return curscene.isNodeChanged||curscene.isResourceChanged||curscene.isScriptChanged||curscene.isConfigChanged;
-	},
 	/**
 	* release project with compress js file
 	* @method release
@@ -146,6 +144,7 @@ AngoraEditor.ProjectManager.prototype = {
 		this.editor.scene.reset();
 		this.editor.ui.scenePane.reset();
 		this.currentProject=null;
+		this.config=null;
 	},
 	/**
 	* close current project
