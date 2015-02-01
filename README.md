@@ -13,8 +13,10 @@ AngoraEditor is a simple phaser scene editor based on jquery and easyui.
 * **State Script editor**
 
 #Tutorial
-the demo is under the workspace directory.
+a demo project is under the workspace directory.
+
 a tutorial video is public in http://youtu.be/g6fHNZv5QD4
+
 a tutorial of tilemap is public in http://youtu.be/Des4gUJCw2Q
 
 #requirement
