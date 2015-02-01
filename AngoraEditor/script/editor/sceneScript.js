@@ -44,7 +44,7 @@ AngoraEditor.ScriptManager.prototype = {
 		});
 		this.editor.file.readFile('/template/scene.script.js',function(data){
 			if(scene=='preload')
-				data+="\n{sceneName}.prototype.shotdown=function(){}";
+				data+="\n{sceneName}.prototype.shutdown=function(){}";
 			var customSceneScript = data.replace(/{sceneName}/g, scene);
 			editor.file.writeFile("{0}/{1}.script.js".format(projectpath, scene), customSceneScript);
 		});

@@ -195,6 +195,7 @@ AngoraEditor.SceneManager.prototype = {
 		this.editor.node.clear();
 		this.editor.ui.reset();
 		this.curScene=null;
+		this.isNodeChanged=this.isResourceChanged=this.isScriptChanged=this.isConfigChanged=false;
 	},
 	/**
 	* reset current scene
