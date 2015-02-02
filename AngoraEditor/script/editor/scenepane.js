@@ -36,8 +36,9 @@ AngoraEditor.ScenePaneManager.prototype = {
 		}
 		this.pane.delegate('.sceneitem', 'click', function () {
 			if(editor.scene.isChanged()){
-				var r = confirm("do you want to save changed?");
-				if(r) editor.project.save();
+				editor.ui.confirm('Warning',"do you want to save changed?",function(r){
+					if(r) editor.scene.save();
+				});
 			}
 			var sceneDiv=$('.selectedsceneitem');
 			if(sceneDiv.length>0){

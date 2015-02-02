@@ -91,10 +91,9 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		editor.ui.showDialog('/dialog/nodetype');
 	});
 	$("#addScene").click(function () {
-		var sceneName = prompt('Enter scene name', '');
-		if (sceneName != null) {
-			editor.scene.add(sceneName);
-		}
+		editor.ui.prompt('Add Scene','Enter scene name',function(r){
+			if (r != '') editor.scene.add(r);
+		});
 	});
 	$('#addEvent').click(function(){
 		
@@ -103,8 +102,9 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		
 	});
 	$("#removeScene").click(function () {
-		var r = confirm("remove local file?");
-		editor.scene.remove(editor.scene.curScene,r);
+		editor.ui.confirm('Warning',"remove local file?",function(r){
+			editor.scene.remove(editor.scene.curScene,r);
+		});
 	});
 	$("#removeNode").click(function () {
 		editor.node.remove(editor.node.selected);
@@ -160,7 +160,7 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		switch(item.id){
 		case 'about':editor.ui.showDialog("/dialog/about",420,320,function(){});break;
 		case 'preferences':editor.ui.showDialog("/dialog/preferences",420,320,function(){});break;
-		case 'help':editor.ui.showDialog("/dialog/help",240,320,function(){},false);break;
+		case 'help':editor.ui.showDialog("/dialog/help",240,320,function(){},false,true);break;
 		default:break;
 		}
 	}});
@@ -170,20 +170,27 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 	$("#submenu_file").menu({onClick:function (item) {
 		switch(item.id){
 		case 'newProject':
-			$('#closeProject').trigger('click');
+			if(editor.project.currentProject!=null)
+				$('#closeProject').trigger('click');
 			editor.ui.showNewProjectDialog();
 			break;
 		case 'openProject':
-			$('#closeProject').trigger('click');
+			if(editor.project.currentProject!=null)
+				$('#closeProject').trigger('click');
 			editor.ui.showOpenProjectDialog();
 			break;
-		case 'saveProject':editor.project.save();break;
+		case 'saveProject':editor.scene.save();break;
 		case 'closeProject':
-			if(editor.scene.isChanged()){
-				var r = confirm("do you want to save changed?");
-				if(r) editor.project.save();
-			}
-			editor.project.close();
+			editor.ui.confirm('Warning',"Are you sure to close current project?",function(r){
+				if(r){
+					if(editor.scene.isChanged()){
+						editor.ui.confirm('Warning',"do you want to save changed?",function(r){
+							if(r) editor.scene.save();
+						});
+					}
+					editor.project.close();
+				}
+			});
 			break;
 		default:break;
 		}
@@ -191,13 +198,14 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 	$("#submenu_view").menu({onClick:function (item) {
 		switch(item.id){
 		case 'setgridsize':
-			var size=prompt('Enter grid size','32');
-			if(size==''){
-				editor.ui.gridSize=32;
-			}else{
-				editor.ui.gridSize=parseInt(size);
-			}
-			$('#preview').css('background-size','{0}px {0}px'.format(editor.ui.gridSize));
+			editor.ui.prompt('Change Size','Enter grid size',function(size){
+				if(size==''){
+					editor.ui.gridSize=32;
+				}else{
+					editor.ui.gridSize=parseInt(size);
+				}
+				$('#preview').css('background-size','{0}px {0}px'.format(editor.ui.gridSize));
+			});
 			break;
 		case 'snaptogrid':
 			if(editor.ui.snapToGrid==false){

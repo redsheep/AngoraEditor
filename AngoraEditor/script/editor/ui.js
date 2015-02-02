@@ -74,6 +74,23 @@ AngoraEditor.UI.prototype = {
 		this.contextMenu.setup();
 		this.setupUICallback();
 	},
+	alert:function(title,content,icon){
+		$.messager.alert(title,content,icon);
+	},
+	confirm:function(title,content,func){
+		$.messager.confirm(title,content,func);
+	},
+	showMessage:function(title,message,timeout){
+		$.messager.show({
+			title:title,
+			msg:message,
+			timeout:timeout,
+			showType:'slide'
+		});
+	},
+	prompt:function(title,content,func){
+		$.messager.prompt(title, content, func);
+	},
 	/**
 	 * showDialog
 	 * @method showDialog
@@ -82,21 +99,22 @@ AngoraEditor.UI.prototype = {
 	 * @param {number} - height of dialog
 	 * @param {function} - callback when close
 	 */
-	showDialog : function (path, w, h, func) {
-		if (typeof w === 'undefined')
-			w = 400;
-		if (typeof h === 'undefined')
-			h = 300;
+	showDialog : function (path, w, h, func, modal,resize) {
+		w = w || 400;
+		h = h || 300;
+		if (typeof modal==='undefined')modal=true;
+		if (typeof resize==='undefined')resize=false;
 		var dlg=$('#dd').dialog({
-			title: 'My Dialog',
+			title: path.split('/').pop(),
 			left:(window.innerWidth-w)/2,
 			top:(window.innerHeight-h)/2,
 			width: w,
 			height: h,
+			resizable:resize,
 			closed: false,
 			cache: false,
 			href: path,
-			modal: true,
+			modal: modal,
 			onClose: func
 		});
 		//$('#dd').editor=this.editor;
