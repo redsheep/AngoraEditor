@@ -1,4 +1,4 @@
-function createObject(state, node) {
+function createObject(state, node, group) {
 	var object = null;
 	switch (node.type) {
 	case 'tilesprite':
@@ -101,6 +101,13 @@ function createObject(state, node) {
 		for (e in node.events) {
 			object.inputEnabled = true;
 			object.events[e].add(state[node.events[e]], state);
+		}
+	}
+	if (typeof group!='undefined')
+		group.add(object);
+	if(typeof node.children!=='undefined'){
+		for(i in node.children){
+			state.objects[i]=createObject(state,node.children[i],object);
 		}
 	}
 	return object;
