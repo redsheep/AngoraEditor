@@ -53,13 +53,24 @@ AngoraEditor.NodeTreeManager.prototype = {
 			onBeforeDrop : function (targetNode, source, point) {
 				//var targetId = $(target).tree('getNode', targetNode).id;
 				var node=editor.node.get(targetNode.textContent);
-				if(point=='append')// && node.type!='group')
+				if(point=='append' && node.type!='group')
 					return false;
 				return true;
 			},
 			onDrop : function(targetNode, source, point) {
-				var nodes=$('#nodes').tree('getRoots');
-				editor.node.update(nodes);
+				if(point=='append'){
+					editor.node.addToGroup(source.id,targetNode.textContent);
+				}else{
+					editor.node.checkGroup(source.id,targetNode.textContent, point);
+				}
+				var node=editor.node.getParent(targetNode.textContent);
+				if(node==null){
+					editor.ui.gamePane.updateGroup(source.id);
+					editor.ui.gamePane.updateZorder(editor.node.nodes,0);
+				}else{
+					editor.ui.gamePane.updateGroup(source.id,node.id);
+					editor.ui.gamePane.updateZorder(node,0);
+				}
 			},
 			onContextMenu: function(e,node){
 				e.preventDefault();
@@ -68,19 +79,28 @@ AngoraEditor.NodeTreeManager.prototype = {
 			}
 		});
 	},
+	loadNode:function(data,parent){
+		var item = {
+			"id" : data.id,
+			"text" : data.id,
+			"iconCls" : this.getTypeIcon(data.type),
+			"children": typeof data.children!=='undefined'?[]:undefined
+		}
+		parent.push(item);
+		if(typeof data.children!=='undefined'){
+			for(i in data.children){
+				this.loadNode(data.children[i],item.children);
+			}
+		}
+	},
 	/**
 	* 
 	* @method 
 	* @param 
 	*/
 	loadData : function (data) {
-		for (i in data) {
-			var item = {
-				"id" : data[i].id,
-				"text" : data[i].id,
-				"iconCls" : this.getTypeIcon(data[i].type)
-			}
-			this.nodes.push(item);
+		for (i in data){
+			this.loadNode(data[i],this.nodes);
 		}
 		this.tree.tree('loadData',this.nodes);
 	},

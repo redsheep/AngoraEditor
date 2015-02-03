@@ -89,9 +89,10 @@ AngoraEditor.GamePaneManager.prototype = {
 	* @method add
 	* @param {Object} node
 	*/
-	add: function(node){
+	add: function(node,parent){
 		var editor=this.editor;
-		var parent=this.pane;
+		if(typeof parent==='undefined')
+			parent=this.pane;
 		//if(editor.node.selected==null)
 		//	parent=this.pane;
 		//else
@@ -199,7 +200,11 @@ AngoraEditor.GamePaneManager.prototype = {
 				}
 			}
 		});
-		return nodeDiv;
+		if(typeof node.children!='undefined'){
+			for(i in node.children){
+				this.add(node.children[i],nodeDiv);
+			}
+		}
 	},
 	/**
 	* update the z-index of the node
@@ -207,10 +212,23 @@ AngoraEditor.GamePaneManager.prototype = {
 	* @param {Object} node
 	* @param {number} zindex
 	*/
-	updateZOrder:function(node,zindex){
-		var nodeDiv=$('#'+node.id);
-		if(nodeDiv.length>0)
+	updateZorder:function(node,zindex){
+		for(i in node){
+			zindex++;
+			var nodeDiv=$('#'+node[i].id);
 			nodeDiv.css('z-index',zindex);
+			if(typeof node[i].children!='undefined')
+				zindex=this.updateZorder(node[i].children,zindex);
+		}
+		return zindex;
+	},
+	updateGroup:function(id,target){
+		var nodeDiv=$('#'+id);
+		nodeDiv.detach();//.parent().remove(nodeDiv);
+		var newparent=this.pane;
+		if(typeof target!='undefined')
+			newparent=$('#'+target);
+		newparent.append(nodeDiv);
 	},
 	/**
 	* update the node css style

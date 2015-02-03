@@ -107,7 +107,7 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		});
 	});
 	$("#removeNode").click(function () {
-		editor.node.remove(editor.node.selected);
+		editor.node.remove(editor.node.selected.id);
 		editor.ui.nodeTree.removeNode();
 		editor.ui.gamePane.remove(editor.node.selected);
 		editor.ui.propertyGrid.reset();

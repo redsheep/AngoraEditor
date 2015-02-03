@@ -41,7 +41,7 @@ AngoraEditor.NodeManager.prototype = {
 	*/
 	create : function (type) {
 		var nodeID='{0}{1}'.format(type,this.count++);
-		while(typeof this.nodes[nodeID]!='undefined')
+		while(this.get(nodeID)!=null)
 			nodeID='{0}{1}'.format(type,this.count++);
 		var node = {
 			'id':nodeID,
@@ -57,7 +57,58 @@ AngoraEditor.NodeManager.prototype = {
 	* @param {Object} data
 	*/
 	setData : function (data) {
-		this.nodes = data;
+		this.nodes=data;
+	},
+	_insert: function(node,target,position,insert){
+		var reorder={};
+		for(i in node){
+			if(node[i].id==target){
+				if(position=='top'){
+					reorder[insert.id]=insert;
+					reorder[i]=node[i];
+				}else{
+					reorder[i]=node[i];
+					reorder[insert.id]=insert;
+				}
+			}else{
+				reorder[i]=node[i];
+			}
+		}
+		return reorder;
+	},
+	_remove: function(node,id){
+		for(i in node){
+			if(node[i].id==id){
+				return delete node[i];
+			}else if(typeof node[i].children!=='undefined'){
+				this._remove(node[i].children,id);
+			}
+		}
+	},
+	_find: function(node,id){
+		for(i in node){
+			if(node[i].id==id){
+				return node[i];
+			}else if(typeof node[i].children!=='undefined'){
+				var n = this._find(node[i].children,id);
+				if(n!=null)return n;
+			}
+		}
+		return null;
+	},
+	_parent:function(node,id,parent){
+		for(i in node){
+			if(node[i].id==id){
+				return parent;
+			}else if(typeof node[i].children!=='undefined'){
+				var n = this._parent(node[i].children,id,node[i]);
+				if(n!=null)return n;
+			}
+		}
+		return null;
+	},
+	getParent:function(nodeID){
+		return this._parent(this.nodes,nodeID,null);
 	},
 	/**
 	* 
@@ -66,7 +117,7 @@ AngoraEditor.NodeManager.prototype = {
 	* @param 
 	*/
 	get : function (nodeID) {
-		return this.nodes[nodeID];
+		return this._find(this.nodes,nodeID);
 	},
 	/**
 	* select node by id
@@ -96,24 +147,50 @@ AngoraEditor.NodeManager.prototype = {
 	* @method remove
 	* @param {Object} node
 	*/
-	remove : function (node) {
+	remove : function (nodeID) {
 		//this.editor.ui.nodeTree.remove(item);
-		delete this.nodes[node.id];
+		this._remove(this.nodes,nodeID);
 		this.editor.scene.isNodeChanged=true;
 	},
-	/**
-	* reorder the nodes
-	* @method update
-	* @param {Object} treenode
-	*/
-	update : function (treenode) {
+	/*
+	updatenode:function(treenode,zindex){
+		var id=treenode.id;
+		var node=this.get(id);
+		if(node.type=='group'&& typeof treenode.children!='undefined'){
+			for(i in treenode.children){
+				updatenode(treenode.children[i],zindex);
+			}
+		}else{
+			this.editor.ui.gamePane.updateZOrder(node,zindex);
+		}
+	},
+	updateOrder : function (treenode) {
 		var reorder={};
 		for (i in treenode){
-			var id=treenode[i].id
+			var id=treenode[i].id;
 			reorder[id]=this.nodes[id];
-			this.editor.ui.gamePane.updateZOrder(this.nodes[id],i);
 		}
 		this.nodes=reorder;
+		this.editor.scene.isNodeChanged=true;
+	},
+	*/	
+	addToGroup:function(id,group){
+		var node=this.get(group);
+		if(typeof node.children==='undefined')
+			node.children={};
+		var oldnode=this.get(id);
+		this.remove(oldnode.id);
+		node.children[oldnode.id]=oldnode;
+		this.editor.scene.isNodeChanged=true;
+	},
+	checkGroup:function(id,target,position){
+		var node=this.get(id);
+		this.remove(id);
+		var parent=this.getParent(target);
+		if(parent!=null)
+			parent.children=this._insert(parent.children,target,position,node);
+		else
+			this.nodes=this._insert(this.nodes,target,position,node);
 		this.editor.scene.isNodeChanged=true;
 	},
 	/**
@@ -124,7 +201,7 @@ AngoraEditor.NodeManager.prototype = {
 	clone : function(node){
 		var newnode={};
 		var nodeID='{0}{1}'.format(node.type,this.count++);
-		while(typeof this.nodes[nodeID]!='undefined')
+		while(this.get(nodeID)!=null)
 			nodeID='{0}{1}'.format(node.type,this.count++);
 		for(key in node){
 			newnode[key]=node[key];
@@ -140,8 +217,13 @@ AngoraEditor.NodeManager.prototype = {
 	*/
 	changeID: function(oldID,newID){
 		if(oldID==newID)return;
-		this.nodes[newID]=this.nodes[oldID];
-		delete this.nodes[oldID];
+		var newnode=this.get(oldID);
+		var parent=this.getParent(oldID);
+		if(parent!=null)
+			parent.children[newID]=newnode;
+		else
+			this.nodes[newID]=newnode;
+		this.remove(oldID);
 		this.editor.scene.isNodeChanged=true;
 	},
 	/**
@@ -290,10 +372,9 @@ AngoraEditor.NodeManager.prototype = {
 				node['alpha']=alpha;
 				node['rotation']=rotation;
 				node['maxParticles']=maxParticles;
-				node['lifespan']=lifespan;
-				node['angle']=angle;
-				node['gravity']=gravity;
 				node['frequency']=frequency;
+				node['lifespan']=lifespan;
+				node['gravity']=gravity;
 				node['minspeedX']=minspeedX;
 				node['maxspeedX']=maxspeedX;
 				node['minspeedY']=minspeedY;
