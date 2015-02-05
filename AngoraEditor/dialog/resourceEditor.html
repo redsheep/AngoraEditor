@@ -153,7 +153,7 @@
 		editor.file.openFileDialog('',function(filename){
 			var resID = filename.substr(0, filename.lastIndexOf('.')) || filename;
 			addObjectToPane(resID,'audio',"/data/audio.png".format(type),'global');
-			editor.res.add(resID,'audio',filename);
+			editor.res.add(resID,'audio',{path:filename});
 		});
 	});
 	$("#cm_res").menu({onClick:function (item) {
