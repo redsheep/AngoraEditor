@@ -107,6 +107,15 @@ AngoraEditor.ProjectManager.prototype = {
 			}
 		});
 	},
+	setConfig:function(config){
+		var editor=this.editor;
+		this.config=config;
+		editor.file.readFile(this.currentProject.path+'/mygame.js',function(data){
+			data = data.replace(/game\s*=\s*new\s*Phaser.Game\([\s*\S+\s*,]+\'\'\);/,"game=new Phaser.Game({0},{1},Phaser.{2},'');".format(config.display.width,config.display.height,config.render));
+			editor.file.writeFile(editor.project.currentProject.path+'/mygame.js',data);
+			editor.file.writeFile(editor.project.currentProject.configFile,JSON.stringify(config,null,2));
+		});
+	},
 	/**
 	* remove project
 	* @method remove
