@@ -224,6 +224,12 @@ AngoraEditor.UI.prototype = {
 		//$('#menu_run').menubutton('disable');
 		//var item = $('#submenu_run').menu('getItem', $('#run')[0]);
 		//$('#submenu_run').menu('disableItem', item.target);
+		$('#submenu_run').menu('disableItem', $('#submenu_run').menu('findItem', 'Run').target);
+		$('#submenu_run').menu('disableItem', $('#submenu_run').menu('findItem', 'Release').target);
+		$('#submenu_app').menu('disableItem', $('#submenu_app').menu('findItem', 'AppConfig').target);
+		$('#submenu_tools').menu('disableItem', $('#submenu_tools').menu('findItem','Resource').target);
+		$('#submenu_file').menu('disableItem', $('#submenu_file').menu('findItem','Save').target);
+		$('#submenu_file').menu('disableItem', $('#submenu_file').menu('findItem','Close').target);
 	},
 	/**
 	 * active menuitem

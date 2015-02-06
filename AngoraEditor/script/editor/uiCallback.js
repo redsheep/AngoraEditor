@@ -189,6 +189,7 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 						});
 					}
 					editor.project.close();
+					editor.ui.unactiveMenu();
 				}
 			});
 			break;

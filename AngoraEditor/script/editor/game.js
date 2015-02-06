@@ -21,6 +21,10 @@ AngoraEditor.GameManager=function(editor){
 	 */
 	this.display	=null;//default:800*600
 	/**
+	 * @property {string} - configuration of game render method(AUTO/WEBGL/CANVAS)
+	 */
+	this.render		=null;//default:AUTO
+	/**
 	 * @property {Object} - configuration of game sound
 	 */	
 	this.sound		=null;//default:disable
@@ -63,6 +67,7 @@ AngoraEditor.GameManager.prototype={
 			});
 		}
 		this.set('display',config.display);
+		this.set('render',config.render);
 		this.set('sound',config.sound);
 		this.set('physics',config.physics);
 		this.set('script',config.script);
@@ -106,6 +111,7 @@ AngoraEditor.GameManager.prototype={
 	getDefault: function(id){
 		switch(id){
 			case 'display'	:	return {width:800,height:600}; break;
+			case 'render'	:	return 'AUTO';break;
 			case 'sound'	:	return {slient:true,volume:1}; break;
 			case 'physics'	:	return 'P2JS'; break;
 			case 'script'	: 	return 'javascript'; break;

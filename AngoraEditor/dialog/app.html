@@ -57,6 +57,10 @@
 	<script>
 	$(document).ready(function(){
 		var editor = edt;
+		$('#DisplayX').val(editor.game.display.width);
+		$('#DisplayY').val(editor.game.display.height);
+		$('#Render').val(editor.game.render);
+		$('#Physics').val(editor.game.physics);
 		$('#confirm').click(function(){
 			var DisplayX=$('#DisplayX').val();
 			var DisplayY=$('#DisplayY').val();

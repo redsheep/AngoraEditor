@@ -115,6 +115,7 @@ AngoraEditor.ProjectManager.prototype = {
 			editor.file.writeFile(editor.project.currentProject.path+'/mygame.js',data);
 			editor.file.writeFile(editor.project.currentProject.configFile,JSON.stringify(config,null,2));
 		});
+		editor.game.setup(config);
 	},
 	/**
 	* remove project
