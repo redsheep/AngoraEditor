@@ -218,7 +218,7 @@ AngoraEditor.PropertyGridManager.prototype = {
 			case 'tilesetW': group='tilemap';type='numberbox';break;
 			case 'tilesetH': group='tilemap';type='numberbox';break;
 			case 'tilemap': group='tilemap';type='none';break;
-			default		:	group='custom';type='text';break;
+			default		:	group='custom';type='none';break;
 		}
 		if(typeof grp!='undefined')
 			group=grp;

@@ -217,6 +217,9 @@ AngoraEditor.NodeAttrManager.prototype = {
 			case 'body':return 'default';
 			case 'mass':return 10;
 			case 'fixedRotation':return true;
+			case 'clsname':return '';
+			case 'basecls':return '';
+			case 'clsfile':return '';
 			default:return null;
 		}
 	}

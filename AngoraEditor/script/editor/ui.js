@@ -53,7 +53,7 @@ AngoraEditor.UI = function (editor) {
 	 * @property {Jquery Object}
 	 */	
 	this.codeEditors={};
-	this.codeChanges={};
+	//this.codeChanges={};
 	this.codeEditor=null;
 	//this.setup();
 	//this.setupUICallback();
@@ -173,20 +173,24 @@ AngoraEditor.UI.prototype = {
 	 * @method
 	 * @param
 	 */
-	setupScript : function (title, script, id, closable) {
+	setupScript : function (title, script, type) {
 		if(typeof closable==='undefined')closable=false;
-		if(typeof id==='undefined')id='code';
+		//if(typeof id==='undefined')id='code';
 		var editor=this.editor;
+		if($('#tabs').tabs('exists',title)){
+			$('#tabs').tabs('select',title);
+			return;
+		}
 		$('#tabs').tabs('add',{
 		   id:'tab_'+title,
 		   title:title,
-		   closable:closable,
-		   content:'<textarea id="{0}"></textarea>'.format(id),
+		   closable:true,
+		   content:'<textarea id="{0}_script" type="{1}"></textarea>'.format(title,type),
 		   cache:true
 		});
 		//if(this.codeEditor!=null)
 		//	this.codeEditor.toTextArea();
-		var pane=document.getElementById(id);
+		var pane=document.getElementById(title+"_script");
 		this.codeEditor = CodeMirror.fromTextArea(pane, {
 			lineNumbers : true,
 			mode : "javascript",
@@ -194,11 +198,10 @@ AngoraEditor.UI.prototype = {
 			gutters : ["CodeMirror-lint-markers"],
 			lint : true
 		});
-		this.codeEditors[title]=this.codeEditor;
-		this.codeChanges[title]=false;
+		this.codeEditors[title]={'editor':this.codeEditor,'changes':false,type:type}
+		//this.codeChanges[title]=false;
 		this.codeEditor.setValue(script);
-		if(id==='code')this.codeEditor.on("change",function(){editor.scene.isScriptChanged=true;});
-		else this.codeEditor.on("change",function(){editor.ui.codeChanges[title]=true;});
+		this.codeEditor.on("change",function(){editor.ui.codeEditors[title].changes=true;});
 	},
 	/**
 	 * active state of menubutton
@@ -279,7 +282,6 @@ AngoraEditor.UI.prototype = {
 		this.propertyGrid.reset();
 		this.eventPane.reset();
 		this.gamePane.reset();
-		$('#tabs').tabs('close',this.editor.scene.curScene);
 	}
 }
 AngoraEditor.UI.prototype.constructor = AngoraEditor.UI;

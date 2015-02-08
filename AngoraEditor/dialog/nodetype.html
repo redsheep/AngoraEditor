@@ -105,12 +105,12 @@ types = [{
 ];
 $(document).ready(function () {
 	var editor = edt;
-	var cls=editor.project.customclass;
-	if(cls!=null){
+	var customclass=editor.project.customclass;
+	if(customclass!=null){
 		types[types.length-1].children=[];
-		for(i in cls){
+		for(i in customclass){
 			types[types.length-1].children.push({
-				"text" : cls[i].clsname,
+				"text" : customclass[i].clsname,
 				"iconCls" : "icon-ae-custom",
 				"type" : 'custom'
 			});
@@ -121,7 +121,12 @@ $(document).ready(function () {
 		onDblClick : function (nodetype) {
 			if($('#tt').tree('isLeaf', nodetype.target)==false) return false;
 			var node = editor.node.create(nodetype.type);
-			if(nodetype.type==='custom') node.clsname=nodetype.text;
+			if(nodetype.type==='custom'){
+				var cls = customclass[nodetype.text];
+				node.clsname=cls.clsname;
+				node.basecls=cls.basecls;
+				node.clsfile=cls.clsfile;
+			}
 			editor.node.add(node);
 			editor.ui.nodeTree.addNode(node);
 			editor.ui.gamePane.add(node);

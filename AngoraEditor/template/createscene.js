@@ -36,6 +36,9 @@ function createObject(state, node, group) {
 				object.body.dynamic=parseBoolean(node.dynamic);
 				object.body.mass=parseInt(node.mass);
 				object.body.fixedRotation=parseBoolean(node.fixedRotation);
+				if(node.body!='default'){
+					object.body.addPolygon({},node.body);
+				}
 			}
 			//object.body.collideWorldBounds = true;
 		}
@@ -47,6 +50,9 @@ function createObject(state, node, group) {
 		break;
 	case 'group':
 		object = state.add.group();
+		break;
+	case 'physicsgroup':
+		object = state.add.physicsGroup();
 		//parseInt(node.x), parseInt(node.y), node.image);
 		break;
 	case 'text':
@@ -86,6 +92,10 @@ function createObject(state, node, group) {
 		for(var i in node.tileset){
 			object.addTilesetImage(node.tileset[i]);
 		}
+		break;
+	case 'custom':
+		object = new window[node.clsname](state.game);
+		state.add.existing(object);
 		break;
 	default:
 		break;

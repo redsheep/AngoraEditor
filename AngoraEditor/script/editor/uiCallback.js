@@ -252,12 +252,12 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 	  },
 	  onBeforeClose: function(title,index){
 		//if(title=='preview'||title==editor.scene.curScene)return true;
-		if(editor.ui.codeChanges[title]){
+		if(editor.ui.codeEditors[title].changes){
 			var r = confirm("Do you want to save changes");
 			if (r == true) {
 				var myInstance = $('#'+title).data('CodeMirrorInstance');
-				editor.file.writeFile('{0}/{1}.js'.format(editor.project.currentProject.path,title),editor.ui.codeEditors[title].getValue());
-				editor.ui.codeChanges[title]=false;
+				editor.file.writeFile('{0}/{1}.js'.format(editor.project.currentProject.path,title),editor.ui.codeEditors[title].editor.getValue());
+				editor.ui.codeEditors[title].changes=false;
 				return true;
 			}
 		}

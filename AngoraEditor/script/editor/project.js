@@ -135,7 +135,7 @@ AngoraEditor.ProjectManager.prototype = {
 			var script = script.substring(0, n) + '<script type="text/javascript" src="{0}.js"></script>'.format(cls.clsname) + script.substring(n);
 			editor.file.writeFile(startPage, script);	
 		});
-		this.editor.file.writeFile('{0}/{1}.js'.format(this.currentProject.path,cls.clsname),'');
+		this.editor.script.createCustomClassScript(cls);
 	},
 	removeCustomClass:function(cls){
 		var startPage = "{0}/mygame.html".format(this.currentProject.path);
@@ -143,6 +143,7 @@ AngoraEditor.ProjectManager.prototype = {
 			script = script.replace('<script type="text/javascript" src="{0}.js"></script>'.format(cls.clsname),' ');
 			editor.file.writeFile(startPage, script);
 		});
+		delete this.editor.ui.codeEditors[cls.clsname];
 		delete this.customclass[cls.clsname];
 	},
 	addPlugin:function(plugin){

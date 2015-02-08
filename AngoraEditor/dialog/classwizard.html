@@ -42,6 +42,12 @@
 		$('#addClass').click(function(){
 			$('#dd_class').dialog('open');
 		});
+		$('#removeClass').click(function(){
+			var selectedcls=$('#tb_class').datagrid('getSelected');
+			if(selectedcls!=null){
+				editor.project.removeCustomClass(selectedcls);
+			}
+		});
 		$('#confirm').click(function(){
 			var clsname=$('#clsname').val();
 			var basecls=$('#basecls').val();
@@ -73,8 +79,7 @@
 			if(selectedcls!=null){
 				//open with codemirror
 				editor.file.readFile('{0}/{1}'.format(editor.project.currentProject.path,selectedcls.clsfile),function(script){
-					console.log(script);
-					editor.ui.setupScript(selectedcls.clsname,script,selectedcls.clsname,true);
+					editor.ui.setupScript(selectedcls.clsname,script,'customClass');
 				});
 			}
 			$('#dd').dialog('close');

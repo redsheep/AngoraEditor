@@ -75,7 +75,7 @@ AngoraEditor.SceneManager.prototype = {
 				console.log('gamepane setup success');
 			});
 			p.editor.script.loadSceneScript(scene,function(script){
-				p.editor.ui.setupScript(scene, script);
+				p.editor.ui.setupScript(scene, script, 'sceneScript');
 				$('#tabs').tabs('select','preview');
 			});
 			var configfile="{0}/{1}.config".format(p.editor.project.currentProject.path, scene);
@@ -277,20 +277,19 @@ AngoraEditor.SceneManager.prototype = {
 		editor.file.writeFile("{0}/preload.res".format(projectpath), JSON.stringify(editor.res.globalres, null, 2));
 		this.isResourceChanged=false;
 		}
-		if(this.isScriptChanged){
-		//editor.file.writeFile("{0}/{1}.scripts".format(projectpath,sceneName),);
-		editor.file.writeFile("{0}/{1}.script.js".format(projectpath,sceneName),editor.ui.codeEditor.getValue());
-		this.isScriptChanged=false;
-		}
 		if(this.isConfigChanged){
 		editor.file.writeFile("{0}/{1}.config".format(projectpath,sceneName),JSON.stringify(editor.scene.config, null, 2));
 		this.isConfigChanged=false;
 		}
-		for(i in editor.ui.codeChanges){
-			if(editor.ui.codeChanges[i]){
-				var myInstance = $('#'+i).data('CodeMirrorInstance');
-				editor.file.writeFile('{0}/{1}.js'.format(editor.project.currentProject.path,i),editor.ui.codeEditors[i].getValue());
-				editor.ui.codeChanges[i]=false;
+		for(i in editor.ui.codeEditors){
+			var code = editor.ui.codeEditors[i];
+			if(code.changes){
+				if(code.type==='sceneScript'){
+					editor.file.writeFile("{0}/{1}.script.js".format(projectpath,i),editor.ui.codeEditors[i].editor.getValue());
+				}else if(code.type==='customClass'){
+					editor.file.writeFile('{0}/{1}.js'.format(projectpath,i),editor.ui.codeEditors[i].editor.getValue());
+				}
+				code.changes=false;
 			}
 		}
 	}

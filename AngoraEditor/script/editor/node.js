@@ -277,6 +277,9 @@ AngoraEditor.NodeManager.prototype = {
 		var maxspeedX=this.setAttr('maxspeedX',node.maxspeedX);
 		var minspeedY=this.setAttr('minspeedY',node.minspeedY);
 		var maxspeedY=this.setAttr('maxspeedY',node.maxspeedY);
+		var basecls=this.setAttr('basecls',node.basecls);
+		var clsname=this.setAttr('clsname',node.clsname);
+		var clsfile=this.setAttr('clsfile',node.clsfile);
 		switch(node.type){
 			case 'image':
 			case 'sprite':
@@ -384,8 +387,9 @@ AngoraEditor.NodeManager.prototype = {
 				node['delay']=delay;
 				break;
 			case 'custom':
-				node['extend']='';
-				node['script']='';
+				node['clsname']=clsname;
+				node['basecls']=basecls;
+				node['clsfile']=clsfile;
 				break;
 			default:
 				break;

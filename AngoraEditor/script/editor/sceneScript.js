@@ -36,7 +36,7 @@ AngoraEditor.ScriptManager.prototype = {
 	* @param {string} scene name
 	*/
 	createScript : function (scene) {
-	var editor=this.editor;
+		var editor=this.editor;
 		var projectpath = this.editor.project.currentProject.path;
 		this.editor.file.readFile('/template/scene.js',function(data){
 			var sceneScript = data.replace(/{sceneName}/g, scene);
@@ -47,6 +47,15 @@ AngoraEditor.ScriptManager.prototype = {
 				data+="\n{sceneName}.prototype.shutdown=function(){}";
 			var customSceneScript = data.replace(/{sceneName}/g, scene);
 			editor.file.writeFile("{0}/{1}.script.js".format(projectpath, scene), customSceneScript);
+		});
+	},
+	createCustomClassScript : function (cls) {
+		var editor=this.editor;
+		var projectpath = this.editor.project.currentProject.path;
+		this.editor.file.readFile('/template/customclass.js',function(data){
+			data = data.replace(/{clsname}/g, cls.clsname);
+			data = data.replace(/{basecls}/g, cls.basecls);
+			editor.file.writeFile("{0}/{1}.js".format(projectpath, cls.clsname), data);		
 		});
 	},
 	/**

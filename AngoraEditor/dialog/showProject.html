@@ -16,8 +16,7 @@
 		text-align:center;
 		width:64px;
 		height:64px;
-		background-image:url('default.png');
-		background-size:100% 100%;
+		overflow:hidden;
 	}
 	.projectSrc{
 		display:block;
@@ -75,21 +74,22 @@
 			$('#dd').dialog('close');
 		});
 		$("#removebtn").click(function () {
-			var r = confirm("Are you comfirm to remove this project?");
-			if (r == true) {
-				var selected = $(".selected");
-				var name = selected.children(".projectName")[0].innerHTML;
-				var dir = selected.children(".projectDir")[0].innerHTML;
-				for (var i in projects) {
-					if (projects[i].name == name) {
-						editor.project.remove(i);
-						break;
+			editor.ui.confirm("Warning","Are you comfirm to remove this project?",function(r){
+				if (r) {
+					var selected = $(".selected");
+					var name = selected.children(".projectName")[0].innerHTML;
+					var dir = selected.children(".projectDir")[0].innerHTML;
+					for (var i in projects) {
+						if (projects[i].name == name) {
+							editor.project.remove(i);
+							break;
+						}
 					}
+					selected.remove();
+				} else {
+					editor.ui.alert("Warning","Cannot remove the project");
 				}
-				selected.remove();
-			} else {
-				alert("Cannot remove the project");
-			}
+			});
 		});
 	});
 	</script>
