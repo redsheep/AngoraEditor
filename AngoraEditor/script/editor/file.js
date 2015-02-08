@@ -29,8 +29,8 @@ AngoraEditor.FileManager.prototype = {
 		$.get('/mkdir',{"path":filepath});
 	},
 	/**
-	* create a new file
-	* @method createFile
+	* is the file exist
+	* @method existFile
 	* @param {string} filepath
 	*/
 	existFile : function (filepath,func) {
@@ -113,15 +113,6 @@ AngoraEditor.FileManager.prototype = {
 			});
 		//var file = Ti.Filesystem.getFile(filepath);
 		//return file.deleteFile();
-	},
-	/**
-	* is the file exist
-	* @method existFile
-	* @param {string} filepath
-	*/
-	existFile : function (filepath) {
-		//var file = Ti.Filesystem.getFile(filepath);
-		//return file.exists();
 	},
 	/**
 	* is the file empty

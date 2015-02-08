@@ -14,31 +14,82 @@
 	  height: 20px;
 	}
 	</style>
-<div id="container" class="easyui-layout" fit="true">
-	<div data-options="region:'south'" style="overflow:hidden">
+<div class="easyui-layout" fit="true">
+	<div data-options="region:'center'">
+		<div id="tt" class="easyui-tabs" data-options="tabPosition:'left',headerWidth:72" fit=true>
+		<div title="Settings">
+			<div style="padding:10px 60px 20px 60px">
+			<table cellpadding="5">
+			<tr><td>Language:</td>
+				<td><select id='set_lang' class="easyui-combobox">
+					<option>EN</option>
+				</select></td>
+			</tr>
+			<tr><td>Themes:</td>
+				<td><select id='set_theme' class="easyui-combobox">
+					<option>default</option>
+					<option>black</option>
+				</select></td>
+			</tr>
+			<tr><td>AutoSave:</td>
+				<td><input id='set_autosave' type="checkbox"></input></td>
+			</tr>
+			</table>
+			</div>
+		</div>
+		<div title="Display">
+			<div style="padding:10px 60px 20px 60px">
+			<table cellpadding="5">
+				<tr><td>showGrid:</td>
+				<td><input id='set_showGrid' type="checkbox" checked></input></td>
+				</tr>
+				<tr><td>gridSize:</td>
+				<td><input id='set_gridSize' class="easyui-numberspinner" value='32' data-options="width:64"></input></td>
+				</tr>
+				<tr><td>worldBounds:</td>
+				<td><input id='set_WorldBounds' type="checkbox"></input></td>
+				</tr>
+			</table>
+			</div>
+		</div>
+		<div title="Code">
+			<div style="padding:10px 60px 20px 60px">
+			<table cellpadding="5">
+				<tr><td>Themes:</td>
+					<td><select id='set_codetheme' class="easyui-combobox">
+						<option>default</option>
+						<option>black</option>
+					</select></td>
+				</tr>
+				<tr><td>showLineNumber:</td>
+				<td><input id='set_showLineNumber' type="checkbox" checked></input></td>
+				</tr>
+				<tr><td>autoComplete:</td>
+				<td><input id='set_autoComplete' type="checkbox" checked></input></td>
+				</tr>
+			</table>
+			</div>
+		</div>
+		</div>
+	</div>
+	<div data-options="region:'south'" style="height:64px;">
 		<button id="btn_ok" style="float:left;margin-top:10px;">OK</button>
 		<button id="btn_cancel" style="float:right;margin-top:10px;">Cancel</button>
 	</div>
-
-	<div data-options="region:'center'">
-	<div id="tt" class="easyui-tabs" data-options="tabPosition:'left',headerWidth:72" fit=true>
-	<div title="Settings">
-		this is test
-	</div>
-	<div title="Themes">
-		<select id="cc" class="easyui-combobox" name="dept">
-			<option>default</option>
-			<option>black</option>
-		</select>
-	</div>
-	<div title="Editor">
-		
-	</div>
-	</div>
-	</div>
 </div>	
-	<script>
+<script>
 	$(document).ready(function(){
 		var editor = edt;
+		$('#set_lang').val(editor.system.config.settings.language);
+		$('#set_themes').val(editor.system.config.settings.theme);
+		$('#set_autosave').prop('checked', editor.system.config.settings.autosave);
+		$('#set_showGrid').prop('checked', editor.system.config.display.showGrid);
+		$('#set_gridSize').val(editor.system.config.display.gridSize);
+		$('#set_WorldBounds').prop('checked', editor.system.config.display.worldBounds);
+		$('#set_codetheme').val(editor.system.config.code.theme);
+		$('#set_showLineNumber').prop('checked', editor.system.config.code.lineNumber);
+		$('#set_autoComplete').prop('checked', editor.system.config.code.autoComplete);
 	  });
-  </script>
+</script>
+
+

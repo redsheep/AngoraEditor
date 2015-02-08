@@ -32,7 +32,11 @@ AngoraEditor.SystemConfig = function (editor) {
 	 * @property {string} - project path
 	 */
 	this.projectFile	= null;
-
+	this.appconfig		= null;
+	/**
+	 * @property {Object} - application config
+	 */
+	this.config	= {};
 }
 
 AngoraEditor.SystemConfig.prototype = {
@@ -41,6 +45,12 @@ AngoraEditor.SystemConfig.prototype = {
 		this.templatePath	= this.appPath+"/template";
 		this.workspacePath	= this.appPath+"/workspace";
 		this.projectFile	= this.appPath+"/data/projects.json";
+		this.configPath		= this.appPath+"/data/perferences.cfg";
+		this.langPath		= this.appPath+"/data/lang";
+		var editor=this.editor;
+		this.editor.file.readFile(this.configPath,function(data){
+			editor.system.config=JSON.parse(data);
+		});
 	},
 	/**
 	* 

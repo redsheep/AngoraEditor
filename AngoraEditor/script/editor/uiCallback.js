@@ -55,6 +55,7 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		}
 	});
 	$('#preview').mousedown(function(e){
+		if(editor.project.currentProject==null)return;
 		editor.ui.propertyGrid.reset();
 		editor.ui.nodeTree.unselect();
 		editor.ui.propertyGrid.loadData(editor.scene.config);
@@ -88,25 +89,29 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		editor.ui.gamePane.scaleScene(e.deltaY,origin);
 	});
 	$("#addNode").click(function () {
+		if(editor.project.currentProject==null)return;
 		editor.ui.showDialog('/dialog/nodetype');
 	});
 	$("#addScene").click(function () {
+		if(editor.project.currentProject==null)return;
 		editor.ui.prompt('Add Scene','Enter scene name',function(r){
-			if (r != '') editor.scene.add(r);
+			if (typeof r!='undefined' && r.trim() != '') editor.scene.add(r);
 		});
 	});
 	$('#addEvent').click(function(){
-		
+		if(editor.project.currentProject==null)return;
 	});
 	$('#addProperty').click(function(){
-		
+		if(editor.project.currentProject==null)return;
 	});
 	$("#removeScene").click(function () {
+		if(editor.project.currentProject==null)return;
 		editor.ui.confirm('Warning',"remove local file?",function(r){
 			editor.scene.remove(editor.scene.curScene,r);
 		});
 	});
 	$("#removeNode").click(function () {
+		if(editor.project.currentProject==null || editor.node.selected==null)return;
 		editor.node.remove(editor.node.selected.id);
 		editor.ui.nodeTree.removeNode();
 		editor.ui.gamePane.remove(editor.node.selected);
@@ -165,7 +170,14 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		}
 	}});
 	$("#submenu_app").menu({onClick:function (item) {
+		switch(item.id){
+		case 'app':
 		editor.ui.showDialog("/dialog/app",360,360,function(){});
+		break;
+		case 'custom':
+		editor.ui.showDialog("/dialog/classwizard",360,360,function(){});
+		break;
+		}
 	}});
 	$("#submenu_file").menu({onClick:function (item) {
 		switch(item.id){
@@ -180,16 +192,14 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 			editor.ui.showOpenProjectDialog();
 			break;
 		case 'saveProject':editor.scene.save();break;
-		case 'closeProject':
+		case 'closeProject':	
+			if(editor.scene.isChanged()){
+				var r = confirm("do you want to save changed?");
+				if(r)editor.scene.save();
+			}
 			editor.ui.confirm('Warning',"Are you sure to close current project?",function(r){
 				if(r){
-					if(editor.scene.isChanged()){
-						editor.ui.confirm('Warning',"do you want to save changed?",function(r){
-							if(r) editor.scene.save();
-						});
-					}
 					editor.project.close();
-					editor.ui.unactiveMenu();
 				}
 			});
 			break;
@@ -200,7 +210,7 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		switch(item.id){
 		case 'setgridsize':
 			editor.ui.prompt('Change Size','Enter grid size',function(size){
-				if(size==''){
+				if (typeof size!='undefined' && size.trim() != ''){
 					editor.ui.gridSize=32;
 				}else{
 					editor.ui.gridSize=parseInt(size);
@@ -236,7 +246,23 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		default:break;
 		}
 	}});
-
+	$('#tabs').tabs({
+	  onSelect:function(title,index){
+		editor.ui.codeEditor=editor.ui.codeEditors[title];
+	  },
+	  onBeforeClose: function(title,index){
+		//if(title=='preview'||title==editor.scene.curScene)return true;
+		if(editor.ui.codeChanges[title]){
+			var r = confirm("Do you want to save changes");
+			if (r == true) {
+				var myInstance = $('#'+title).data('CodeMirrorInstance');
+				editor.file.writeFile('{0}/{1}.js'.format(editor.project.currentProject.path,title),editor.ui.codeEditors[title].getValue());
+				editor.ui.codeChanges[title]=false;
+				return true;
+			}
+		}
+	  }
+	});
 	$('body').keydown(function(e){
 		if (e.ctrlKey){
 			switch(e.which){

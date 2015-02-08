@@ -36,14 +36,12 @@ AngoraEditor.ScenePaneManager.prototype = {
 		}
 		this.pane.delegate('.sceneitem', 'click', function () {
 			if(editor.scene.isChanged()){
-				editor.ui.confirm('Warning',"do you want to save changed?",function(r){
-					if(r) editor.scene.save();
-				});
+				var r=confirm("do you want to save changed?");
+				if(r) editor.scene.save();
 			}
 			var sceneDiv=$('.selectedsceneitem');
-			if(sceneDiv.length>0){
+			if(sceneDiv.length>0)
 				sceneDiv.removeClass('selectedsceneitem');
-			}
 			$(this).addClass('selectedsceneitem');
 			editor.scene.load($(this).attr('sceneID'));
 		});

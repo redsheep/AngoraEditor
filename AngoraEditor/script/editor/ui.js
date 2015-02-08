@@ -52,8 +52,9 @@ AngoraEditor.UI = function (editor) {
 	/**
 	 * @property {Jquery Object}
 	 */	
+	this.codeEditors={};
+	this.codeChanges={};
 	this.codeEditor=null;
-	
 	//this.setup();
 	//this.setupUICallback();
 }
@@ -172,21 +173,20 @@ AngoraEditor.UI.prototype = {
 	 * @method
 	 * @param
 	 */
-	setupScript : function (id, script) {
+	setupScript : function (title, script, id, closable) {
+		if(typeof closable==='undefined')closable=false;
+		if(typeof id==='undefined')id='code';
 		var editor=this.editor;
-		//$(id).val(script);
-		//var CM = document.getElementById(id);
-		//$('#tabs').tabs('add',
 		$('#tabs').tabs('add',{
-		   id:'tab_'+id,
-		   title:id,
-		   //closable:true,
-		   content:'<textarea id="code"></textarea>',
+		   id:'tab_'+title,
+		   title:title,
+		   closable:closable,
+		   content:'<textarea id="{0}"></textarea>'.format(id),
 		   cache:true
 		});
 		//if(this.codeEditor!=null)
 		//	this.codeEditor.toTextArea();
-		var pane=document.getElementById("code");
+		var pane=document.getElementById(id);
 		this.codeEditor = CodeMirror.fromTextArea(pane, {
 			lineNumbers : true,
 			mode : "javascript",
@@ -194,8 +194,11 @@ AngoraEditor.UI.prototype = {
 			gutters : ["CodeMirror-lint-markers"],
 			lint : true
 		});
+		this.codeEditors[title]=this.codeEditor;
+		this.codeChanges[title]=false;
 		this.codeEditor.setValue(script);
-		this.codeEditor.on("change",function(){editor.scene.isScriptChanged=true;});
+		if(id==='code')this.codeEditor.on("change",function(){editor.scene.isScriptChanged=true;});
+		else this.codeEditor.on("change",function(){editor.ui.codeChanges[title]=true;});
 	},
 	/**
 	 * active state of menubutton
@@ -209,6 +212,7 @@ AngoraEditor.UI.prototype = {
 		$('#submenu_run').menu('enableItem', $('#submenu_run').menu('findItem', 'Run').target);
 		$('#submenu_run').menu('enableItem', $('#submenu_run').menu('findItem', 'Release').target);
 		$('#submenu_app').menu('enableItem', $('#submenu_app').menu('findItem', 'AppConfig').target);
+		$('#submenu_app').menu('enableItem', $('#submenu_app').menu('findItem', 'CustomClass').target);
 		$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Resource').target);
 		$('#submenu_file').menu('enableItem', $('#submenu_file').menu('findItem','Save').target);
 		$('#submenu_file').menu('enableItem', $('#submenu_file').menu('findItem','Close').target);
@@ -227,6 +231,7 @@ AngoraEditor.UI.prototype = {
 		$('#submenu_run').menu('disableItem', $('#submenu_run').menu('findItem', 'Run').target);
 		$('#submenu_run').menu('disableItem', $('#submenu_run').menu('findItem', 'Release').target);
 		$('#submenu_app').menu('disableItem', $('#submenu_app').menu('findItem', 'AppConfig').target);
+		$('#submenu_app').menu('disableItem', $('#submenu_app').menu('findItem', 'CustomClass').target);
 		$('#submenu_tools').menu('disableItem', $('#submenu_tools').menu('findItem','Resource').target);
 		$('#submenu_file').menu('disableItem', $('#submenu_file').menu('findItem','Save').target);
 		$('#submenu_file').menu('disableItem', $('#submenu_file').menu('findItem','Close').target);
@@ -256,6 +261,12 @@ AngoraEditor.UI.prototype = {
 			case 'tilemap':$('#submenu_tools').menu('enableItem', $('#submenu_tools').menu('findItem','Tilemap').target);break;
 			default:break;
 			}
+		}
+	},
+	closeAllCode:function(){
+		var tabs=$('#tabs').tabs('tabs');
+		for (var i=tabs.length-1;i>0;i--){
+			$('#tabs').tabs('close',i);
 		}
 	},
 	/**

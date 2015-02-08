@@ -383,6 +383,10 @@ AngoraEditor.NodeManager.prototype = {
 			case 'timer':
 				node['delay']=delay;
 				break;
+			case 'custom':
+				node['extend']='';
+				node['script']='';
+				break;
 			default:
 				break;
 		}

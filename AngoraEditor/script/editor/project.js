@@ -28,6 +28,8 @@ AngoraEditor.ProjectManager = function (editor) {
 	 * @property {Object}
 	 */
 	this.currentProject = null;
+	this.customclass=null;
+	this.plugins=null;
 }
 AngoraEditor.ProjectManager.prototype = {
 	/**
@@ -57,6 +59,7 @@ AngoraEditor.ProjectManager.prototype = {
 		this.currentProject['path'] 		= project['path'];
 		this.currentProject['configFile']	= this.currentProject['path']+'/config.json';
 		this.currentProject['sceneFile']	= this.currentProject['path']+'/scenes.json';
+		this.currentProject['customClassFile']=this.currentProject['path']+'/custom.cls';
 		var p=this;
 		if(this.config==null){
 			this.editor.file.readFile(this.currentProject['configFile'],function(json){
@@ -73,6 +76,11 @@ AngoraEditor.ProjectManager.prototype = {
 			console.log('update config success');
 			p.editor.scene.setup(finished);
 			console.log('New Project Create Success!');
+		}
+		if(this.editor.file.existFile(this.currentProject.customClassFile)){
+			p.editor.file.readFile(this.currentProject.customClassFile,function(json){
+				p.customclass=JSON.parse(json);
+			});
 		}
 		this.editor.ui.activeMenu();
 	},
@@ -117,6 +125,33 @@ AngoraEditor.ProjectManager.prototype = {
 		});
 		editor.game.setup(config);
 	},
+	addCustomClass:function(cls){
+		if(this.customclass==null) this.customclass={};
+		this.customclass[cls.clsname]=cls;
+		this.editor.file.writeFile(this.currentProject.customClassFile,JSON.stringify(this.customclass,null,2));
+		var startPage = "{0}/mygame.html".format(this.currentProject.path);
+		this.editor.file.readFile(startPage,function(script){
+			var n = script.lastIndexOf('<script type="text/javascript" src="mygame.js">');
+			var script = script.substring(0, n) + '<script type="text/javascript" src="{0}.js"></script>'.format(cls.clsname) + script.substring(n);
+			editor.file.writeFile(startPage, script);	
+		});
+		this.editor.file.writeFile('{0}/{1}.js'.format(this.currentProject.path,cls.clsname),'');
+	},
+	removeCustomClass:function(cls){
+		var startPage = "{0}/mygame.html".format(this.currentProject.path);
+		this.editor.file.readFile(startPage,function(script){
+			script = script.replace('<script type="text/javascript" src="{0}.js"></script>'.format(cls.clsname),' ');
+			editor.file.writeFile(startPage, script);
+		});
+		delete this.customclass[cls.clsname];
+	},
+	addPlugin:function(plugin){
+		if(this.plugins==null) this.plugins={};
+		this.plugins[plugin.name]=plugin;
+	},
+	removePlugin:function(plugin){
+		delete this.plugins[plugin.name];
+	},
 	/**
 	* remove project
 	* @method remove
@@ -148,7 +183,8 @@ AngoraEditor.ProjectManager.prototype = {
 	* @param 
 	*/
 	reset: function(){
-		//this.editor.ui.unactiveMenu();
+		this.editor.ui.closeAllCode();
+		this.editor.ui.unactiveMenu();
 		this.editor.scene.scenes={};
 		this.editor.res.clearAll();
 		this.editor.scene.reset();

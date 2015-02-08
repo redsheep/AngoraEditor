@@ -286,6 +286,13 @@ AngoraEditor.SceneManager.prototype = {
 		editor.file.writeFile("{0}/{1}.config".format(projectpath,sceneName),JSON.stringify(editor.scene.config, null, 2));
 		this.isConfigChanged=false;
 		}
+		for(i in editor.ui.codeChanges){
+			if(editor.ui.codeChanges[i]){
+				var myInstance = $('#'+i).data('CodeMirrorInstance');
+				editor.file.writeFile('{0}/{1}.js'.format(editor.project.currentProject.path,i),editor.ui.codeEditors[i].getValue());
+				editor.ui.codeChanges[i]=false;
+			}
+		}
 	}
 }
 

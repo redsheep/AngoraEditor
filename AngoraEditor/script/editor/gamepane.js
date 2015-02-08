@@ -133,9 +133,10 @@ AngoraEditor.GamePaneManager.prototype = {
 				//nodeDiv.draggable();
 				//nodeDiv.resizable();
 				break;
+			case 'physicsGroup':
 			case 'group':
-				//nodeDiv.css('width','100px');
-				//nodeDiv.css('height','100px');
+				nodeDiv.html('group');
+				nodeDiv.css('background-color','lightblue');
 				break;
 			case 'particle':
 				nodeDiv.css('width','32px');
@@ -159,6 +160,7 @@ AngoraEditor.GamePaneManager.prototype = {
 				editor.node.locked[node.id]=true;
 				break;
 			case 'sound': break;
+			case 'custom': break;
 			default:break;
 		}
 		if(node.visible=='true') nodeDiv.show();

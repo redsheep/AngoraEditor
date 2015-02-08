@@ -58,12 +58,15 @@ AngoraEditor.NodeTreeManager.prototype = {
 				return true;
 			},
 			onDrop : function(targetNode, source, point) {
+				var node=null;
 				if(point=='append'){
 					editor.node.addToGroup(source.id,targetNode.textContent);
+					node=editor.node.get(targetNode.textContent);
 				}else{
 					editor.node.checkGroup(source.id,targetNode.textContent, point);
+					node=editor.node.getParent(targetNode.textContent);
 				}
-				var node=editor.node.getParent(targetNode.textContent);
+				
 				if(node==null){
 					editor.ui.gamePane.updateGroup(source.id);
 					editor.ui.gamePane.updateZorder(editor.node.nodes,0);
