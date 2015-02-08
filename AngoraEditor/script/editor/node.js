@@ -39,7 +39,7 @@ AngoraEditor.NodeManager.prototype = {
 	* @method create
 	* @param {string} type
 	*/
-	create : function (type) {
+	create : function (type,cls) {
 		var nodeID='{0}{1}'.format(type,this.count++);
 		while(this.get(nodeID)!=null)
 			nodeID='{0}{1}'.format(type,this.count++);
@@ -47,6 +47,10 @@ AngoraEditor.NodeManager.prototype = {
 			'id':nodeID,
 			'type':type,
 			'visible':'true'
+		}
+		if(type==='custom'){
+			node.clsname=cls.clsname;
+			node.basecls=cls.basecls;
 		}
 		this.initNode(node);
 		return node;
@@ -136,7 +140,7 @@ AngoraEditor.NodeManager.prototype = {
 		//if(this.selected!=null){
 		//	node.group=this.selected.id;
 		//}
-		this.initNode(node);
+		//this.initNode(node);
 		this.nodes[node.id] = node;
 		//this.editor.ui.nodeTree.addNode(node);
 		//this.editor.ui.gamepane.addNode(node);
@@ -152,28 +156,6 @@ AngoraEditor.NodeManager.prototype = {
 		this._remove(this.nodes,nodeID);
 		this.editor.scene.isNodeChanged=true;
 	},
-	/*
-	updatenode:function(treenode,zindex){
-		var id=treenode.id;
-		var node=this.get(id);
-		if(node.type=='group'&& typeof treenode.children!='undefined'){
-			for(i in treenode.children){
-				updatenode(treenode.children[i],zindex);
-			}
-		}else{
-			this.editor.ui.gamePane.updateZOrder(node,zindex);
-		}
-	},
-	updateOrder : function (treenode) {
-		var reorder={};
-		for (i in treenode){
-			var id=treenode[i].id;
-			reorder[id]=this.nodes[id];
-		}
-		this.nodes=reorder;
-		this.editor.scene.isNodeChanged=true;
-	},
-	*/	
 	addToGroup:function(id,group){
 		var node=this.get(group);
 		if(typeof node.children==='undefined')
@@ -246,150 +228,114 @@ AngoraEditor.NodeManager.prototype = {
 	*/
 	initNode : function(node){
 		var editor=this.editor;
-		var x=this.setAttr('x',node.x);//editor.attr.getDefault('x');
-		var y=this.setAttr('y',node.y);
-		var width=this.setAttr('width',node.width);
-		var height=this.setAttr('height',node.height);
-		var scaleX=this.setAttr('scaleX',node.scaleX);
-		var scaleY=this.setAttr('scaleY',node.scaleY);
-		var anchorX=this.setAttr('anchorX',node.anchorX);
-		var anchorY=this.setAttr('anchorY',node.anchorY);
-		var rotation=this.setAttr('rotation',node.rotaion);
-		var volume=this.setAttr('volume',node.volume);
-		var fontsize=this.setAttr('fontSize',node.fontSize);
-		var atlasWidth=this.setAttr('atlasWidth',node.atlasWidth);
-		var atlasHeight=this.setAttr('atlasHeight',node.atlasHeight);
-		var physics=this.setAttr('physics',node.physics);
-		var dynamic=this.setAttr('dynamic',node.dynamic);
-		var body=this.setAttr('body',node.body);
-		var mass=this.setAttr('mass',node.mass);
-		var fixedRotation=this.setAttr('fixedRotation',node.fixedRotation);
-		var image=this.setAttr('image',node.image);
-		var animations=this.setAttr('animations',node.animations);
-		var delay=this.setAttr('delay',node.delay);
-		var maxParticles=this.setAttr('maxParticles',node.maxParticles);
-		var lifespan=this.setAttr('lifespan',node.lifespan);
-		var gravity=this.setAttr('gravity',node.gravity);
-		var frequency=this.setAttr('frequency',node.frequency);
-		var alpha=this.setAttr('alpha',node.alpha);
-		var angle=this.setAttr('angle',node.angle);
-		var minspeedX=this.setAttr('minspeedX',node.minspeedX);
-		var maxspeedX=this.setAttr('maxspeedX',node.maxspeedX);
-		var minspeedY=this.setAttr('minspeedY',node.minspeedY);
-		var maxspeedY=this.setAttr('maxspeedY',node.maxspeedY);
-		var basecls=this.setAttr('basecls',node.basecls);
-		var clsname=this.setAttr('clsname',node.clsname);
-		var clsfile=this.setAttr('clsfile',node.clsfile);
-		switch(node.type){
+		var type=node.type;
+		if(node.type==='custom')
+			type=node.basecls.toLowerCase();
+		switch(type){
 			case 'image':
 			case 'sprite':
 			case 'tilesprite':
 			case 'animate':
-				node['x']=x;
-				node['y']=y;
-				node['width']=width;
-				node['height']=height;
-				node['image']=image;
+				node['x']=this.setAttr('x',node.x);
+				node['y']=this.setAttr('y',node.y);
+				node['width']=this.setAttr('width',node.width);
+				node['height']=this.setAttr('height',node.height);
+				node['image']=this.setAttr('image',node.image);
 				if(node.type=='animate')
-					node['animations']=animations;
+					node['animations']=this.setAttr('animations',node.animations);
 				else if(node.type=='sprite')
-					node['frame']=0;
-				node['scaleX']=scaleX;
-				node['scaleY']=scaleY;
-				node['anchorX']=anchorX;
-				node['anchorY']=anchorY;
-				node['rotation']=rotation;
+					node['frame']=this.setAttr('frame',node.frame);
+				node['scaleX']=this.setAttr('scaleX',node.scaleX);
+				node['scaleY']=this.setAttr('scaleY',node.scaleY);
+				node['anchorX']=this.setAttr('anchorX',node.anchorX);
+				node['anchorY']=this.setAttr('anchorY',node.anchorY);
+				node['rotation']=this.setAttr('rotation',node.rotaion);
 				if(node.type!='image'){
-					node['physics']=physics;
-					node['dynamic']=dynamic;
-					node['body']=body;
-					node['mass']=mass;
-					node['fixedRotation']=fixedRotation;
+					node['physics']=this.setAttr('physics',node.physics);
+					node['dynamic']=this.setAttr('dynamic',node.dynamic);
+					node['body']=this.setAttr('body',node.body);
+					node['mass']=this.setAttr('mass',node.mass);
+					node['fixedRotation']=this.setAttr('fixedRotation',node.fixedRotation);
 				}
 				break;
 			case 'group':
-				node['x']=x;
-				node['y']=y;
-				node['physics']=physics;
+				node['x']=this.setAttr('x',node.x);
+				node['y']=this.setAttr('y',node.y);
+				node['physics']=this.setAttr('physics',node.physics);
 				break;
 			case 'bitmapdata':
-				node['width']=width;
-				node['height']=height;
+				node['width']=this.setAttr('width',node.width);
+				node['height']=this.setAttr('height',node.height);
 				break;
 			case 'spritebatch':
 			case 'physicsgroup':
 			case 'graphics':
-				node['x']=x;
-				node['y']=y;
+				node['x']=this.setAttr('x',node.x);
+				node['y']=this.setAttr('y',node.y);
 				break;
 			case 'camera':
-				node['x']=x;
-				node['y']=y;
-				node['width']=width;
-				node['height']=height;
-				node['follow']='';
+				node['x']=this.setAttr('x',node.x);
+				node['y']=this.setAttr('y',node.y);
+				node['width']=this.setAttr('width',node.width);
+				node['height']=this.setAttr('height',node.height);
+				node['follow']=this.setAttr('follow',node.follow);
 				break;
 			case 'audio':
-				node['audio']='none';
-				node['tracks']='none';
+				node['audio']=this.setAttr('audio',node.audio);
+				node['tracks']=this.setAttr('tracks',node.tracks);
 				delete node['visible'];
 				break;
 			case 'text':
-				node['x']=x;
-				node['y']=y;
-				node['text']='text';
-				node['fontFamily']='Arial';
-				node['fontSize']='32';
-				node['fontColor']='#ffffff';
-				node['textAlign']='center';
+				node['x']=this.setAttr('x',node.x);
+				node['y']=this.setAttr('y',node.y);
+				node['text']=this.setAttr('text',node.text);
+				node['fontFamily']=this.setAttr('fontFamily',node.fontFamily);
+				node['fontSize']=this.setAttr('fontSize',node.fontSize);
+				node['fontColor']=this.setAttr('fontColor',node.fontColor);
+				node['textAlign']=this.setAttr('textAlign',node.textAlign);
 				break;
 			case 'bitmaptext':
-				node['x']=x;
-				node['y']=y;
-				node['font']='';
-				node['text']='text';
-				node['fontSize']='32';
+				node['x']=this.setAttr('x',node.x);
+				node['y']=this.setAttr('y',node.y);
+				node['font']=this.setAttr('font',node.font);
+				node['text']=this.setAttr('text',node.text);
+				node['fontSize']=this.setAttr('fontSize',node.fontSize);
 				break;
 			case 'button':
-				node['x']=x;
-				node['y']=y;
-				node['width']=width;
-				node['height']=height;
-				node['image']=image;
-				node['frame']=0;
-				node['scaleX']=scaleX;
-				node['scaleY']=scaleY;
-				node['rotation']=rotation;
+				node['x']=this.setAttr('x',node.x);
+				node['y']=this.setAttr('y',node.y);
+				node['width']=this.setAttr('width',node.width);
+				node['height']=this.setAttr('height',node.height);
+				node['image']=this.setAttr('image',node.image);
+				node['frame']=this.setAttr('frame',node.frame);
+				node['scaleX']=this.setAttr('scaleX',node.scaleX);
+				node['scaleY']=this.setAttr('scaleY',node.scaleY);
+				node['rotation']=this.setAttr('rotation',node.rotaion);
 				//node['callback']=callback;
 				break;
 			case 'tilemap':
-				node['tileW']=32;
-				node['tileH']=32;
-				node['tilesetW']=32;
-				node['tilesetH']=32;
-				node['tilemap']='';
+				node['tileW']=this.setAttr('tileW',node.tileW);
+				node['tileH']=this.setAttr('tileH',node.tileH);
+				node['tilesetW']=this.setAttr('tilesetW',node.tilesetW);
+				node['tilesetH']=this.setAttr('tilesetH',node.tilesetH);
+				node['tilemap']=this.setAttr('tilemap',node.tilemap);
 				break;
 			case 'particle':
-				node['x']=x;
-				node['y']=y;
-				node['alpha']=alpha;
-				node['rotation']=rotation;
-				node['maxParticles']=maxParticles;
-				node['frequency']=frequency;
-				node['lifespan']=lifespan;
-				node['gravity']=gravity;
-				node['minspeedX']=minspeedX;
-				node['maxspeedX']=maxspeedX;
-				node['minspeedY']=minspeedY;
-				node['maxspeedY']=maxspeedY;
+				node['x']=this.setAttr('x',node.x);
+				node['y']=this.setAttr('y',node.y);
+				node['alpha']=this.setAttr('alpha',node.alpha);
+				node['rotation']=this.setAttr('rotation',node.rotaion);
+				node['maxParticles']=this.setAttr('maxParticles',node.maxParticles);
+				node['frequency']=this.setAttr('frequency',node.frequency);
+				node['lifespan']=this.setAttr('lifespan',node.lifespan);
+				node['gravity']=this.setAttr('gravity',node.gravity);
+				node['minspeedX']=this.setAttr('minspeedX',node.minspeedX);
+				node['maxspeedX']=this.setAttr('maxspeedX',node.maxspeedX);
+				node['minspeedY']=this.setAttr('minspeedY',node.minspeedY);
+				node['maxspeedY']=this.setAttr('maxspeedY',node.maxspeedY);
 				break;
 			case 'timer':
-				node['delay']=delay;
-				break;
-			case 'custom':
-				node['clsname']=clsname;
-				node['basecls']=basecls;
-				node['clsfile']=clsfile;
+				node['delay']=this.setAttr('delay',node.delay);
 				break;
 			default:
 				break;

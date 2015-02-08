@@ -138,11 +138,13 @@ AngoraEditor.NodeAttrManager.prototype = {
 	* @param {string} attr
 	* @param {string} value
 	*/
-	addAttr : function (node, attr, value) {
+	addAttr : function (node, attr, value, addToGrid) {
 		//var node=editor.node.get(nodeID);
-		node[attr] = value;
-		/*if (node.id == this.editor.node.selected.id)
-			this.editor.ui.propertyGrid.add(attr, value);*/
+		if(typeof node.custom==='undefined')node.custom={};
+		node['custom'][attr] = value;
+		//if (node.id == this.editor.node.selected.id)
+		if(addToGrid)this.editor.ui.propertyGrid.add(attr, value, 'custom', true);
+		
 		this.editor.scene.isNodeChanged=true;
 	},
 	/**
@@ -219,7 +221,6 @@ AngoraEditor.NodeAttrManager.prototype = {
 			case 'fixedRotation':return true;
 			case 'clsname':return '';
 			case 'basecls':return '';
-			case 'clsfile':return '';
 			default:return null;
 		}
 	}

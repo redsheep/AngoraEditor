@@ -63,6 +63,10 @@ AngoraEditor.PropertyGridManager.prototype = {
 				if(editingObject==null){
 					editor.scene.setConfig(name,field['group'],value);
 				}else{
+					if(field['group']=='custom'){
+						editingObject.custom[name]=value;
+						return;
+					}
 					switch (name) {
 					case 'id':
 						editor.ui.nodeTree.updateNode(editingObject.id, value);
@@ -166,7 +170,7 @@ AngoraEditor.PropertyGridManager.prototype = {
 	 * @param {string} value
 	 * @param {string} grp	 
 	 */
-	add : function (key, value, grp) {
+	add : function (key, value, grp, append) {
 		switch(key){
 			case 'id'	:	group='general';type='text';break;
 			case 'type'	:	group='general';type='none';break;
@@ -218,13 +222,18 @@ AngoraEditor.PropertyGridManager.prototype = {
 			case 'tilesetW': group='tilemap';type='numberbox';break;
 			case 'tilesetH': group='tilemap';type='numberbox';break;
 			case 'tilemap': group='tilemap';type='none';break;
+			case 'clsname': group='general';type='none';break;
+			case 'basecls': group='general';type='none';break;
+			case 'clsfile': group='general';type='none';break;
 			default		:	group='custom';type='none';break;
 		}
-		if(typeof grp!='undefined')
-			group=grp;
-		if(grp=='tracks' || grp=='animations')
-			type='none';
-		this.data.push({id:key,name:key,value:value,group:group,editor:type});
+		if(typeof grp!='undefined')group=grp;
+		if(grp=='tracks' || grp=='animations')type='none';
+		if(grp==='custom')type='text';
+		if(append)
+			this.grid.propertygrid('appendRow',{id:key,name:key,value:value,group:group,editor:type});
+		else
+			this.data.push({id:key,name:key,value:value,group:group,editor:type});
 	},
 	/**
 	 * update attribute property row
@@ -234,8 +243,13 @@ AngoraEditor.PropertyGridManager.prototype = {
 	 */
 	updateRow : function (attr, value, delay) {
 		if(delay) return;
-		var index = this.propertyIndex[attr];
-		//var rows = $('#attributes').propertygrid('getRows');
+		var index=-1;//this.grid.propertygrid('getRowIndex',attr);//this.propertyIndex[attr];
+		var rows = $('#attributes').propertygrid('getRows');
+		for( i in rows){
+			if(rows[i].id==attr){
+				index=i;break;
+			}
+		}
 		//rows[index]['value'] = value;
 		this.grid.propertygrid('updateRow', {
 			index : index,

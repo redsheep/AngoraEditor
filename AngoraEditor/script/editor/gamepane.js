@@ -99,7 +99,9 @@ AngoraEditor.GamePaneManager.prototype = {
 		//	parent=$('#'+editor.node.selected.id);
 		parent.append("<div id='{0}' class='{1}'><div>".format(node.id,node.type));
 		var nodeDiv=$('#'+node.id);
-		switch(node.type){
+		var type=node.type;
+		if(node.type==='custom')type=node.basecls.toLowerCase();
+		switch(type){
 			case 'image':
 			case 'button':
 			case 'tilesprite':
@@ -160,7 +162,6 @@ AngoraEditor.GamePaneManager.prototype = {
 				editor.node.locked[node.id]=true;
 				break;
 			case 'sound': break;
-			case 'custom': break;
 			default:break;
 		}
 		if(node.visible=='true') nodeDiv.show();

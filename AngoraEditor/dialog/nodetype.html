@@ -120,13 +120,8 @@ $(document).ready(function () {
 		data : types,
 		onDblClick : function (nodetype) {
 			if($('#tt').tree('isLeaf', nodetype.target)==false) return false;
-			var node = editor.node.create(nodetype.type);
-			if(nodetype.type==='custom'){
-				var cls = customclass[nodetype.text];
-				node.clsname=cls.clsname;
-				node.basecls=cls.basecls;
-				node.clsfile=cls.clsfile;
-			}
+			var cls=(nodetype.type==='custom'&&customclass!==null)?customclass[nodetype.text]:undefined;
+			var node = editor.node.create(nodetype.type,cls);
 			editor.node.add(node);
 			editor.ui.nodeTree.addNode(node);
 			editor.ui.gamePane.add(node);

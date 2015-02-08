@@ -94,7 +94,7 @@ function createObject(state, node, group) {
 		}
 		break;
 	case 'custom':
-		object = new window[node.clsname](state.game);
+		object = new window[node.clsname](state.game,node);
 		state.add.existing(object);
 		break;
 	default:
@@ -118,6 +118,11 @@ function createObject(state, node, group) {
 	if(typeof node.children!=='undefined'){
 		for(i in node.children){
 			state.objects[i]=createObject(state,node.children[i],object);
+		}
+	}
+	if(typeof node.custom!=='undefined'){
+		for(i in node.custom){
+			object[i]=node.custom[i];
 		}
 	}
 	return object;

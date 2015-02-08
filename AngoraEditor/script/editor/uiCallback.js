@@ -99,10 +99,14 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		});
 	});
 	$('#addEvent').click(function(){
-		if(editor.project.currentProject==null)return;
+		if(editor.node.selected==null)return;
 	});
 	$('#addProperty').click(function(){
-		if(editor.project.currentProject==null)return;
+		if(editor.node.selected==null)return;
+		editor.ui.prompt("add property","Enter new property name",function(name){
+			if (typeof name!='undefined' && name.trim() != '')
+				editor.attr.addAttr(editor.node.selected, name,'',true);
+		});
 	});
 	$("#removeScene").click(function () {
 		if(editor.project.currentProject==null)return;
