@@ -38,6 +38,7 @@ AngoraEditor.NodeAttrManager.prototype = {
 	*/
 	setAttr : function (node, attr, value) {
 		var delay=false;
+		if(typeof node[attr]==='undefined')return;
 		this.editor.scene.isNodeChanged=true;
 		switch(attr){
 		case 'id':
@@ -221,6 +222,19 @@ AngoraEditor.NodeAttrManager.prototype = {
 			case 'fixedRotation':return true;
 			case 'clsname':return '';
 			case 'basecls':return '';
+			case 'audio':return '';
+			case 'tracks':return '';
+			case 'follow':return '';
+			case 'fontSize':return 32;
+			case 'fontFamily':return 'Arial';
+			case 'fontColor':return '#000';
+			case 'textAlign':return 'left';
+			case 'tileW':return 32;
+			case 'tileH':return 32;
+			case 'tilesetW':return 32;
+			case 'tilesetH':return 32;
+			case 'tilemap':return '';
+			case 'delay':return 100;
 			default:return null;
 		}
 	}

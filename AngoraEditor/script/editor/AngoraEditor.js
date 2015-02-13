@@ -65,10 +65,12 @@ AngoraEditor.prototype = {
 	* @param 
 	*/
 	boot : function () {
-		this.ui 	= new AngoraEditor.UI(this);
-		console.log('ui ready');
 		this.file 	= new AngoraEditor.FileManager(this);
 		console.log('file ready');
+		this.system	= new AngoraEditor.SystemConfig(this);
+		console.log('system ready');
+		this.ui 	= new AngoraEditor.UI(this);
+		console.log('ui ready');
 		this.scene 	= new AngoraEditor.SceneManager(this);
 		console.log('scene ready');
 		this.game 	= new AngoraEditor.GameManager(this);
@@ -83,10 +85,7 @@ AngoraEditor.prototype = {
 		console.log('attr ready');
 		this.script	= new AngoraEditor.ScriptManager(this);
 		console.log('script ready');
-		this.system	= new AngoraEditor.SystemConfig(this);
-		console.log('system ready');
 		
-		this.system.setup();
 		this.ui.setup();
 		this.project.setup();
 	}

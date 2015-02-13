@@ -172,9 +172,9 @@ AngoraEditor.PropertyGridManager.prototype = {
 	 */
 	add : function (key, value, grp, append) {
 		switch(key){
-			case 'id'	:	group='general';type='text';break;
-			case 'type'	:	group='general';type='none';break;
-			case 'visible':	group='general';type={"type":"checkbox","options":{"on":true,"off":false}};break;
+			case 'id'	:	group='basic';type='text';break;
+			case 'type'	:	group='basic';type='none';break;
+			case 'visible':	group='basic';type={"type":"checkbox","options":{"on":true,"off":false}};break;
 			case 'image':	group='general';type='none';break;
 			case 'frame':	group='general';type='numberbox';break;
 			case 'assetatlas':group='general';type='none';break;
@@ -222,9 +222,8 @@ AngoraEditor.PropertyGridManager.prototype = {
 			case 'tilesetW': group='tilemap';type='numberbox';break;
 			case 'tilesetH': group='tilemap';type='numberbox';break;
 			case 'tilemap': group='tilemap';type='none';break;
-			case 'clsname': group='general';type='none';break;
-			case 'basecls': group='general';type='none';break;
-			case 'clsfile': group='general';type='none';break;
+			case 'clsname': group='class';type='none';break;
+			case 'basecls': group='class';type='none';break;
 			default		:	group='custom';type='none';break;
 		}
 		if(typeof grp!='undefined')group=grp;

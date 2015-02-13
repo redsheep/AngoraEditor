@@ -89,6 +89,22 @@
 		$('#set_codetheme').val(editor.system.config.code.theme);
 		$('#set_showLineNumber').prop('checked', editor.system.config.code.lineNumber);
 		$('#set_autoComplete').prop('checked', editor.system.config.code.autoComplete);
+		$('#btn_ok').click(function(){
+			editor.system.config.settings.language=$('#set_lang').val();
+			editor.system.config.settings.theme=$('#set_themes').val();
+			editor.system.config.settings.autosave=$('#set_autosave').prop('checked');
+			editor.system.config.display.showGrid=$('#set_showGrid').prop('checked');
+			editor.system.config.display.gridSize=$('#set_gridSize').val();
+			editor.system.config.display.worldBounds=$('#set_WorldBounds').prop('checked');
+			editor.system.config.code.theme=$('#set_codetheme').val();
+			editor.system.config.code.autoComplete=$('#set_autoComplete').prop('checked');
+			editor.system.config.code.lineNumber=$('#set_showLineNumber').prop('checked');
+			editor.system.save();
+			$('#dd').dialog('close');
+		});
+		$('#btn_cancel').click(function(){
+			$('#dd').dialog('close');
+		});
 	  });
 </script>
 

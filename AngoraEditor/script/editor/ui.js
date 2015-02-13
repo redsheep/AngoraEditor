@@ -192,7 +192,7 @@ AngoraEditor.UI.prototype = {
 		//	this.codeEditor.toTextArea();
 		var pane=document.getElementById(title+"_script");
 		this.codeEditor = CodeMirror.fromTextArea(pane, {
-			lineNumbers : true,
+			lineNumbers : parseBoolean(editor.system.config.code.lineNumber),
 			mode : "javascript",
 			extraKeys: {"Shift-Space": "autocomplete"},
 			gutters : ["CodeMirror-lint-markers"],
