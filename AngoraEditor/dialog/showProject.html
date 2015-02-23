@@ -36,6 +36,7 @@
 			<button id="newbtn">New</button>
 			<button id="openbtn">Open</button>
 			<button id="removebtn">Remove</button>
+			<button id="importbtn">Import</button>
 		</div>
 	</div>
 	<script>
@@ -55,7 +56,7 @@
 					"</div>"
 					$('#projects').append(projectdiv);
 		}
-		$(".project").click(function (e) {
+		$("#projects").delegate('.project','click',function (e) {
 			var selected = $(".selected");
 			if (selected.length > 0)
 				selected.removeClass("selected");
@@ -63,7 +64,7 @@
 		});
 		$("#newbtn").click(function () {
 			var dialog = editor.ui.showNewProjectDialog();
-			win.close();
+			//win.close();
 		});
 		$("#openbtn").click(function () {
 			var selected = $(".selected");
@@ -89,6 +90,16 @@
 				} else {
 					editor.ui.alert("Warning","Cannot remove the project");
 				}
+			});
+		});
+		$("#importbtn").click(function(){
+			editor.project.importProject(function(project){
+				var projectdiv = "<div class='project'>" +
+					"<span class='projectName'>" + project.name + "</span>" +
+					"<span class='projectDir'>" + project.path + "</span>" +
+					"<span class='descibe'>" + project.describe + "</span>" +
+					"</div>"
+					$('#projects').append(projectdiv);
 			});
 		});
 	});

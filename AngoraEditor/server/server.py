@@ -83,19 +83,18 @@ def writeFile():
 
 @route('/files/<filepath:path>', method='POST')
 def uploadFile(filepath):
-    #files = request.files.data
-    #print request.forms.get('files')
-    #for item in request.files:
-    #uploads=[]
     print filepath
     upload = request.files.get('upload')
     upload.save('../'+filepath,True)
     filename = upload.filename
     print filename
-    #uploads.append(filename)
-    #for f in files:
-    #    print 'data: %s'% f.filename
     return filename
+
+@route('/temp', method='POST')
+def readTempFile():
+    upload = request.files.get('upload')
+    return upload.file.read()
+    #return f.read()
 
 @route('/release/<filepath:path>')
 def releaseFile(filepath):

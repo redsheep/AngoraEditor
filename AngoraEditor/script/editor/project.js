@@ -97,6 +97,7 @@ AngoraEditor.ProjectManager.prototype = {
 		this.projects[project.name] = project;
 		this.editor.file.writeFile(editor.system.projectFile, JSON.stringify(this.projects, null, 4));
 		this.editor.file.createDirectory(project.path);
+		this.editor.file.writeFile(project.path+'/~.project', JSON.stringify({"name": project.name,"path": project.path,"icons": "","descript": ""}, null, 4));
 		this.editor.file.createDirectory(project.path + '/data');
 		this.editor.file.createTemplate(project.path,'scenes.json');
 		this.editor.file.createTemplate(project.path,'mygame.html');
@@ -152,6 +153,15 @@ AngoraEditor.ProjectManager.prototype = {
 	},
 	removePlugin:function(plugin){
 		delete this.plugins[plugin.name];
+	},
+	importProject:function(func){
+		var editor=this.editor;
+		this.editor.file.readTempFile(function(data){
+			var project=JSON.parse(data);
+			editor.project.projects[project.name] = project;
+			editor.file.writeFile(editor.system.projectFile, JSON.stringify(editor.project.projects, null, 2));
+			func(project);
+		});
 	},
 	/**
 	* remove project

@@ -180,6 +180,28 @@ AngoraEditor.FileManager.prototype = {
 		});
 		$("#upload").trigger('click');
 	},
+	
+	readTempFile(func){
+		var p=this;
+		$("#upload").off('change').on('change',function (){
+			$('#filedialog').trigger('submit');
+		});
+		$("#filedialog").off('submit').on('submit',function(event) {
+			event.preventDefault();
+			var data = new FormData(this);
+			$.ajax({
+				type        : "POST",
+				url         : "temp",
+				data        : data,
+				contentType : false,
+				processData : false
+			}).done(function (data) {
+				func(data);
+			}); 
+			return true;
+		});
+		$("#upload").trigger('click');
+	},
 	/**
 	* open folder select dialog
 	* @method openFolderDialog
