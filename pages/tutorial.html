@@ -5,10 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
-	<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/slider.css"/>
+    <link rel="stylesheet" type="text/css" href="../stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../stylesheets/print.css" media="print">
+	<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/slider.css"/>
 
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -18,7 +18,7 @@
 	<style>
 		.preview{ height:300px;}
 		.feature{ margin-right:12%; width:20%; }
-		footer{	height:50px; background:url('images/header-bg.jpg');}
+		footer{	height:50px; background:url('../images/header-bg.jpg');}
 		nav {position:relative;float:right;top:-1em;}
 		nav ul {text-align:center;z-index:999;}
 		nav ul li {float:left;display:inline;}
@@ -37,10 +37,10 @@
         <a href="https://github.com/redsheep/AngoraEditor" class="button"><small>View project on</small> GitHub</a>
 		<nav>
 		  <ul>
-			<li class='active'><a href="index.html">Home</a></li>
-			<li><a href="pages/tutorial.html">Tutorial</a></li>
-			<li><a href="pages/demo.html">Demo</a></li>
-			<li><a href="pages/about.html">About</a></li>
+			<li><a href="../index.html">Home</a></li>
+			<li class='active'><a href="tutorial.html">Tutorial</a></li>
+			<li><a href="demo.html">Demo</a></li>
+			<li><a href="about.html">About</a></li>
 		  </ul>
 		</nav>
     </div>
@@ -49,19 +49,14 @@
     <div id="content-wrapper">
       <div class="inner clearfix">
         <section id="main-content">
-          <h2>Free and OpenSource HTML5 Game Editor based on Phaser</h2>
-			<img id="slide" src="images/code.jpg"/>
-		  <h2>Features</h2>
-		  <div><img src="images/physics.png" class="feature"/>
-			  <img src="images/audio.png" class="feature"/>
-			  <img src="images/tilemap.png" class="feature"/>
+          <div><img src="../images/physics.png" class="feature"/>
+			  <img src="../images/audio.png" class="feature"/>
+			  <img src="../images/tilemap.png" class="feature"/>
 		  </div>
-
         </section>
 
         <aside id="sidebar">
-			<img src="images/logo.png"></img>
-			
+			<img src="../images/logo.png"></img>
           <a href="https://github.com/redsheep/AngoraEditor/zipball/master" class="button">
             <small>Download</small>
             .zip file
@@ -70,13 +65,11 @@
             <small>Download</small>
             .tar.gz file
           </a>
-
           <p class="repo-owner"><a href="https://github.com/redsheep/AngoraEditor"></a> is maintained by <a href="https://github.com/redsheep">redsheep</a>.</p>
-		  
-		  	  
-        </aside>
+		</aside>
       </div>
     </div>
+	
     <footer>
 	<div class="inner">
 	</div>
@@ -85,19 +78,8 @@
 <script src="../javascripts/jquery.min.js"></script>
 <script>
 $(document).ready(function(){
-	var images = new Array()
-	images[0] = "images/main.jpg";
-	images[1] = "images/particle.jpg";
-	images[2] = "images/code.jpg";
-	images[3] = "images/resource.jpg";
-	images[4] = "images/tilemap.jpg";
-	var img = $("#slide"), i = 0, speed = 5000;
-	window.setInterval(function() {
-		img.fadeOut(1000,function(){
-			img.attr("src", images[(++i % images.length)]);
-			img.fadeIn(1000);
-		});
-	},speed);
+	
 });
 </script>
 </html>
+

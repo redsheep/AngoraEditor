@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="../stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../stylesheets/print.css" media="print">
+	<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/slider.css"/>
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Angoraeditor by redsheep</title>
+	<style>
+		.preview{ height:300px;}
+		.feature{ margin-right:12%; width:20%; }
+		footer{	height:50px; background:url('../images/header-bg.jpg');}
+		nav {position:relative;float:right;top:-1em;}
+		nav ul {text-align:center;z-index:999;}
+		nav ul li {float:left;display:inline;}
+		nav ul li.active {background:#E6E6E6;}
+		nav ul li:hover {background:#FFF;}
+		nav ul li a {display:block;padding:10px 25px;color:#F7F7F7;}
+		nav ul li.active a {color:black;}
+	</style>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Angoraeditor</h1>
+        <h2>A simple phaser game editor</h2>
+        <a href="https://github.com/redsheep/AngoraEditor" class="button"><small>View project on</small> GitHub</a>
+		<nav>
+		  <ul>
+			<li><a href="../index.html">Home</a></li>
+			<li><a href="tutorial.html">Tutorial</a></li>
+			<li class='active'><a href="demo.html">Demo</a></li>
+			<li><a href="about.html">About</a></li>
+		  </ul>
+		</nav>
+    </div>
+    </header>
+	
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <div id="democanvas"></div>
+        </section>
+
+        <aside id="sidebar">
+			<img src="../images/logo.png"></img>
+		</aside>
+      </div>
+    </div>
+	
+    <footer>
+	<div class="inner">
+	</div>
+    </footer>
+  </body>
+<script src="../javascripts/jquery.min.js"></script>
+<script src="../javascripts/phaser.min.js"></script>
+<script src="../javascripts/createscene.js"></script>
+<script src="../javascripts/flap/gameover.js"></script>
+<script src="../javascripts/flap/gameplay.js"></script>
+<script src="../javascripts/flap/mainmenu.js"></script>
+<script src="../javascripts/flap/preload.js"></script>
+<script>
+function parseBoolean(str){return String(str)=='true';}
+var game;
+$(document).ready(function(){
+	game=new Phaser.Game(320,480,Phaser.AUTO,'democanvas');
+	game.state.add('preload',preload);
+	game.state.add('mainmenu',mainmenu);
+	game.state.add('gameplay',gameplay);
+	game.state.add('gameover',gameover);
+	game.state.start('preload');
+});
+</script>
+</html>
+

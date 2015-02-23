@@ -1,0 +1,2 @@
+var game;function parseBoolean(str){return String(str)=='true';}
+window.onload=function(){game=new Phaser.Game(320,480,Phaser.AUTO,'');game.state.add('preload',preload);game.state.add('mainmenu',mainmenu);game.state.add('gameplay',gameplay);game.state.add('gameover',gameover);game.state.start('preload');};
