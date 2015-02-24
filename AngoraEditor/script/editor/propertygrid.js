@@ -245,7 +245,7 @@ AngoraEditor.PropertyGridManager.prototype = {
 		var index=-1;//this.grid.propertygrid('getRowIndex',attr);//this.propertyIndex[attr];
 		var rows = $('#attributes').propertygrid('getRows');
 		for( i in rows){
-			if(rows[i].id==attr){
+			if(rows[i].name==attr){
 				index=i;break;
 			}
 		}
