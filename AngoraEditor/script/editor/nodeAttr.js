@@ -38,6 +38,7 @@ AngoraEditor.NodeAttrManager.prototype = {
 	*/
 	setAttr : function (node, attr, value) {
 		var delay=false;
+		if(typeof node[attr]==='undefined')return;
 		this.editor.scene.isNodeChanged=true;
 		switch(attr){
 		case 'id':
@@ -127,7 +128,6 @@ AngoraEditor.NodeAttrManager.prototype = {
 		default:
 			break;
 		}
-		if(typeof node[attr]==='undefined')return;
 		node[attr]=value;
 		this.editor.ui.propertyGrid.updateRow(attr,value,delay);
 		this.editor.ui.gamePane.update(node,attr,value);

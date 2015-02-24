@@ -65,32 +65,29 @@ AngoraEditor.prototype = {
 	* @param 
 	*/
 	boot : function () {
-		var editor=this;
 		this.file 	= new AngoraEditor.FileManager(this);
 		console.log('file ready');
 		this.system	= new AngoraEditor.SystemConfig(this);
 		console.log('system ready');
-		this.system.setup(function(){
-			editor.ui 	= new AngoraEditor.UI(editor);
-			console.log('ui ready');
-			editor.scene 	= new AngoraEditor.SceneManager(editor);
-			console.log('scene ready');
-			editor.game 	= new AngoraEditor.GameManager(editor);
-			console.log('game ready');
-			editor.res 	= new AngoraEditor.ResourceManager(editor);
-			console.log('resource ready');
-			editor.project= new AngoraEditor.ProjectManager(editor);
-			console.log('project ready');
-			editor.node	= new AngoraEditor.NodeManager(editor);
-			console.log('node ready');
-			editor.attr	= new AngoraEditor.NodeAttrManager(editor);
-			console.log('attr ready');
-			editor.script	= new AngoraEditor.ScriptManager(editor);
-			console.log('script ready');
-			
-			editor.project.setup();
-			editor.ui.setup();
-		});
+		this.ui 	= new AngoraEditor.UI(this);
+		console.log('ui ready');
+		this.scene 	= new AngoraEditor.SceneManager(this);
+		console.log('scene ready');
+		this.game 	= new AngoraEditor.GameManager(this);
+		console.log('game ready');
+		this.res 	= new AngoraEditor.ResourceManager(this);
+		console.log('resource ready');
+		this.project= new AngoraEditor.ProjectManager(this);
+		console.log('project ready');
+		this.node	= new AngoraEditor.NodeManager(this);
+		console.log('node ready');
+		this.attr	= new AngoraEditor.NodeAttrManager(this);
+		console.log('attr ready');
+		this.script	= new AngoraEditor.ScriptManager(this);
+		console.log('script ready');
+		
+		this.ui.setup();
+		this.project.setup();
 	}
 }
 

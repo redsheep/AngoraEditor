@@ -38,10 +38,11 @@ AngoraEditor.SystemConfig = function (editor) {
 	 * @property {Object} - application config
 	 */
 	this.config	= {};
+	this.setup();
 }
 
 AngoraEditor.SystemConfig.prototype = {
-	setup: function(func){
+	setup: function(){
 		this.appPath		= "";//Ti.App.appURLToPath('app://');
 		this.templatePath	= this.appPath+"/template";
 		this.workspacePath	= this.appPath+"/workspace";
@@ -51,8 +52,12 @@ AngoraEditor.SystemConfig.prototype = {
 		var editor=this.editor;
 		this.editor.file.readFile(this.configFile,function(data){
 			editor.system.config=JSON.parse(data);
-			console.log('system setup');
-			func();
+			editor.ui.showRegion=parseBoolean(editor.system.config.display.worldBounds);
+			if(editor.ui.showRegion)$('#worldbounds').css('visibility','visible');
+			editor.ui.showGrid=parseBoolean(editor.system.config.display.showGrid);
+			if(!editor.ui.showGrid)$('#preview').removeClass('grid');
+			editor.ui.gridSize=parseInt(editor.system.config.display.gridSize);
+			$('#preview').css('background-size','{0}px {0}px'.format(editor.ui.gridSize));
 		});
 	},
 	save : function(){

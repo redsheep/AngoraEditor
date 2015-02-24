@@ -61,9 +61,9 @@ AngoraEditor.FileManager.prototype = {
 	* @param {string} src - source file name
 	* @param {string} dest - destination file name
 	*/
-	createTemplate: function(path,src,dest,func) {
+	createTemplate: function(path,src,dest) {
 		if(typeof dest==='undefined') dest=src;
-		$.get('/createTemplate',{"src":src,"path":path,"dest":dest},func);
+		$.get('/createTemplate',{"src":src,"path":path,"dest":dest});
 	},
 	/**
 	* read file
@@ -181,7 +181,7 @@ AngoraEditor.FileManager.prototype = {
 		$("#upload").trigger('click');
 	},
 	
-	readTempFile : function(func){
+	readTempFile(func){
 		var p=this;
 		$("#upload").off('change').on('change',function (){
 			$('#filedialog').trigger('submit');

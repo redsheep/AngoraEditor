@@ -77,7 +77,6 @@ AngoraEditor.SceneManager.prototype = {
 			p.editor.script.loadSceneScript(scene,function(script){
 				p.editor.ui.setupScript(scene, script, 'sceneScript');
 				$('#tabs').tabs('select','preview');
-				p.editor.ui.codeEditor=p.editor.ui.codeEditors[scene];
 			});
 			var configfile="{0}/{1}.config".format(p.editor.project.currentProject.path, scene);
 			p.editor.file.readFile(configfile,function(data){
@@ -92,7 +91,6 @@ AngoraEditor.SceneManager.prototype = {
 	* @param {string} scene name
 	*/
 	add : function (sceneName) {
-		console.log('start add scene');
 		var editor = this.editor;
 		var projectpath = editor.project.currentProject.path;
 		if (typeof this.scenes[sceneName]==='undefined') {
@@ -118,7 +116,7 @@ AngoraEditor.SceneManager.prototype = {
 			editor.file.writeFile(startPage, script);	
 		});
 
-		if(this.curScene==null) this.load(sceneName);
+		if(this.curScene==null) this.load(sceneName);		
 		var startPageScript = "{0}/mygame.js".format(editor.project.currentProject.path);
 		editor.file.readFile(startPageScript,function(script){
 			var insertpos = script.lastIndexOf('game.state.start');
@@ -132,7 +130,6 @@ AngoraEditor.SceneManager.prototype = {
 		//setupSceneResource(sceneName);
 		//setupCustomScript(sceneName);
 		//setupSceneScript(sceneName);
-		console.log('finish add scene');
 	},
 	/**
 	* add a scene event 
