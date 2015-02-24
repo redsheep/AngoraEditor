@@ -27,7 +27,7 @@ AngoraEditor.PropertyGridManager = function (editor) {
 	/**
 	 * @property {jquery object}
 	 */
-	this.grid = null;
+	this.grid = $('#attributes');
 	/**
 	 * @property {Object} - attribute row index
 	 */
@@ -46,84 +46,84 @@ AngoraEditor.PropertyGridManager.prototype = {
 	 */
 	setup : function () {
 		var editor=this.editor;
-		this.grid = $('#attributes').propertygrid({
-		data : '',
-		showGroup : true,
-		onBeginEdit: function(index,row){
-			if(editor.node.selected!=null)
-				editor.ui.propertyGrid.editingObject=editor.node.selected.id;
-			else
-				editor.ui.propertyGrid.editingObject=null;
-		},
-		onEndEdit : function (index, field, changes) {
-			var name = field['name'];
-			var value = field['value'];
-			if(editor.ui.propertyGrid.editingObject!=null){
-				var editingObject=editor.node.get(editor.ui.propertyGrid.editingObject);
-				if(editingObject==null){
-					editor.scene.setConfig(name,field['group'],value);
-				}else{
-					if(field['group']=='custom'){
-						editingObject.custom[name]=value;
-						return;
-					}
-					switch (name) {
-					case 'id':
-						editor.ui.nodeTree.updateNode(editingObject.id, value);
-						editor.attr.setAttr(editingObject, 'id', value);
-						break;
-					default:
-						editor.attr.setAttr(editingObject,name,value);
-						break;
-					}
-				}
-				editingObject=null;
-			}else{
-				editor.scene.config[field['group']][name]=value;
-				if(field['group']=='world')
-					editor.ui.gamePane.updateWorld(name,value);
-				editor.scene.isConfigChanged=true;
-			}
-		},
-		onDblClickRow:function(index, field){
-			if(editor.ui.propertyGrid.editingObject!=null){
-				var editingObject=editor.node.get(editor.ui.propertyGrid.editingObject);
+		this.grid.propertygrid({
+			data : '',
+			showGroup : true,
+			onBeginEdit: function(index,row){
+				if(editor.node.selected!=null)
+					editor.ui.propertyGrid.editingObject=editor.node.selected.id;
+				else
+					editor.ui.propertyGrid.editingObject=null;
+			},
+			onEndEdit : function (index, field, changes) {
 				var name = field['name'];
 				var value = field['value'];
-				switch (name) {
-				case 'image':
-				case 'assetatlas':
-				case 'font':
-				case 'audio':
-					editor.ui.showResourceEditor(function () {
-						if(editor.res.selected==null)return;
-						var id = editor.res.selected['id'];
-						editor.attr.setAttr(editingObject, name, id);
-					});
-					break;
-				case 'tilemap':
-					editor.ui.showResourceEditor(function () {
-						if(editor.res.selected==null)return;
-						var id = editor.res.selected['id'];
-						editor.attr.setAttr(editingObject, name, id);
-						var tileset=[];
-						for(imgid in editor.res.get(id).tileset)
-							tileset.push(imgid);
-						editor.attr.setAttr(editingObject, 'tileset', tileset);
-					});
-					break;
-				case 'animations':
-					editor.ui.showAnimationEditor(function(){});
-					break;
-				case 'tracks':
-					editor.ui.showAudioEditor(function () {});
-					break;
-				default:
-					break;
+				if(editor.ui.propertyGrid.editingObject!=null){
+					var editingObject=editor.node.get(editor.ui.propertyGrid.editingObject);
+					if(editingObject==null){
+						editor.scene.setConfig(name,field['group'],value);
+					}else{
+						if(field['group']=='custom'){
+							editingObject.custom[name]=value;
+							return;
+						}
+						switch (name) {
+						case 'id':
+							editor.ui.nodeTree.updateNode(editingObject.id, value);
+							editor.attr.setAttr(editingObject, 'id', value);
+							break;
+						default:
+							editor.attr.setAttr(editingObject,name,value);
+							break;
+						}
+					}
+					editingObject=null;
+				}else{
+					editor.scene.config[field['group']][name]=value;
+					if(field['group']=='world')
+						editor.ui.gamePane.updateWorld(name,value);
+					editor.scene.isConfigChanged=true;
 				}
-			}			
-		}
-	});
+			},
+			onDblClickRow:function(index, field){
+				if(editor.ui.propertyGrid.editingObject!=null){
+					var editingObject=editor.node.get(editor.ui.propertyGrid.editingObject);
+					var name = field['name'];
+					var value = field['value'];
+					switch (name) {
+					case 'image':
+					case 'assetatlas':
+					case 'font':
+					case 'audio':
+						editor.ui.showResourceEditor(function () {
+							if(editor.res.selected==null)return;
+							var id = editor.res.selected['id'];
+							editor.attr.setAttr(editingObject, name, id);
+						});
+						break;
+					case 'tilemap':
+						editor.ui.showResourceEditor(function () {
+							if(editor.res.selected==null)return;
+							var id = editor.res.selected['id'];
+							editor.attr.setAttr(editingObject, name, id);
+							var tileset=[];
+							for(imgid in editor.res.get(id).tileset)
+								tileset.push(imgid);
+							editor.attr.setAttr(editingObject, 'tileset', tileset);
+						});
+						break;
+					case 'animations':
+						editor.ui.showAnimationEditor(function(){});
+						break;
+					case 'tracks':
+						editor.ui.showAudioEditor(function () {});
+						break;
+					default:
+						break;
+					}
+				}			
+			}
+		});
 	},
 	/**
 	 * setup property grid from json data
@@ -230,9 +230,9 @@ AngoraEditor.PropertyGridManager.prototype = {
 		if(grp=='tracks' || grp=='animations')type='none';
 		if(grp==='custom')type='text';
 		if(append)
-			this.grid.propertygrid('appendRow',{id:key,name:key,value:value,group:group,editor:type});
+			this.grid.propertygrid('appendRow',{name:key,value:value,group:group,editor:type});
 		else
-			this.data.push({id:key,name:key,value:value,group:group,editor:type});
+			this.data.push({name:key,value:value,group:group,editor:type});
 	},
 	/**
 	 * update attribute property row

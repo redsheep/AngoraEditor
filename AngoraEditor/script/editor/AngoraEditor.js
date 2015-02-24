@@ -85,9 +85,12 @@ AngoraEditor.prototype = {
 		console.log('attr ready');
 		this.script	= new AngoraEditor.ScriptManager(this);
 		console.log('script ready');
-		
-		this.ui.setup();
-		this.project.setup();
+		var editor=this;
+		this.system.loadPerferences(function(){	
+			editor.project.setup();
+			editor.ui.setupUICallback();
+			console.log('all finished');
+		});
 	}
 }
 

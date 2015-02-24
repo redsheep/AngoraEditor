@@ -13,7 +13,13 @@
  */
 AngoraEditor.UI.prototype.setupUICallback = function () {
 	var editor = this.editor;
-
+	console.log('start setup callback');
+	/*this.showRegion=parseBoolean(this.editor.system.config.display.worldBounds);
+	this.showGrid=parseBoolean(this.editor.system.config.display.showGrid);
+	this.gridSize=parseInt(this.editor.system.config.display.gridSize);
+	if(this.showRegion)$('#worldbounds').css('visibility','visible');
+	if(!this.showGrid)$('#preview').removeClass('grid');
+	$('#preview').css('background-size','{0}px {0}px'.format(this.gridSize));*/
 	$('#preview').mousemove(function (e) {
 		//console.log(editor.ui.gamePane.dragging);
 		if(editor.ui.gamePane.offseting){
@@ -251,9 +257,9 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		}
 	}});
 	$('#tabs').tabs({
-	  onSelect:function(title,index){
+	  /*onSelect:function(title,index){
 		editor.ui.codeEditor=editor.ui.codeEditors[title];
-	  },
+	  },*/
 	  onBeforeClose: function(title,index){
 		//if(title=='preview'||title==editor.scene.curScene)return true;
 		if(editor.ui.codeEditors[title].changes){
@@ -294,4 +300,5 @@ AngoraEditor.UI.prototype.setupUICallback = function () {
 		return false;
 	});
 	this.unactiveMenu();
+	console.log('finished setup callback');
 }

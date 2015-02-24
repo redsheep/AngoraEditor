@@ -43,12 +43,12 @@ AngoraEditor.EventPaneManager.prototype = {
 				}else{
 					if(editor.node.selected != null && typeof editor.node.selected !='undefined'){
 						functionName='{0}_{1}'.format(editor.node.selected.id,name);
-						editor.ui.codeEditor.replaceRange("\n{0}.prototype.{1} = function(){\n}\n".format(editor.scene.curScene,functionName), {line: Infinity});
+						editor.ui.codeEditor.editor.replaceRange("\n{0}.prototype.{1} = function(){\n}\n".format(editor.scene.curScene,functionName), {line: Infinity});
 						editor.ui.eventPane.update(index,functionName);
 						editor.attr.addEvent(editor.node.selected,name,functionName);
 					}else{
 						functionName='{0}_{1}'.format('game',name);
-						editor.ui.codeEditor.replaceRange("\n{0}.prototype.{1} = function(){\n}\n".format(editor.scene.curScene,functionName), {line: Infinity});
+						editor.ui.codeEditor.editor.replaceRange("\n{0}.prototype.{1} = function(){\n}\n".format(editor.scene.curScene,functionName), {line: Infinity});
 						editor.ui.eventPane.update(index,functionName);
 						editor.scene.addEvent(name,functionName);
 					}

@@ -53,10 +53,10 @@ AngoraEditor.UI = function (editor) {
 	 * @property {Jquery Object}
 	 */	
 	this.codeEditors={};
-	//this.codeChanges={};
+	
 	this.codeEditor=null;
-	//this.setup();
-	//this.setupUICallback();
+	
+	this.setup();
 }
 AngoraEditor.UI.prototype = {
 	/**
@@ -73,7 +73,7 @@ AngoraEditor.UI.prototype = {
 		this.contextMenu =new AngoraEditor.ContextMenuManger(this.editor);
 		//this.gamePane.setup();
 		this.contextMenu.setup();
-		this.setupUICallback();
+		//this.setupUICallback();
 	},
 	alert:function(title,content,icon){
 		$.messager.alert(title,content,icon);
