@@ -41,8 +41,9 @@ AngoraEditor.ProjectManager.prototype = {
 		//var data=this.editor.file.readFile(this.editor.system.projectFile);
 		//this.projects=JSON.parse(data);
 		var p=this;
-		$.getJSON(this.editor.system.projectFile, function(json) {
-			p.projects=json;
+		this.editor.file.readFile(this.editor.system.projectFile, function(json) {
+			p.projects=JSON.parse(json);
+			console.log('load project list finished');
 		});
 	},
 	/**
@@ -54,6 +55,7 @@ AngoraEditor.ProjectManager.prototype = {
 		if(this.currentProject!=null){
 			this.reset();
 		}
+		console.log('loading project');
 		this.currentProject={};
 		this.currentProject['name'] 		= project['name'];
 		this.currentProject['path'] 		= project['path'];
@@ -92,29 +94,32 @@ AngoraEditor.ProjectManager.prototype = {
 	* @param {boolean} load immediately
 	*/
 	add : function (project,config,load) {
+		
 		var editor=this.editor;
 		this.config=config;
 		this.projects[project.name] = project;
 		this.editor.file.writeFile(editor.system.projectFile, JSON.stringify(this.projects, null, 4));
 		this.editor.file.createDirectory(project.path);
-		this.editor.file.writeFile(project.path+'/~.project', JSON.stringify({"name": project.name,"path": project.path,"icons": "","descript": ""}, null, 4));
 		this.editor.file.createDirectory(project.path + '/data');
 		this.editor.file.createTemplate(project.path,'scenes.json');
 		this.editor.file.createTemplate(project.path,'mygame.html');
-		this.editor.file.createTemplate(project.path,'mygame.js');
 		this.editor.file.createTemplate(project.path,'createscene.js');
 		this.editor.file.createTemplate(project.path,'phaser.min.js');
-		this.editor.file.readFile(project.path+'/mygame.js',function(data){
-			data = data.replace(/{w}/g, config.display.width);
-			data = data.replace(/{h}/g, config.display.height);
-			editor.file.writeFile(project.path+'/mygame.js',data);
-			if(load==true){
-				editor.project.load(project,function(){
-					editor.scene.add('preload');
-				});
-				//editor.scene.add('preload');
-			}
+		this.editor.file.createTemplate(project.path,'mygame.js',undefined,function(){
+			editor.file.readFile(project.path+'/mygame.js',function(data){
+				data = data.replace(/{w}/g, config.display.width);
+				data = data.replace(/{h}/g, config.display.height);
+				editor.file.writeFile(project.path+'/mygame.js',data);
+				if(load){
+					editor.project.load(project,function(){
+						editor.scene.add('preload');
+					});
+				}
+			});
 		});
+		var projectargs={"name": project.name,"path": project.path,"icons": "","descript": ""};
+		this.editor.file.writeFile(project.path+'/~.project', JSON.stringify(projectargs, null, 4));
+		console.log('finish add project');
 	},
 	setConfig:function(config){
 		var editor=this.editor;

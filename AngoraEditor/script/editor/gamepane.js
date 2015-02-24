@@ -55,11 +55,6 @@ AngoraEditor.GamePaneManager.prototype = {
 	setup: function(){
 		var editor=this.editor;
 		this.pane=$('#scene');
-/* 		this.pane.mousedown(function(e){
-			editor.ui.propertyGrid.reset();
-			editor.ui.nodeTree.unselect();
-			editor.ui.propertyGrid.loadData(editor.scene.config);
-		}); */
 		//this.pane.append("<div id='stamp' class='stamp'><div>");
 	},
 	/**
