@@ -3,6 +3,7 @@ import os
 import shutil
 import releaseJS
 import docs
+import json
 
 @route('/style/<filename:path>')
 def send_style(filename):
@@ -83,12 +84,27 @@ def writeFile():
 
 @route('/files/<filepath:path>', method='POST')
 def uploadFile(filepath):
-    print filepath
+    '''print filepath
     upload = request.files.get('upload')
     upload.save('../'+filepath,True)
     filename = upload.filename
     print filename
-    return filename
+    return filename'''
+    uploadfiles=[];
+    num_files=int(request.forms.get('num_files'))
+    multiple=request.forms.get('multiple')[0].upper()=='T'
+    if not multiple:
+        upload = request.files.get('image0')
+        upload.save('../'+filepath,True)
+        print upload.filename
+        return upload.filename
+    else:
+        for i in range(0,num_files):
+            upload = request.files.get('image%d'%i)
+            upload.save('../'+filepath,True)
+            uploadfiles.append(upload.filename)
+            print upload.filename
+        return json.dumps(uploadfiles)
 
 @route('/temp', method='POST')
 def readTempFile():

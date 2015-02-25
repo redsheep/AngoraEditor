@@ -153,9 +153,13 @@ AngoraEditor.FileManager.prototype = {
 	* @param {string} basepath
 	* @param {function} func
 	*/
-	openFileDialog : function (basepath, func) {
+	openFileDialog : function (basepath, func, accept, multi) {
 		//Ti.UI.openFileChooserDialog(func);
 		var p=this;
+		if(typeof multi==='undefined'){$('#upload').removeProp('multiple');multi=false;}
+		else {$('#upload').prop('multiple');multi=true;}
+		if(typeof accept==='undefined')$('#upload').removeProp('accept');
+		else $('#upload').prop('accept', accept);
 		
 		$("#upload").off('change').on('change',function (){
 			$('#filedialog').trigger('submit');
@@ -166,11 +170,20 @@ AngoraEditor.FileManager.prototype = {
 		var projectpath=this.editor.project.currentProject.path;
 		$("#filedialog").off('submit').on('submit',function(event) {
 			event.preventDefault();
-			var data = new FormData(this);
+			var formData = new FormData();
+			// Loop through each of the selected files.
+			var files = $("#upload")[0].files;
+			formData.append('num_files', files.length);
+			formData.append('multiple', multi.toString());
+			for (var i = 0; i < files.length; i++) {
+			  var file = files[i];
+			  // Add the file to the request.
+			  formData.append('image'+i, file, file.name);
+			}
 			$.ajax({
 				type        : "POST",
 				url         : "files{0}/data".format(projectpath),
-				data        : data,
+				data        : formData,
 				contentType : false,
 				processData : false
 			}).done(function (data) {

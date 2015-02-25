@@ -81,10 +81,27 @@
 			<div id="cm_set_global">GlobalResource</div>
 			</div>
 		</div>
+		<div>
+			<span>Convert To</span>
+			<div>
+			<div id="cm_to_sheet">SpriteSheet</div>
+			<div id="cm_to_image">Image</div>
+			</div>
+		</div>
 	</div>
+	<div id="dd_sheet" class="easyui-dialog" title="Convert to Sheet" style="width:360px;height:380px;" data-options="closed:true,modal:true">
+		<div style='text-align:center;'>
+		<p><img id="convert_img" style='max-height:200px;max-width:340px;'></p>
+		<p>Xframe:<input id='Xframe' class='easyui-numberbox'/></p>
+		<p>Yframe:<input id='Yframe' class='easyui-numberbox'/></p>
+		</div>
+		<div style='text-align:center;padding:5px'>
+		<a id='sheet_convert' class='easyui-linkbutton'>Convert</a>
+		</div>
+    </div>
 </div>
 <script>
- $(document).ready(function(){
+$(document).ready(function(){
 	var editor=edt;
 	if(editor.project.currentProject==null){
 		$('#dd').dialog('close');
@@ -92,6 +109,7 @@
 	}
 	var projectpath = editor.project.currentProject.path;
 	function addObjectToPane(resID,pane,respath,which){
+		if($('#'+resID).length!=0)return;
 		var path=respath;
 		if(respath==null)
 			path=editor.project.currentProject.path+"/"+editor.res.get(resID)['path'];
@@ -139,41 +157,63 @@
 		$(this).addClass("selectedrect");
 	});
 	$('#addimgbtn').click(function(){
-		editor.file.openFileDialog('',function(filename){
-			var resID = filename.substr(0, filename.lastIndexOf('.')) || filename;
-			var respath = "{0}/data/{1}".format(projectpath,filename);
-			addObjectToPane(resID,'image',respath,'global');
-			$('#'+resID).load(function(){
-				var res={path:filename,height:this.naturalHeight,width:this.naturalWidth};
-				editor.res.add(resID,'image',res);
-			});
-		});
+		editor.file.openFileDialog('',function(files){
+			var uploads=JSON.parse(files);
+			for( i in uploads ){
+				var filename = uploads[i];
+				var resID = filename.substr(0, filename.lastIndexOf('.')) || filename;
+				var respath = "{0}/data/{1}".format(projectpath,filename);
+				addObjectToPane(resID,'image',respath,'global');
+				$('#'+resID).load(function(){
+					var filepath = $(this).attr('src');
+					var filename = filepath.substr(filepath.lastIndexOf('/')+1,filepath.length);
+					var res={path:filename,height:this.naturalHeight,width:this.naturalWidth};
+					var resID = filename.substr(0, filename.lastIndexOf('.')) || filename;
+					editor.res.add(resID,'image',res);
+				});
+			}
+		},'image/*', true);
 	});
 	$('#addsndbtn').click(function(){
-		editor.file.openFileDialog('',function(filename){
-			var resID = filename.substr(0, filename.lastIndexOf('.')) || filename;
-			addObjectToPane(resID,'audio',"/data/audio.png".format(type),'global');
-			editor.res.add(resID,'audio',{path:filename});
-		});
+		editor.file.openFileDialog('',function(files){
+			var uploads=JSON.parse(files);
+			for( i in uploads ){
+				var filename = uploads[i];
+				var resID = filename.substr(0, filename.lastIndexOf('.')) || filename;
+				addObjectToPane(resID,'audio',"/data/audio.png".format(type),'global');
+				editor.res.add(resID,'audio',{path:filename});
+			}
+		},'audio/*', true);
 	});
 	$("#cm_res").menu({onClick:function (item) {
+		var resID=$(".selectedrect img").attr('id');
 		switch(item.id){
 		case 'cm_remove_res':
-			editor.res.remove($(".selectedrect img").attr('id'));
+			editor.res.remove(resID);
 			$(".selectedrect").remove();break;
 		case 'cm_set_global':
-			editor.res.setAsGlobalRes($(".selectedrect img").attr('id'));
+			editor.res.setAsGlobalRes(resID);
 			if($(".selectedrect").children().eq(2).hasClass('local')){
 				$(".selectedrect").children().eq(2).removeClass('local')
 				$(".selectedrect").children().eq(2).addClass('global')
 			}
 			break;
 		case 'cm_set_local':
-			editor.res.setAsLocalRes($(".selectedrect img").attr('id'));
+			editor.res.setAsLocalRes(resID);
 			if($(".selectedrect").children().eq(2).hasClass('global')){
 				$(".selectedrect").children().eq(2).removeClass('global')
 				$(".selectedrect").children().eq(2).addClass('local')
 			}
+			break;
+		case 'cm_to_sheet':
+			$('#convert_img').prop('src',"{0}/{1}".format(projectpath,editor.res.get(resID).path));
+			$('#dd_sheet').dialog('open');
+			break;
+		case 'cm_to_image':
+			var res=editor.res.get(resID);
+			res.type='image';
+			res.Xframe=undefined;
+			res.Yframe=undefined;
 			break;
 		default:break;
 		}
@@ -184,6 +224,14 @@
 			left: e.pageX,
 			top: e.pageY
 		});
+	});
+	$('#sheet_convert').click(function(){
+		var resID=$(".selectedrect img").attr('id');
+		var res=editor.res.get(resID);
+		res.type='spritesheet';
+		res.Xframe=$('#Xframe').val();
+		res.Yframe=$('#Yframe').val();
+		$('#dd_sheet').dialog('close');
 	});
 	$('#addotherbtn').click(function(){
 		var dlg=$('#otherdd').dialog({
