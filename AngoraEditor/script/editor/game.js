@@ -53,7 +53,7 @@ AngoraEditor.GameManager.prototype={
 	* @method setup
 	* @param {Object} config - game configuration
 	*/
-	setup: function(config){
+	setup: function(config,setupworldbounds){
 		var editor=this.editor;
 		var configfile=editor.project.currentProject.configFile;
 		if(typeof config==='undefined'){
@@ -75,8 +75,10 @@ AngoraEditor.GameManager.prototype={
 		this.set('plugins',config.plugins);
 		this.set('startScene', config.startScene);
 		this.editor.file.writeFile(configfile,JSON.stringify(config,null,2));
-		$('#worldbounds').css('width',editor.game.display.width);
-		$('#worldbounds').css('height',editor.game.display.height);
+		if(setupworldbounds){
+			$('#worldbounds').css('width',editor.game.display.width);
+			$('#worldbounds').css('height',editor.game.display.height);
+		}
 	},
 	/**
 	* Description 

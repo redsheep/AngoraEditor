@@ -224,6 +224,8 @@ AngoraEditor.PropertyGridManager.prototype = {
 			case 'tilemap': group='tilemap';type='none';break;
 			case 'clsname': group='class';type='none';break;
 			case 'basecls': group='class';type='none';break;
+			case 'gravityX':	group='physics';type='numberbox';break;
+			case 'gravityY':	group='physics';type='numberbox';break;
 			default		:	group='custom';type='none';break;
 		}
 		if(typeof grp!='undefined')group=grp;

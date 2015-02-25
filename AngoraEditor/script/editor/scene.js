@@ -82,7 +82,6 @@ AngoraEditor.SceneManager.prototype = {
 			var configfile="{0}/{1}.config".format(p.editor.project.currentProject.path, scene);
 			p.editor.file.readFile(configfile,function(data){
 				p.config=JSON.parse(data);
-				p.editor.ui.gamePane.setupConfig();
 			});
 		});
 	},

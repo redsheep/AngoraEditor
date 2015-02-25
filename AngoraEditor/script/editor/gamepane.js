@@ -74,9 +74,9 @@ AngoraEditor.GamePaneManager.prototype = {
 	* @method setupConfig
 	* @param 
 	*/
-	setupConfig : function(){
-		this.pane.css('width',this.editor.scene.config.world.width);
-		this.pane.css('height',this.editor.scene.config.world.height);
+	setupConfig : function(w,h){
+		this.pane.css('width',w);
+		this.pane.css('height',h);
 		console.log('setup game config success!');
 	},
 	/**

@@ -67,14 +67,14 @@ AngoraEditor.ProjectManager.prototype = {
 			this.editor.file.readFile(this.currentProject['configFile'],function(json){
 				p.config=JSON.parse(json);
 				p.editor.game.setup(p.config);
-				//p.editor.ui.gamePane.setupConfig();
+				p.editor.ui.gamePane.setupConfig(p.config.display.width,p.config.display.height);
 				console.log('load config success');
 				p.editor.scene.setup(finished);
 				console.log('New Project Create Success!');
 			});			
 		}else{
-			p.editor.game.setup(p.config);
-			//p.editor.ui.gamePane.setupConfig();
+			p.editor.game.setup(p.config,true);
+			p.editor.ui.gamePane.setupConfig(p.config.display.width,p.config.display.height);
 			console.log('update config success');
 			p.editor.scene.setup(finished);
 			console.log('New Project Create Success!');
@@ -130,6 +130,7 @@ AngoraEditor.ProjectManager.prototype = {
 			editor.file.writeFile(editor.project.currentProject.configFile,JSON.stringify(config,null,2));
 		});
 		editor.game.setup(config);
+		editor.ui.gamePane.setupConfig(config.display.width,config.display.height);
 	},
 	addCustomClass:function(cls){
 		if(this.customclass==null) this.customclass={};

@@ -225,6 +225,7 @@ AngoraEditor.NodeAttrManager.prototype = {
 			case 'audio':return '';
 			case 'tracks':return '';
 			case 'follow':return '';
+			case 'font':return '';
 			case 'fontSize':return 32;
 			case 'fontFamily':return 'Arial';
 			case 'fontColor':return '#000';
