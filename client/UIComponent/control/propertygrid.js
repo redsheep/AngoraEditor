@@ -69,10 +69,13 @@ AngoraEditor.PropertyGrid.prototype = {
 			data : '',
 			showGroup : true,
 			onBeginEdit: function(index,row){
+				self.selectedrow=index;
 			},
 			onEndEdit : function (index, field, changes) {
+				self.selectedrow=null;
 				var name = field['name'];
 				var value = field['value'];
+				if(!isNaN(value)) value=parseFloat(value);
 				editor.Manager.gameNode.updateProperty(name,value);
 			},
 			onDblClickRow:function(index, field){
@@ -165,6 +168,12 @@ AngoraEditor.PropertyGrid.prototype = {
 		//var index = this.propertyIndex[id];
 		var index=this.findRow(attr);
 		this.Dom.propertygrid('deleteRow', index);
+	},
+	endEdit: function(){
+		//if(this.selectedrow!=null){
+		//	var ed = this.Dom.propertygrid('getEditor', {index:this.selectedrow,field:'value'});
+		//	this.Dom.propertygrid('endEdit', this.selectedrow);
+		//}
 	},
 	/**
 	* refresh the property grid

@@ -25,8 +25,8 @@ AngoraEditor.GameModel = function (Data) {
 }
 
 AngoraEditor.GameModel.prototype = {
-	addState:function(state){
-		this.states[state]=new StateModel(this.Data,state);
+	addState:function(state,create){
+		this.states[state]=new StateModel(this.Data,state,create);
 	},
 	removeState:function(state){
 		delete this.states[state];

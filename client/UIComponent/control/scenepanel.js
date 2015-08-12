@@ -30,16 +30,10 @@ AngoraEditor.ScenePanel.prototype = {
 			self.editor.Manager.game.loadState(this.innerHTML);
 		});
 		$("#addScene").click(function () {
-			if(editor.project.currentProject==null)return;
-			editor.ui.prompt('Add Scene','Enter scene name',function(r){
-				if (typeof r!='undefined' && r.trim() != '') editor.scene.add(r);
-			});
+			self.editor.Manager.game.addState();
 		});
 		$("#removeScene").click(function () {
-			if(editor.project.currentProject==null)return;
-			editor.ui.confirm('Warning',"remove local file?",function(r){
-				editor.scene.remove(editor.scene.curScene,r);
-			});
+			self.editor.Manager.game.removeState();
 		});
 	},
 	/**

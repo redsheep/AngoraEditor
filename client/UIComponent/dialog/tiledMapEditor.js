@@ -1,73 +1,60 @@
-        <style>
-        body{
-			margin:0px;
-			padding:0px;
-        }
-        #map{
-			height:528px;
-			width:528px;        
-			float:left;
-			overflow:scroll;
-        }
-        #layer{
-			height:264px;
-			width:264px;
-			float:left;
-			overflow:scroll;
-        }
-		.layer{
-			height:24px;
-			border:1px solid black;
-		}
-		.layer.selected{
-			border:1px solid red;
-		}
-        #tilesets{
-			padding: 0;
-			margin: 0;
-        }
-		#tiles{
-			height:264px;
-			width:264px;
-			float:left;
-			overflow:scroll;
-		}
-		#marker{
-			position:relative;
-			left:0px;
-			top:0px;
-			border:1px red solid;
-			height:32px;
-			width:32px;
-		}
-		#tilemapdiv{
-			float:left;
-		}
-        </style>
-    <div class="easyui-layout" fit="true">
-        <div data-options="region:'south'" style="overflow:hidden">
-		    <button id="btn_ok" style="float:left;margin-top:10px;">OK</button>
-			<button id="btn_cancel" style="float:right;margin-top:10px;">Cancel</button>
-        </div>
-        <div id="map" data-options="region:'center'">
-		    <div id="tilemapdiv"></div>
-        </div> 
-        <div id="leftContainer" data-options="region:'east',split:true" title="Scene" style="width:300px;">
-            <div class="easyui-layout" fit="true">
-                <div data-options="region:'north'" style="overflow:hidden">
-					<a id="btn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'"></a>
-				</div>
-                <div id="layer" data-options="region:'center'"></div>
-                <div id="tiles" data-options="region:'south'">
-					<div id="tilesets"></div>
-					<div id="marker"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-	<script>
-	$(document).ready(function () {
-		var editor=edt;
+AngoraEditor.UIComponent.TilemapEditor=function(editor){
+  this.editor=editor;
+  this.href = '/dialog/openProject';
+  this.view = '<div class="easyui-layout" fit="true"> \
+      <div data-options="region:\'south\'" style="overflow:hidden"> \
+      <button id="btn_ok" style="float:left;margin-top:10px;">OK</button> \
+    <button id="btn_cancel" style="float:right;margin-top:10px;">Cancel</button>  \
+      </div>  \
+      <div id="map" data-options="region:\'center\'"> \
+      <div id="tilemapdiv"></div> \
+      </div>  \
+      <div id="leftContainer" data-options="region:\'east\',split:true" title="Scene" style="width:300px;"> \
+          <div class="easyui-layout" fit="true">  \
+              <div data-options="region:\'north\'" style="overflow:hidden"> \
+        <a id="btn" href="#" class="easyui-linkbutton" data-options="iconCls:\'icon-add\'"></a> \
+      </div>  \
+              <div id="layer" data-options="region:\'center\'"></div> \
+              <div id="tiles" data-options="region:\'south\'">  \
+        <div id="tilesets"></div> \
+        <div id="marker"></div> \
+              </div>  \
+          </div>  \
+      </div>  \
+  </div>';
+  this.width = 400;
+  this.height = 300;
+  this.modal = true;
+  this.resize = false;
+  //this.onConfirm = null;
+  //this.onCreate = null;
+}
+AngoraEditor.UIComponent.TilemapEditor.prototype={
+  show: function () {
+    self=this;
+    $.get(this.href,function(data){
+      $('#dd').html(data);
+      self.onLoad(self);
+    });
+  },
+  onShow:function(self){
+    $('#dd').dialog({
+      title: self.href.split('/').pop(),
+      left:(window.innerWidth-self.width)/2,
+      top:(window.innerHeight-self.height)/2,
+      width: self.width,
+      height: self.height,
+      resizable: self.resize,
+      closed: false,
+      cache: false,
+      //href: path,
+      modal: self.modal
+      //onLoad: self.onLoad(self),
+      //onClose: self.onClose(self)
+    });
+  },
+  onLoad:function(self){
+    var editor=edt;
 		if(editor.node.selected==null){
 			$('#dd').dialog('close');
 			return false;
@@ -83,7 +70,7 @@
 		var mapLayers;
 		var mapTileSets;
 		var mapLayerIndex={};
-		
+
 		var map;
 		var layers={};
 		var marker;
@@ -174,10 +161,10 @@
 				}
 				game.load.tilemap('map', mapPath+'?_='+new Date().getTime(), null, Phaser.Tilemap.TILED_JSON);
 			}
-			
+
 			function create() {
 				map = game.add.tilemap('map');
-				
+
 				for(i in mapTileSets){
 					map.addTilesetImage(mapTileSets[i].name);
 				}
@@ -188,7 +175,7 @@
 					}
 				}
 				changeLayer(mapLayers[0].name);
-				
+
 				//  Our painting marker
 				marker = game.add.graphics();
 				marker.lineStyle(2, 0x000000, 1);
@@ -198,7 +185,7 @@
 				cursors = game.input.keyboard.createCursorKeys();
 
 			}
-			
+
 			function updateMarker() {
 				marker.x = currentLayer.getTileX(game.input.activePointer.worldX) * 32;
 				marker.y = currentLayer.getTileY(game.input.activePointer.worldY) * 32;
@@ -210,7 +197,7 @@
 					mapObject.layers[mapLayerIndex[currentLayerName]].data[offsety*mapObject.width+offsetx]=currentTile;}
 					else if(game.input.mouse.button==Phaser.Mouse.RIGHT_BUTTON){
 					map.putTile(null, offsetx, offsety, currentLayer);
-					mapObject.layers[mapLayerIndex[currentLayerName]].data[offsety*mapObject.width+offsetx]=0;					
+					mapObject.layers[mapLayerIndex[currentLayerName]].data[offsety*mapObject.width+offsetx]=0;
 					}
 				}
 			}
@@ -228,12 +215,17 @@
 				mymarker.style.left = game.math.snapToFloor(pos[0] - tileRect.left, w)+  'px';
 				mymarker.style.top = game.math.snapToFloor(pos[1] - tilesets.clientHeight - tileRect.top, h) - 1 + 'px';
 			}
-		});	
+		});
 		$("#btn_ok").click(function(){
 			var canvas = document.getElementById('tilemapdiv').children[0];
 			editor.ui.gamePane.update(editor.node.selected,'mapcache',canvas.toDataURL());
 			editor.file.writeFile(mapPath,JSON.stringify(mapObject));
 			$('#dd').dialog('close');
 		});
-	});
-	</script>
+  },
+  onClose:function(self){ },
+  onCreate:function(){ },
+  onConfirm:function(project){ }
+}
+
+AngoraEditor.UIComponent.TilemapEditor.constructor=AngoraEditor.UIComponent.TilemapEditor;

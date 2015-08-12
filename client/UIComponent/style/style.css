@@ -290,6 +290,7 @@ border: 2px solid #f00;
   width: 16px;
   height: 16px;
 }
+/* state panel styles */
 ul#scenes {
    list-style: none;
    margin: 0;
@@ -309,4 +310,88 @@ ul#scenes li:hover {
 }
 ul#scenes li:before {
  content: "\0BB \020";
+}
+
+/* open project dialog styles */
+#projects{
+	border:1px white solid;
+	overflow:hidden;
+}
+.project{
+	height:80px;
+	background-color:skyblue;
+	text-align:left;
+	font-size:1.5em;
+}
+.projectName{
+	display:block;
+	float:left;
+	border-right:1px white solid;
+	text-align:center;
+	width:64px;
+	height:64px;
+	overflow:hidden;
+}
+.projectSrc{
+	display:block;
+}
+.descibe{
+	display:block;
+}
+.selected{
+	border:2px red solid;
+}
+/* resource editor styles */
+.resrect{
+	height:64px;
+	width:64px;
+	border:2px solid gray;
+	margin:8px;
+	float:left;
+	position:relative;
+	overflow:hidden;
+}
+.resrect .key{
+	background:#ccc;
+	position:absolute;
+	width:64px;
+	left:0px;
+	bottom:0px;
+	font-size:12px;
+	height:20px;
+}
+.resrect .global{
+	background:green;
+	position:absolute;
+	width:16px;
+	height:16px;
+	right:0px;
+	top:0px;
+	color:white;
+}
+.resrect .global:after{
+	content:"global";
+}
+.resrect .local{
+	background:red;
+	position:absolute;
+	width:16px;
+	height:16px;
+	right:0px;
+	top:0px;
+	color:white;
+}
+.resrect .local:after{
+	content:"local";
+}
+.resrect img{
+	height:64px;
+	width:64px;
+}
+.addbtn{
+	border:2px dashed gray;
+}
+.selectedrect{
+	background-color:lightgray;
+	border:2px solid red;
 }

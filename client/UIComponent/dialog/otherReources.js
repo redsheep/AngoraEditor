@@ -1,43 +1,38 @@
-	<style>
-	label { display: inline-block; width: 200px; text-align: right; }
-	input { margin:2px; }
-	.easyui-textbox{
-	  display: inline-block;
-	  white-space: nowrap;
-	  margin: 0;
-	  padding: 0;
-	  border-width: 1px;
-	  border-style: solid;
-	  border-color:#ddd;
-	  overflow: hidden;
-	  vertical-align: middle;
-	  height: 20px;
-	}
-	</style>
-	<div style="padding:10px 30px 20px 30px">
-	<div id='form' style="text-align:center;">
-		<p>ID:<input id='resID' class='.easyui-textbox'/><p>
-		<select id="cc" class="easyui-combobox" name="dept" style="width:200px;">
-			<option>spritesheet</option>
-			<option>atlas</option>
-			<option>bitmapfont</option>
-			<option>tilemap</option>
-			<option>text</option>
-		</select>
-		<div id='options'>
-		<p>asset:<input id='asset' class='file' readonly/><p>
-		<p>Xframe:<input id='Xframe' class='easyui-numberbox'/></p>
-		<p>Yframe:<input id='Yframe' class='easyui-numberbox'/></p>
-		</div>
-		<img id='assetpreview' alt='preview'/>
-	</div>
-	<div style="text-align:center;padding:5px">
-	<a id="confirm" class="easyui-linkbutton" >OK</a>
-	<a id="cancel" class="easyui-linkbutton" >Cancel</a>
-	</div>
-	</div>
-  <script>
-	function showPane(type){
+
+AngoraEditor.UIComponent.otherResources=function(editor){
+  this.editor=editor;
+  this.href = '/dialog/openProject';
+  this.view = '	<div style="padding:10px 30px 20px 30px"> \
+  	<div id="form" style="text-align:center;"> \
+  		<p>ID:<input id="resID" class=".easyui-textbox"/><p>  \
+  		<select id="cc" class="easyui-combobox" name="dept" style="width:200px;"> \
+  			<option>spritesheet</option> \
+  			<option>atlas</option> \
+  			<option>bitmapfont</option>  \
+  			<option>tilemap</option> \
+  			<option>text</option>  \
+  		</select> \
+  		<div id="options">  \
+  		<p>asset:<input id="asset" class="file" readonly/><p> \
+  		<p>Xframe:<input id="Xframe" class="easyui-numberbox"/></p> \
+  		<p>Yframe:<input id="Yframe" class="easyui-numberbox"/></p> \
+  		</div>  \
+  		<img id="assetpreview" alt="preview"/>  \
+  	</div> \
+  	<div style="text-align:center;padding:5px">  \
+  	<a id="confirm" class="easyui-linkbutton" >OK</a>  \
+  	<a id="cancel" class="easyui-linkbutton" >Cancel</a> \
+  	</div> \
+  	</div>';
+  this.width = 400;
+  this.height = 300;
+  this.modal = true;
+  this.resize = false;
+  //this.onConfirm = null;
+  //this.onCreate = null;
+}
+AngoraEditor.UIComponent.otherResources.prototype={
+  showPane :function (type){
 		$('#options').empty();
 		var options=null;
 		switch(type){
@@ -66,8 +61,31 @@
 		}
 		$('#options').append(options);
 	}
-	$(document).ready(function(){
-		var editor=edt;
+  show: function () {
+    self=this;
+    $.get(this.href,function(data){
+      $('#dd').html(data);
+      self.onLoad(self);
+    });
+  },
+  onShow:function(self){
+    $('#dd').dialog({
+      title: self.href.split('/').pop(),
+      left:(window.innerWidth-self.width)/2,
+      top:(window.innerHeight-self.height)/2,
+      width: self.width,
+      height: self.height,
+      resizable: self.resize,
+      closed: false,
+      cache: false,
+      //href: path,
+      modal: self.modal
+      //onLoad: self.onLoad(self),
+      //onClose: self.onClose(self)
+    });
+  },
+  onLoad:function(self){
+    var editor=edt;
 		var height;
 		var width;
 		var type='spritesheet';
@@ -163,5 +181,10 @@
 		$('#cancel').click(function(){
 			$('#otherdd').dialog('close');
 		});
-	  });
-  </script>
+  },
+  onClose:function(self){ },
+  onCreate:function(){ },
+  onConfirm:function(project){ }
+}
+
+AngoraEditor.UIComponent.otherResources.constructor=AngoraEditor.UIComponent.otherResources;

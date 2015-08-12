@@ -11,15 +11,17 @@
  * @classdesc
  * @constructor
  */
-StateModel = function (Data, state) {
+StateModel = function (Data, state, create) {
 
 	this.Data = Data;
+
+	this.name= state;
 
 	this.resources={};
 
   this.nodes={};
 
-	this.setup(state);
+	this.setup(create);
 
 	this.selected = null;
 
@@ -28,20 +30,26 @@ StateModel = function (Data, state) {
 }
 
 StateModel.prototype = {
-	setup: function(state){
+
+	setup: function(create){
 		var self = this;
 		var path = this.Data.project.path;
-		this.Data.system.File.readFile('{0}/{1}.res'.format(path,state),
-		function(data){
-			self.resources=JSON.parse(data);
-		});
-		this.Data.system.File.readFile('{0}/{1}.scn'.format(path,state),
-		function(data){
-			var nodes = JSON.parse(data);
-			for(var key in nodes){
-				self.addNode(nodes[key]);
-			}
-		});
+		if(create===true){
+			this.Data.system.File.writeFile('{0}/{1}.res'.format(path,this.name),'{}');
+			this.Data.system.File.writeFile('{0}/{1}.scn'.format(path,this.name),'{}');
+		}else{
+			this.Data.system.File.readFile('{0}/{1}.res'.format(path,this.name),
+			function(data){
+				self.resources=JSON.parse(data);
+			});
+			this.Data.system.File.readFile('{0}/{1}.scn'.format(path,this.name),
+			function(data){
+				var nodes = JSON.parse(data);
+				for(var key in nodes){
+					self.addNode(nodes[key]);
+				}
+			});
+		}
 	},
 	createNode:function(type){
 			var nodeID='{0}{1}'.format(type,this.count++);

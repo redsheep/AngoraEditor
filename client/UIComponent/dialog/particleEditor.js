@@ -1,18 +1,51 @@
-<div id="container" class="easyui-layout" fit="true">
-	<div data-options="region:'south'" style="overflow:hidden">
-		<button id="btn_ok" style="float:left;margin-top:10px;">OK</button>
-		<button id="btn_cancel" style="float:right;margin-top:10px;">Cancel</button>
-	</div>
 
-	<div id="particles" data-options="region:'center'" style="overflow:hidden;width:350px;height:480px;">
-	</div>
-	<div data-options="region:'east'" style="overflow:hidden;width:200px;">
-		<div id="particleproperty">property</div>
-	</div>
-</div>
-<script>
-	$(document).ready(function(){
-		var editor=edt;
+AngoraEditor.UIComponent.ParticleEditor=function(editor){
+  this.editor=editor;
+  this.href = '/dialog/openProject';
+  this.view = '<div id="container" class="easyui-layout" fit="true">  \
+  	<div data-options="region:\'south\'" style="overflow:hidden">  \
+  		<button id="btn_ok" style="float:left;margin-top:10px;">OK</button>  \
+  		<button id="btn_cancel" style="float:right;margin-top:10px;">Cancel</button>  \
+  	</div>  \
+  	<div id="particles" data-options="region:\'center\'" style="overflow:hidden;width:350px;height:480px;">  \
+  	</div>  \
+  	<div data-options="region:\'east\'" style="overflow:hidden;width:200px;">  \
+  		<div id="particleproperty">property</div>  \
+  	</div>  \
+  </div>';
+  this.width = 400;
+  this.height = 300;
+  this.modal = true;
+  this.resize = false;
+  //this.onConfirm = null;
+  //this.onCreate = null;
+}
+AngoraEditor.UIComponent.ParticleEditor.prototype={
+  show: function () {
+    self=this;
+    $.get(this.href,function(data){
+      $('#dd').html(data);
+      self.onLoad(self);
+    });
+  },
+  onShow:function(self){
+    $('#dd').dialog({
+      title: self.href.split('/').pop(),
+      left:(window.innerWidth-self.width)/2,
+      top:(window.innerHeight-self.height)/2,
+      width: self.width,
+      height: self.height,
+      resizable: self.resize,
+      closed: false,
+      cache: false,
+      //href: path,
+      modal: self.modal
+      //onLoad: self.onLoad(self),
+      //onClose: self.onClose(self)
+    });
+  },
+  onLoad:function(self){
+    var editor=edt;
 		if(editor.node.selected==null){
 			$('#dd').dialog('close');
 			return false;
@@ -74,5 +107,10 @@
 		$("#btn_cancel").click(function(){
 			$('#dd').dialog('close');
 		});
-	});
-</script>
+  },
+  onClose:function(self){ },
+  onCreate:function(){ },
+  onConfirm:function(project){ }
+}
+
+AngoraEditor.UIComponent.ParticleEditor.constructor=AngoraEditor.UIComponent.ParticleEditor;

@@ -62,32 +62,19 @@ AngoraEditor.ManagerController.GameNodeManager.prototype = {
 				self.select(node.id);
 				sprite.game.anchorBounds.startPoint={x:sprite.x,y:sprite.y};
 				sprite.game.anchorBounds.input.startDrag(pointer);
-				/*if(pointer.button === Phaser.Mouse.LEFT_BUTTON){
-					//sprite.input.draggable = true;
-					sprite.startPoint={x:sprite.x,y:sprite.y};
-				}else{
-					//sprite.input.draggable = false;
-				}*/
 			}, this);
-			/*gameNode.events.onDragUpdate.add(
-				function(sprite, pointer, dragX, dragY, snapPoint){
-					var dx=dragX-sprite.startPoint.x;
-					sprite.x=sprite.startPoint.x+dx/sprite.game.world.scale.x;
-					var dy=dragY-sprite.startPoint.y;
-					sprite.y=sprite.startPoint.y+dy/sprite.game.world.scale.y;
-					self.updateProperty('x',sprite.x);
-					self.updateProperty('y',sprite.y);
-					self.editor.UI.gamePanel.snapAnchorToObject(sprite.x,sprite.y,sprite.width,sprite.height);
-				},this);*/
 		}
 		this.editor.Data.game.curState.nodes[node.id].ref=gameNode;
 		return gameNode;
 	},
 	updateProperty:function(name,value){
-		if(this.editor.Data.game.curState.selected!=null){
-			this.editor.Data.game.curState.selected.setAttr(name,value);
-			this.editor.Data.game.curState.selected.ref[name]=value;
+		var node = this.editor.Data.game.curState.selected;
+		if(node!=null){
+			node.setAttr(name,value);
+			node.ref[name]=value;
 			this.editor.UI.propertyGrid.updateRow(name,value);
+			if(name=='x'||name=='y'||name=='width'||name=='height')
+				this.editor.UI.gamePanel.snapAnchorToObject(node.ref.x,node.ref.y,node.ref.width,node.ref.height);
 			//this.editor.UI.gamePanel.updateProperty(name,value);
 		}
 	},
@@ -127,10 +114,12 @@ AngoraEditor.ManagerController.GameNodeManager.prototype = {
 		//this.editor.Data.game.selected;
 	},
 	unselect:function(){
-		this.editor.Data.game.curState.unselect();
-		this.editor.UI.gamePanel.hideAnchor();
-		this.editor.UI.propertyGrid.reset();
-		this.editor.UI.eventPanel.reset();
+		if(this.editor.Data.game.curState.selected!=null){
+			this.editor.UI.gamePanel.hideAnchor();
+			this.editor.UI.propertyGrid.reset();
+			this.editor.UI.eventPanel.reset();
+			this.editor.Data.game.curState.unselect();
+		}
 	},
 	/**
 	* remove a node from node manager

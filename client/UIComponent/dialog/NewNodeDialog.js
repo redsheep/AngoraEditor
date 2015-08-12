@@ -98,9 +98,44 @@ AngoraEditor.UIComponent.NewNodeDialog=function(){
   		"type" : "custom"
   	}
   ];
+  this.editor=editor;
+  this.href = '/dialog/newProject';
+  this.view = '<div class="easyui-layout" fit="true">  \
+                	<div data-options="region:\'center\'" style="overflow:scoll;">  \
+                		<ul id="tt" class="easyui-tree">  \
+                		</ul>  \
+                	</div>  \
+                </div>';
+  this.width = 400;
+  this.height = 300;
+  this.modal = true;
+  this.resize = false;
 }
 AngoraEditor.UIComponent.NewNodeDialog.prototype={
-  onLoad:function(){
+  show: function (path, w, h, modal, resize) {
+    self=this;
+    //$.get(this.href,function(data){
+      $('#dd').html(this.view);
+      self.onLoad(self);
+    //});
+  },
+  onShow:function(self){
+    $('#dd').dialog({
+      title: self.href.split('/').pop(),
+      left:(window.innerWidth-self.width)/2,
+      top:(window.innerHeight-self.height)/2,
+      width: self.width,
+      height: self.height,
+      resizable: self.resize,
+      closed: false,
+      cache: false,
+      //href: path,
+      modal: self.modal
+      //onLoad: self.onLoad(self),
+      //onClose: self.onClose(self)
+    });
+  },
+  onLoad:function(self){
     var editor = edt;
   	var customclass=editor.project.customclass;
   	if(customclass!=null){
@@ -126,9 +161,8 @@ AngoraEditor.UIComponent.NewNodeDialog.prototype={
   		}
   	});
   },
-  onClose:function(){
-
-  }
+  onClose:function(){},
+  onConfirm:function(project){}
 }
 
 AngoraEditor.UIComponent.NewNodeDialog.constructor=AngoraEditor.UIComponent.NewNodeDialog;

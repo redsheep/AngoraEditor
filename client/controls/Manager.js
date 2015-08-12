@@ -23,6 +23,8 @@ AngoraEditor.ManagerController = function (editor) {
 
   this.app      = new AngoraEditor.ManagerController.AppManager(editor);
 
+  this.view     = new AngoraEditor.ManagerController.ViewManager(editor);
+
   this.boot();
 }
 AngoraEditor.ManagerController.prototype = {

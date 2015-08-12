@@ -28,8 +28,8 @@ AngoraEditor.Menu.prototype = {
 		var editor=this.editor;
 		this.addMenu('submenu_file',function (item) {
 			switch(item.id){
-				case 'newProject':editor.Manager.project.create();break;
-				case 'openProject':editor.Manager.project.open();break;
+				case 'newProject':editor.Manager.view.showNewProjectDialog();break;
+				case 'openProject':editor.Manager.view.showOpenProjectDialog();break;
 				case 'saveProject':editor.Manager.project.save();break;
 				case 'closeProject':editor.Manager.project.close();break;
 				default:break;
@@ -38,18 +38,18 @@ AngoraEditor.Menu.prototype = {
 		this.addMenu('submenu_tools',function (item) {
 			switch(item.id){
 				case 'stamp':editor.Manager.game.stamp();break;
-				case 'resource':editor.Manager.resource.showResourceEditor();break;
-				case 'tilemap':editor.Manager.resource.showTiledMapEditor();break;
-				case 'particle':editor.Manager.resource.showParticleEditor();break;
-				case 'audio':editor.Manager.resource.showAudioEditor();break;
-				case 'anime':editor.Manager.resource.showAnimationEditor();break;
-				case 'physics':editor.Manager.resource.showPhysicsEditor();break;
+				case 'resource':editor.Manager.view.showResourceEditor();break;
+				case 'tilemap':editor.Manager.view.showTiledMapEditor();break;
+				case 'particle':editor.Manager.view.showParticleEditor();break;
+				case 'audio':editor.Manager.view.showAudioEditor();break;
+				case 'anime':editor.Manager.view.showAnimationEditor();break;
+				case 'physics':editor.Manager.view.showPhysicsEditor();break;
 				default:break;
 			}
 		});
 		this.addMenu('submenu_app',function (item) {
 			switch(item.id){
-				case 'app':editor.Manager.app.showSettingsDialog();break;
+				case 'app':editor.Manager.view.showSettingsDialog();break;
 				default:break;
 			}
 		});
@@ -62,9 +62,9 @@ AngoraEditor.Menu.prototype = {
 		});
 		this.addMenu('submenu_help',function (item) {
 			switch(item.id){
-				case 'about':editor.Manager.app.showAboutDialog();break;
-				case 'help':editor.Manager.app.showHelpDialog();break;
-				case 'preferences':editor.Manager.app.showPreferencesDialog();break;
+				case 'about':editor.Manager.view.showAboutDialog();break;
+				case 'help':editor.Manager.view.showHelpDialog();break;
+				case 'preferences':editor.Manager.view.showPreferencesDialog();break;
 				default:break;
 			}
 		});

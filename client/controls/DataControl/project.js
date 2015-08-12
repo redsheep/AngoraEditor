@@ -18,23 +18,6 @@ AngoraEditor.ManagerController.ProjectManager = function (editor) {
 	this.editor = editor;
 }
 AngoraEditor.ManagerController.ProjectManager.prototype = {
-	create:function(){
-		var self = this;
-		var dlg = new AngoraEditor.UIComponent.NewProjectDialog(this.editor);
-		dlg.onConfirm = function(project){
-			self.editor.Data.project.add(project);
-			self.load(project);
-		}
-		dlg.show();
-	},
-
-	open:function(){
-		var self = this;
-		var dlg = new AngoraEditor.UIComponent.OpenProjectDialog(this.editor);
-		dlg.onConfirm = self.load;
-		dlg.onCreate = self.create;
-		dlg.show();
-	},
 	/**
 	* load project
 	* @method load
@@ -60,14 +43,16 @@ AngoraEditor.ManagerController.ProjectManager.prototype = {
 		self.editor.UI.menu.activeMenu();
 
 	},
+	add : function(project){
+		this.editor.Data.project.add(project);
+	},
 	/**
 	* remove project
 	* @method remove
 	* @param {string} project name
 	*/
 	remove : function (name) {
-		delete this.projects[name];
-		this.editor.file.writeFile(this.editor.system.projectFile,JSON.stringify(this.projects));
+		this.editor.Data.project.remove(name);
 	},
 	/**
 	* save project
@@ -75,7 +60,7 @@ AngoraEditor.ManagerController.ProjectManager.prototype = {
 	* @param
 	*/
 	save : function () {
-		this.editor.Data.project.release();
+		this.editor.Data.project.save();
 	},
 	/**
 	* release project with compress js file

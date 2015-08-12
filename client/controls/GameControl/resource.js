@@ -27,6 +27,13 @@ AngoraEditor.ManagerController.ResourceManager.prototype = {
 			default:
 		}
 	},
+	getAll:function(){
+		var res = {};
+		res.Global = this.editor.Data.game.resources;
+		if(this.editor.Data.game.curState!=null)
+			res.Local = this.editor.Data.game.curState.resources;
+		return res;
+	},
 	/**
 	* add a resource into the manager
 	* @method

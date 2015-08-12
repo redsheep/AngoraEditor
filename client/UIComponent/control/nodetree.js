@@ -33,16 +33,12 @@ AngoraEditor.NodeTree = function (editor) {
 }
 AngoraEditor.NodeTree.prototype = {
 	setupCallback:function(){
+		var self = this;
 		$("#addNode").click(function () {
-			if(editor.project.currentProject==null)return;
-			editor.ui.showDialog('/dialog/nodetype');
+
 		});
 		$("#removeNode").click(function () {
-			if(editor.project.currentProject==null || editor.node.selected==null)return;
-			editor.node.remove(editor.node.selected.id);
-			editor.ui.nodeTree.removeNode();
-			editor.ui.gamePane.remove(editor.node.selected);
-			editor.ui.propertyGrid.reset();
+			//self.editor.Manager.gameNode.remove();
 		});
 		$("#moveupNode").click(function () {
 			//var zindex = editor.node.selected.zindex - 1;

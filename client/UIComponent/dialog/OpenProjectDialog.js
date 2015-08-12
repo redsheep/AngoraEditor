@@ -2,6 +2,17 @@
 AngoraEditor.UIComponent.OpenProjectDialog=function(editor){
   this.editor=editor;
   this.href = '/dialog/openProject';
+  this.view = '	<div class="easyui-layout" fit="true">  \
+    		<div data-options="region:\'center\'">  \
+    			<div id="projects"></div>  \
+    		</div>  \
+    		<div data-options="region:\'south\'" style="height:50px;overflow:hidden"> \
+    			<button id="newbtn">New</button> \
+    			<button id="openbtn">Open</button> \
+    			<button id="removebtn">Remove</button> \
+    			<button id="importbtn">Import</button> \
+    		</div>  \
+    	</div>';
   this.width = 400;
   this.height = 300;
   this.modal = true;
@@ -12,10 +23,10 @@ AngoraEditor.UIComponent.OpenProjectDialog=function(editor){
 AngoraEditor.UIComponent.OpenProjectDialog.prototype={
   show: function () {
     self=this;
-    $.get(this.href,function(data){
-      $('#dd').html(data);
+    //$.get(this.href,function(data){
+      $('#dd').html(this.view);
       self.onLoad(self);
-    });
+    //});
   },
   onShow:function(self){
     $('#dd').dialog({
@@ -28,9 +39,9 @@ AngoraEditor.UIComponent.OpenProjectDialog.prototype={
       closed: false,
       cache: false,
       //href: path,
-      modal: self.modal
+      modal: self.modal,
       //onLoad: self.onLoad(self),
-      //onClose: self.onClose(self)
+      onClose: self.onClose
     });
   },
   onLoad:function(self){
@@ -97,7 +108,9 @@ AngoraEditor.UIComponent.OpenProjectDialog.prototype={
       });
     });
   },
-  onClose:function(self){ },
+  onClose:function(self){
+    //$('#dd').panel('destroy');
+  },
   onCreate:function(){ },
   onConfirm:function(project){ }
 }
