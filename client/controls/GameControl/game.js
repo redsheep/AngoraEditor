@@ -21,8 +21,10 @@ AngoraEditor.ManagerController.GameManager.prototype={
 
 	loadState: function(state){
 		this.editor.Data.game.loadState(state);
-		this.editor.UI.nodeTree.setup();
-		this.editor.UI.gamePanel.setup();
+		this.editor.Manager.resource.loadAll();
+		this.editor.Manager.gameNode.loadAll();
+		//this.editor.UI.nodeTree.setup();
+		//this.editor.UI.gamePanel.setup();
 	},
 	addState:function(state){
 		var self = this;

@@ -36,6 +36,9 @@ GameNode = function (state) {
 		audio:['audio'],
 		particle:['particle']
 	};
+	this.DefaultValue = {
+		x:0,y:0,height:32,width:32,image:''
+	}
 
 	return this;
 }
@@ -46,6 +49,8 @@ GameNode.prototype = {
 
 	},
 	setAttr:function(key,value){
+		if(typeof value === 'undefined')
+			value=this.DefaultValue[key];
 		this.property[key]=value;
 	},
 	removeAttr:function(key){

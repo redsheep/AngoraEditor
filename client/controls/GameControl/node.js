@@ -39,34 +39,12 @@ AngoraEditor.ManagerController.GameNodeManager.prototype = {
 	* @method add
 	* @param {Object} node
 	*/
-	add : function (game,node) {
+	add : function (node) {
 		var self = this;
-		//this.editor.Data.game.curState.addNode(node);
-		var gameNode = null;
-		switch (node.type) {
-			case 'sprite':
-			case 'animate':
-				gameNode = game.add.sprite(node.property.x,node.property.y,node.property.image);
-				break;
-			case 'tilesprite':
-				gameNode = game.add.tileSprite(node.property.x,node.property.y,
-					node.property.width,node.property.height,node.property.image);
-				break;
-			default:
-		}
-		if(gameNode!=null){
-			//gameNode.scale.set(node.property.scaleX,node.property.scaleY);
-			//gameNode.fixedToCamera=true;
-	    gameNode.inputEnabled = true;
-			//gameNode.input.enableDrag(false);
-			gameNode.events.onInputDown.add(function(sprite, pointer){
-				self.select(node.id);
-				sprite.game.anchorBounds.startPoint={x:sprite.x,y:sprite.y};
-				sprite.game.anchorBounds.input.startDrag(pointer);
-			}, this);
-		}
+		node = this.editor.Data.game.curState.addNode(node);
+		var gameNode=this.editor.UI.gamePanel.addNode(node);
 		this.editor.Data.game.curState.nodes[node.id].ref=gameNode;
-		return gameNode;
+		this.editor.UI.nodeTree.addNode(node);
 	},
 	updateProperty:function(name,value){
 		var node = this.editor.Data.game.curState.selected;
@@ -121,6 +99,16 @@ AngoraEditor.ManagerController.GameNodeManager.prototype = {
 			this.editor.UI.propertyGrid.reset();
 			this.editor.UI.eventPanel.reset();
 			this.editor.Data.game.curState.unselect();
+		}
+	},
+	loadAll:function (){
+		this.editor.UI.gamePanel.reset();
+		this.editor.UI.nodeTree.reset();
+		var nodes = this.editor.Data.game.curState.nodes;
+		for(var nodeID in nodes){
+			var gameNode=this.editor.UI.gamePanel.addNode(nodes[nodeID]);
+			this.editor.Data.game.curState.nodes[nodeID].ref=gameNode;
+			this.editor.UI.nodeTree.addNode(nodes[nodeID]);
 		}
 	},
 	/**

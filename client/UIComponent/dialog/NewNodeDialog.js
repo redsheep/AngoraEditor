@@ -153,11 +153,9 @@ AngoraEditor.UIComponent.NewNodeDialog.prototype={
   		data : types,
   		onDblClick : function (nodetype) {
   			if($('#tt').tree('isLeaf', nodetype.target)==false) return false;
-  			var cls=(nodetype.type==='custom'&&customclass!==null)?customclass[nodetype.text]:undefined;
-  			var node = editor.node.create(nodetype.type,cls);
-  			editor.node.add(node);
-  			editor.ui.nodeTree.addNode(node);
-  			editor.ui.gamePane.add(node);
+  			//var cls=(nodetype.type==='custom'&&customclass!==null)?customclass[nodetype.text]:undefined;
+        var node = {type:nodetype.type};
+  			editor.Manager.gameNode.add(node);
   			$('#dd').dialog('close');
   		}
   	});

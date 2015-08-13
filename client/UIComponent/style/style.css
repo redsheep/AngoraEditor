@@ -395,3 +395,43 @@ ul#scenes li:before {
 	background-color:lightgray;
 	border:2px solid red;
 }
+/* */
+.CodeMirror {
+  font-size:16px;
+  height: 100%;
+}
+.CodeMirror-scroll {
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+#preview.grid{
+	background-image: linear-gradient(0deg, #FFFFFF 1px, rgba(0,0,0,0) 1px), linear-gradient(90deg, #FFFFFF 1px, rgba(0,0,0,0) 1px), linear-gradient(0deg, rgba(255,255,255,0.298039) 1px, rgba(0,0,0,0) 1px), linear-gradient(90deg, rgba(255,255,255,0.298039) 1px, rgba(0,0,0,0) 1px);
+	background-size: 32px 32px;
+}
+#preview{
+	background-color: lightgray;
+}
+div {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	cursor: default;
+}
+#worldbounds{
+	position:absolute;
+	left:0px;
+	top:0px;
+	width:800px;
+	height:600px;
+	background:gray;
+	border:1px solid black;
+	visibility:hidden;
+	opacity: 0.2;
+	pointer-events: none;
+}
+.nodeselected{
+	border:3px solid red !important;
+}

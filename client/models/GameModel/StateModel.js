@@ -53,7 +53,7 @@ StateModel.prototype = {
 	},
 	createNode:function(type){
 			var nodeID='{0}{1}'.format(type,this.count++);
-			while(!(nodeID in this.nodes))
+			while(nodeID in this.nodes)
 				nodeID='{0}{1}'.format(type,this.count++);
 			var node = {
 				'id':nodeID,
@@ -64,11 +64,14 @@ StateModel.prototype = {
 				node.clsname=cls.clsname;
 				node.basecls=cls.basecls;
 			}
-			this.addNode(node);
+			return node;
 	},
 	addNode:function(node){
+		if(typeof node.id==='undefined')
+			node = this.createNode(node.type);
 		this.nodes[node.id]=new GameNode(this);
 		this.nodes[node.id].initNode(node);
+		return this.nodes[node.id];
 	},
 	removeNode:function(nodeID){
 		delete this.nodes[nodeID];

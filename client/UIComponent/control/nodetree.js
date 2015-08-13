@@ -34,6 +34,7 @@ AngoraEditor.NodeTree = function (editor) {
 AngoraEditor.NodeTree.prototype = {
 	setupCallback:function(){
 		var self = this;
+		var editor = this.editor;
 		$("#addNode").click(function () {
 			self.editor.Manager.view.showNewNodeDialog();
 		});
@@ -48,15 +49,6 @@ AngoraEditor.NodeTree.prototype = {
 			//var zindex = editor.node.selected.zindex - 1;
 			//editor.attr.setAttr(editor.node.selected, 'z-index', zindex);
 		});
-	},
-	/**
-	* setup
-	* @method setup
-	* @param
-	*/
-	setup : function () {
-		var editor = this.editor;
-		var self = this;
 		this.Dom.tree({
 			data : this.nodes,
 			dnd : true,
@@ -81,7 +73,6 @@ AngoraEditor.NodeTree.prototype = {
 					editor.node.checkGroup(source.id,targetNode.textContent, point);
 					node=editor.node.getParent(targetNode.textContent);
 				}
-
 				if(node==null){
 					editor.ui.gamePane.updateGroup(source.id);
 					editor.ui.gamePane.updateZorder(editor.node.nodes,0);
@@ -93,27 +84,9 @@ AngoraEditor.NodeTree.prototype = {
 			onContextMenu: function(e,node){
 				e.preventDefault();
 				$(this).tree('select',node.target);
-				editor.ui.contextMenu.showContextMenu(e.pageX,e.pageY);
+				editor.UI.contextMenu.showContextMenu(e.pageX,e.pageY);
 			}
 		});
-		var nodes=this.editor.Data.game.curState.nodes;
-		for(var key in nodes){
-			this.addNode(nodes[key]);
-		}
-	},
-	_loadNode:function(data,parent){
-		var item = {
-			"id" : data.id,
-			"text" : data.id,
-			"iconCls" : this.getTypeIcon(data.type),
-			"children": typeof data.children!=='undefined'?[]:undefined
-		}
-		parent.push(item);
-		if(typeof data.children!=='undefined'){
-			for(i in data.children){
-				this.loadNode(data.children[i],item.children);
-			}
-		}
 	},
 	/**
 	* add node into the tree
@@ -148,7 +121,7 @@ AngoraEditor.NodeTree.prototype = {
 	select : function(id){
 		this.selected=this.Dom.tree('find', id);
 		this.Dom.tree('select', this.selected.target);
-		//this.editor.ui.activeMenuItem(this.editor.node.selected.type);
+		//this.editor.UI.activeMenuItem(this.editor.node.selected.type);
 	},
 	/**
 	* callback when unselect the tree node
@@ -198,8 +171,8 @@ AngoraEditor.NodeTree.prototype = {
 	* @param
 	*/
 	reset: function(){
-		this.nodes = [];
-		this.Dom.tree('loadData','');
+		//this.nodes = [];
+		this.Dom.tree('loadData',this.nodes);
 	}
 }
 

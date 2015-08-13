@@ -18,16 +18,10 @@ AngoraEditor.ManagerController.ResourceManager = function (editor) {
 	this.editor = editor;
 }
 AngoraEditor.ManagerController.ResourceManager.prototype = {
-	load:function(game,res){
-		var projectPath = this.editor.Data.project.path;
-		var respath = '{0}/{1}'.format(projectPath,res.path);
-		switch (res.type) {
-			case 'image':
-				game.load.image(res.id,respath);
-				break;
-			case 'spritesheet':
-				game.load.spritesheet(res.id, respath, parseInt(res.width/res.Xframe), parseInt(res.height/res.Yframe));
-			default:
+	loadAll:function(){
+		var resources = this.editor.Data.game.resources;
+		for(var resID in resources){
+			this.editor.UI.gamePanel.addResource(resources[resID]);
 		}
 	},
 	getAll:function(){
@@ -49,6 +43,7 @@ AngoraEditor.ManagerController.ResourceManager.prototype = {
 	*/
 	add : function (res) {
 		this.editor.Data.game.addResource(res);
+		this.editor.UI.gamePanel.addResource(res);
 	},
 	/**
 	* remove a resource

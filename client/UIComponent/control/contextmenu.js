@@ -23,8 +23,6 @@ AngoraEditor.ContextMenu = function (editor) {
 	/**
 	* @property {number}
 	*/
-	this.menuposX = 0;
-	this.menuposY = 0;
 	this.setup();
 }
 AngoraEditor.ContextMenu.prototype = {
@@ -123,11 +121,11 @@ AngoraEditor.ContextMenu.prototype = {
 	*/
 	showContextMenu : function (x,y) {
 		var editor=this.editor;
-		this.menuposX=x;this.menuposY=y;
+		var selected = this.editor.Manager.gameNode.getSelected();
 		this.hideAll();
-		if(editor.node.selected!=null){
+		if(selected!=null){
 			this.show('Remove');
-			switch(editor.node.selected.type){
+			switch(selected.type){
 				case 'animate':this.show('AnimeEditor');break;
 				case 'audio':this.show('AudioEditor');break;
 				case 'particle':this.show('ParticleEditor');break;

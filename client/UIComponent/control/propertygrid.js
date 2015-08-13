@@ -26,6 +26,7 @@ AngoraEditor.PropertyGrid = function (editor) {
 	this.selectedrow = null;
 
 	this.delay=0;
+	this.dbclick=false;
 	/**
 	* @property {jquery object}
 	*/
@@ -66,7 +67,7 @@ AngoraEditor.PropertyGrid.prototype = {
 			self.delay++;
 		}, 100);
 		this.Dom.propertygrid({
-			data : '',
+			data : this.data,
 			showGroup : true,
 			onBeginEdit: function(index,row){
 				self.selectedrow=index;
@@ -78,7 +79,14 @@ AngoraEditor.PropertyGrid.prototype = {
 				if(!isNaN(value)) value=parseFloat(value);
 				editor.Manager.gameNode.updateProperty(name,value);
 			},
-			onDblClickRow:function(index, field){
+			onClickRow:function(index, field){
+				if(!self.dbclick){
+					self.dbclick=true;
+					setTimeout(function(){
+						self.dbclick=false;
+					},500);
+					return;
+				}
 				var name = field['name'];
 				var value = field['value'];
 				switch (name) {
@@ -86,16 +94,16 @@ AngoraEditor.PropertyGrid.prototype = {
 					case 'assetatlas':
 					case 'font':
 					case 'audio':
-					editor.Manager.resource.showResourceEditor();
+					editor.Manager.view.showResourceEditor();
 					break;
 					case 'tilemap':
-					editor.Manager.resource.showTilemapEditor();
+					editor.Manager.view.showTilemapEditor();
 					break;
 					case 'animations':
-					editor.Manager.resource.showAnimationEditor();
+					editor.Manager.view.showAnimationEditor();
 					break;
 					case 'tracks':
-					editor.Manager.resource.showAudioEditor();
+					editor.Manager.view.showAudioEditor();
 					break;
 					default:
 					break;
@@ -169,12 +177,6 @@ AngoraEditor.PropertyGrid.prototype = {
 		var index=this.findRow(attr);
 		this.Dom.propertygrid('deleteRow', index);
 	},
-	endEdit: function(){
-		//if(this.selectedrow!=null){
-		//	var ed = this.Dom.propertygrid('getEditor', {index:this.selectedrow,field:'value'});
-		//	this.Dom.propertygrid('endEdit', this.selectedrow);
-		//}
-	},
 	/**
 	* refresh the property grid
 	* @method refresh
@@ -190,7 +192,7 @@ AngoraEditor.PropertyGrid.prototype = {
 	*/
 	reset : function () {
 		this.data=[];
-		this.Dom.propertygrid('loadData', []);
+		this.Dom.propertygrid('loadData', this.data);
 	}
 }
 
