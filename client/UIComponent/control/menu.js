@@ -42,7 +42,7 @@ AngoraEditor.Menu.prototype = {
 				case 'tilemap':editor.Manager.view.showTiledMapEditor();break;
 				case 'particle':editor.Manager.view.showParticleEditor();break;
 				case 'audio':editor.Manager.view.showAudioEditor();break;
-				case 'anime':editor.Manager.view.showAnimationEditor();break;
+				case 'anime':editor.Manager.view.showAnimeEditor();break;
 				case 'physics':editor.Manager.view.showPhysicsEditor();break;
 				default:break;
 			}

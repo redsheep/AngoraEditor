@@ -20,10 +20,13 @@ AngoraEditor.ManagerController.ResourceManager = function (editor) {
 AngoraEditor.ManagerController.ResourceManager.prototype = {
 	load:function(game,res){
 		var projectPath = this.editor.Data.project.path;
+		var respath = '{0}/{1}'.format(projectPath,res.path);
 		switch (res.type) {
 			case 'image':
-				game.load.image(res.id,'{0}/{1}'.format(projectPath,res.path));
+				game.load.image(res.id,respath);
 				break;
+			case 'spritesheet':
+				game.load.spritesheet(res.id, respath, parseInt(res.width/res.Xframe), parseInt(res.height/res.Yframe));
 			default:
 		}
 	},
@@ -33,6 +36,9 @@ AngoraEditor.ManagerController.ResourceManager.prototype = {
 		if(this.editor.Data.game.curState!=null)
 			res.Local = this.editor.Data.game.curState.resources;
 		return res;
+	},
+	get:function(resID){
+		return this.editor.Data.game.resources[resID];
 	},
 	/**
 	* add a resource into the manager

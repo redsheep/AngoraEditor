@@ -62,8 +62,8 @@ function ConvexHull(){
 };
 AngoraEditor.UIComponent.PhysicsEditor=function(editor){
   this.editor=editor;
-  this.href = '/dialog/openProject';
-  this.view = '	<div class="easyui-layout" fit="true"> \
+  this.title = 'PhysicsEditor';
+  this.view = '	<div id="page" class="easyui-layout" fit="true"> \
   	<div data-options="region:\'north\'" style="height:64px;"> \
   		<div style="overflow:hidden"> \
   			<select id="decompmethod" class="easyui-combobox" style="width:200px;"> \
@@ -85,8 +85,8 @@ AngoraEditor.UIComponent.PhysicsEditor=function(editor){
   		<button id="btn_cancel" style="float:right;margin-top:10px;">Cancel</button> \
   	</div> \
   	</div>';
-  this.width = 400;
-  this.height = 300;
+  this.width = 480;
+  this.height = 480;
   this.modal = true;
   this.resize = false;
   //this.onConfirm = null;
@@ -95,14 +95,14 @@ AngoraEditor.UIComponent.PhysicsEditor=function(editor){
 AngoraEditor.UIComponent.PhysicsEditor.prototype={
   show: function () {
     self=this;
-    $.get(this.href,function(data){
-      $('#dd').html(data);
+    //$.get(this.href,function(data){
+      $('#dd').html(this.view);
       self.onLoad(self);
-    });
+    //});
   },
   onShow:function(self){
     $('#dd').dialog({
-      title: self.href.split('/').pop(),
+      title: self.title,
       left:(window.innerWidth-self.width)/2,
       top:(window.innerHeight-self.height)/2,
       width: self.width,
@@ -117,23 +117,22 @@ AngoraEditor.UIComponent.PhysicsEditor.prototype={
     });
   },
   onLoad:function(self){
-    var editor=edt;
-		if(editor.node.selected==null){
-			$('#dd').dialog('close');
-			return false;
-		}
-		var res=editor.res.get(editor.node.selected.image);
-		var path=editor.project.currentProject.path+"/"+res.path;
-		var body=editor.node.selected.body;
+    var self = this;
+    var editor=this.editor;
+    var selected = editor.Manager.gameNode.getSelected();
+		var res=editor.Manager.resource.get(selected.property.image);
+		var path=editor.Manager.project.getPath()+"/"+res.path;
+		var body=selected.property.bodyShape;
 		var scalex=res.width/256;
 		var scaley=res.height/256;
+    $("#page").layout();
 
 		var convas=document.getElementById("convex");
 		var ctx=convas.getContext("2d");
 		ctx.canvas.height=256;
 		ctx.canvas.width=256;
 		var convex = new ConvexHull();
-		var concave = new decomp.Polygon();
+		//var concave = new decomp.Polygon();
 		var points=[];
 		var colors = ["#f99","#9f9","#99f","#ff9"];
 		var selectedmethod="concave";
@@ -238,6 +237,7 @@ AngoraEditor.UIComponent.PhysicsEditor.prototype={
 		$("#btn_cancel").click(function(){
 			$('#dd').dialog('close');
 		});
+    self.onShow(self);
   },
   onClose:function(self){ },
   onCreate:function(){ },

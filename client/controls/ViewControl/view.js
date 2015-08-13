@@ -50,6 +50,10 @@ AngoraEditor.ManagerController.ViewManager.prototype = {
     var dlg = new AngoraEditor.UIComponent.HelpDialog(this.editor);
     dlg.show();
   },
+  showNewNodeDialog: function(){
+    var dlg = new AngoraEditor.UIComponent.NewNodeDialog(this.editor);
+    dlg.show();
+  },
   showNewProjectDialog : function () {
     var self = this;
 		var dlg = new AngoraEditor.UIComponent.NewProjectDialog(this.editor);

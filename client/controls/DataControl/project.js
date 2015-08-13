@@ -54,6 +54,9 @@ AngoraEditor.ManagerController.ProjectManager.prototype = {
 	remove : function (name) {
 		this.editor.Data.project.remove(name);
 	},
+	getPath: function(){
+		return this.editor.Data.project.path;
+	},
 	/**
 	* save project
 	* @method save

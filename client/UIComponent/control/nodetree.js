@@ -35,7 +35,7 @@ AngoraEditor.NodeTree.prototype = {
 	setupCallback:function(){
 		var self = this;
 		$("#addNode").click(function () {
-
+			self.editor.Manager.view.showNewNodeDialog();
 		});
 		$("#removeNode").click(function () {
 			//self.editor.Manager.gameNode.remove();
@@ -61,7 +61,8 @@ AngoraEditor.NodeTree.prototype = {
 			data : this.nodes,
 			dnd : true,
 			onSelect : function (node) {
-				if(self.selected.id !== node.id)
+				var selected = self.editor.Manager.gameNode.getSelected();
+				if(selected == null || selected.id !== node.id)
 					editor.Manager.gameNode.select(node.id);
 			},
 			onBeforeDrop : function (targetNode, source, point) {

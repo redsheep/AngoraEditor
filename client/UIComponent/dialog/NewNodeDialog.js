@@ -1,5 +1,5 @@
 
-AngoraEditor.UIComponent.NewNodeDialog=function(){
+AngoraEditor.UIComponent.NewNodeDialog=function(editor){
   this.types = [{
   		"text" : "Node2D",
   		"iconCls" : "icon-ae-node2d",
@@ -99,7 +99,7 @@ AngoraEditor.UIComponent.NewNodeDialog=function(){
   	}
   ];
   this.editor=editor;
-  this.href = '/dialog/newProject';
+  this.title = "New Game Object";
   this.view = '<div class="easyui-layout" fit="true">  \
                 	<div data-options="region:\'center\'" style="overflow:scoll;">  \
                 		<ul id="tt" class="easyui-tree">  \
@@ -121,7 +121,7 @@ AngoraEditor.UIComponent.NewNodeDialog.prototype={
   },
   onShow:function(self){
     $('#dd').dialog({
-      title: self.href.split('/').pop(),
+      title: self.title,
       left:(window.innerWidth-self.width)/2,
       top:(window.innerHeight-self.height)/2,
       width: self.width,
@@ -136,8 +136,9 @@ AngoraEditor.UIComponent.NewNodeDialog.prototype={
     });
   },
   onLoad:function(self){
-    var editor = edt;
-  	var customclass=editor.project.customclass;
+    var editor = this.editor;
+    var types = this.types;
+  	/*var customclass=editor.project.customclass;
   	if(customclass!=null){
   		types[types.length-1].children=[];
   		for(i in customclass){
@@ -147,7 +148,7 @@ AngoraEditor.UIComponent.NewNodeDialog.prototype={
   				"type" : 'custom'
   			});
   		}
-  	}
+  	}*/
   	$('#tt').tree({
   		data : types,
   		onDblClick : function (nodetype) {
@@ -160,6 +161,7 @@ AngoraEditor.UIComponent.NewNodeDialog.prototype={
   			$('#dd').dialog('close');
   		}
   	});
+    self.onShow(self);
   },
   onClose:function(){},
   onConfirm:function(project){}

@@ -45,6 +45,7 @@ AngoraEditor.ManagerController.GameNodeManager.prototype = {
 		var gameNode = null;
 		switch (node.type) {
 			case 'sprite':
+			case 'animate':
 				gameNode = game.add.sprite(node.property.x,node.property.y,node.property.image);
 				break;
 			case 'tilesprite':
@@ -54,7 +55,7 @@ AngoraEditor.ManagerController.GameNodeManager.prototype = {
 			default:
 		}
 		if(gameNode!=null){
-			gameNode.scale.set(node.property.scaleX,node.property.scaleY);
+			//gameNode.scale.set(node.property.scaleX,node.property.scaleY);
 			//gameNode.fixedToCamera=true;
 	    gameNode.inputEnabled = true;
 			//gameNode.input.enableDrag(false);
@@ -93,8 +94,8 @@ AngoraEditor.ManagerController.GameNodeManager.prototype = {
 	* @param {string} id
 	*/
 	select : function (nodeID) {
-		this.editor.UI.nodeTree.select(nodeID);
 		this.editor.Data.game.curState.selectNode(nodeID);
+		this.editor.UI.nodeTree.select(nodeID);
 		var selectedNode=this.editor.Data.game.curState.selected;
 		this.editor.UI.propertyGrid.reset();
 		this.editor.UI.eventPanel.reset();
@@ -108,6 +109,7 @@ AngoraEditor.ManagerController.GameNodeManager.prototype = {
 		}
 		this.editor.UI.propertyGrid.refresh();
 		this.editor.UI.eventPanel.refresh();
+		this.editor.UI.menu.activeMenuItem(selectedNode.type);
 		this.editor.UI.gamePanel.showAnchor();
 		this.editor.UI.gamePanel.snapAnchorToObject(selectedNode.property.x,
 		selectedNode.property.y,selectedNode.property.width,selectedNode.property.height);
@@ -127,6 +129,9 @@ AngoraEditor.ManagerController.GameNodeManager.prototype = {
 	* @param {Object} node
 	*/
 	remove : function (nodeID) {
+	},
+	getSelected:function(){
+		return this.editor.Data.game.curState.selected;
 	},
 	/**
 	* create a clone node

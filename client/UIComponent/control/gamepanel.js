@@ -220,7 +220,13 @@ AngoraEditor.GamePanel.prototype = {
 		//},this);
 	},
 	snapAnchorToObject:function(x,y,w,h){
-		this.game.world.bringToTop(this.game.anchorGroup);
+		var selected = this.editor.Manager.gameNode.getSelected();
+		var index = this.game.world.getChildIndex(selected.ref)+1;
+		if(index>=this.game.world.children.length-1)
+			this.game.world.bringToTop(this.game.anchorGroup);
+		else
+			this.game.world.setChildIndex(this.game.anchorGroup,index);
+		//this.game.world.bringToTop(this.game.anchorGroup);
 		this.game.anchorLT.x=x;
 		this.game.anchorLT.y=y;
 		this.game.anchorRB.x=x+parseFloat(w);
