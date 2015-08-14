@@ -25,6 +25,8 @@ GameNode = function (state) {
 
 	this.events		= {};
 
+	this.interactive = true;
+
 	this.category = {
 		gameObject:['sprite','image','tilesprite',
 		'animate','text','bitmaptext','button','particle'],
@@ -34,7 +36,8 @@ GameNode = function (state) {
 		physics:['sprite','animate'],
 		camera:['camera'],
 		audio:['audio'],
-		particle:['particle']
+		particle:['particle'],
+		invisible:['audio']
 	};
 	this.DefaultValue = {
 		x:0,y:0,height:32,width:32,image:'default',text:'text',
@@ -111,6 +114,7 @@ GameNode.prototype = {
 		if(type === 'audio'){
 			this.setAttr('audio',node.audio);
 			this.setAttr('tracks',node.tracks);
+			this.interactive=false;
 		}
 		if(type === 'tilemap'){
 			this.setAttr('tileW',node.tileW);

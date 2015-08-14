@@ -218,6 +218,10 @@ AngoraEditor.GamePanel.prototype = {
 				break;
 			case 'spritesheet':
 				game.load.spritesheet(res.id, respath, parseInt(res.width/res.Xframe), parseInt(res.height/res.Yframe));
+				break;
+			case 'audio':
+				game.load.audio(res.id,respath);
+				break;
 			default:
 		}
 	},
@@ -245,14 +249,22 @@ AngoraEditor.GamePanel.prototype = {
 				gameNode.makeParticles(node.property.image);
 				gameNode.start(false, node.property.lifespan, node.property.frequency);
 				break;
+			case 'audio':
+				gameNode = game.add.audio(node.property.audio);
+				if(audio.tracks!=null){
+					for(var key in audio.tracks){
+						var marker = audio.tracks[key];
+						audio.addMarker(marker.name, marker.start, marker.duration);
+					}
+				}
+				break;
 			default:
 		}
 		if(gameNode!=null){
-			gameNode.scale.set(node.property.scaleX,node.property.scaleY);
-			//gameNode.fixedToCamera=true;
-	    gameNode.inputEnabled = true;
-			//gameNode.input.enableDrag(false);
+			if(gameNode.scale != null)
+				gameNode.scale.set(node.property.scaleX,node.property.scaleY);
 			if(gameNode.events != null){
+	    	gameNode.inputEnabled = true;
 				gameNode.events.onInputDown.add(function(sprite, pointer){
 					self.editor.Manager.gameNode.select(node.id);
 					sprite.game.anchorBounds.startPoint={x:sprite.x,y:sprite.y};

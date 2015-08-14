@@ -35,6 +35,17 @@ AngoraEditor.NodeTree.prototype = {
 	setupCallback:function(){
 		var self = this;
 		var editor = this.editor;
+		$.extend($.fn.tree.methods,{
+			unselect:function(jq,target){
+				return jq.each(function(){
+					var opts = $(this).tree('options');
+					$(target).removeClass('tree-node-selected');
+					if (opts.onUnselect){
+						opts.onUnselect.call(this, $(this).tree('getNode',target));
+					}
+				});
+			}
+		});
 		$("#addNode").click(function () {
 			self.editor.Manager.view.showNewNodeDialog();
 		});
@@ -128,8 +139,10 @@ AngoraEditor.NodeTree.prototype = {
 	* @method select
 	*/
 	unselect : function () {
-		editor.Manager.game.node.unselect();
-		//this.tree.tree('unSelect', selected.target);
+		var selected = this.Dom.tree('getSelected');
+		if(selected != null){
+			this.Dom.tree('unselect',selected.target);
+		}
 	},
 	/**
 	* update the tree node

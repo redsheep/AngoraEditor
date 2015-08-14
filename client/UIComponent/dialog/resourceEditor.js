@@ -112,13 +112,13 @@ AngoraEditor.UIComponent.ResourceEditor.prototype={
   		$(this).addClass("selectedrect");
   	});
   	$('#addimgbtn').click(function(){
-  		editor.file.openFileDialog('',function(files){
+  		editor.Manager.view.openFileDialog('',function(files){
   			var uploads=JSON.parse(files);
   			for( i in uploads ){
   				var filename = uploads[i];
   				var resID = filename.substr(0, filename.lastIndexOf('.')) || filename;
   				var respath = "{0}/data/{1}".format(projectpath,filename);
-  				addObjectToPane(resID,'image',respath,'global');
+  				this.addObjectToPane(resID,'image',respath,'global');
   				$('#'+resID).load(function(){
   					var filepath = $(this).attr('src');
   					var filename = filepath.substr(filepath.lastIndexOf('/')+1,filepath.length);
@@ -130,15 +130,39 @@ AngoraEditor.UIComponent.ResourceEditor.prototype={
   		},'image/*', true);
   	});
   	$('#addsndbtn').click(function(){
-  		editor.file.openFileDialog('',function(files){
+  		editor.Manager.view.openFileDialog('',function(files){
   			var uploads=JSON.parse(files);
   			for( i in uploads ){
   				var filename = uploads[i];
   				var resID = filename.substr(0, filename.lastIndexOf('.')) || filename;
-  				addObjectToPane(resID,'audio',"/data/audio.png".format(type),'global');
+  				this.addObjectToPane(resID,'audio',"/data/audio.png".format(type),'global');
   				editor.res.add(resID,'audio',{path:filename});
   			}
   		},'audio/*', true);
+  	});
+  	$('#addotherbtn').click(function(){
+  		var dlg=$('#otherdd').dialog({
+  			title: 'My Dialog',
+  			width: 360,
+  			height: 400,
+  			closed: false,
+  			cache: false,
+  			href: "/dialog/otherResource",
+  			modal: true,
+  			onClose: function(){
+  				var newres=editor.res.selected;
+  				var resID=newres.id;
+  				switch(newres.type){
+  				case 'spritesheet':
+  				case 'atlas':
+  					addObjectToPane(resID,'image',null,'global');
+  					break;
+  				default:
+  					addObjectToPane(resID,'other',"/data/{0}.png".format(newres.type),'global');
+  					break;
+  				}
+  			}
+  		});
   	});
   	$("#cm_res").menu({onClick:function (item) {
   		var resID=$(".selectedrect img").attr('id');
@@ -187,31 +211,6 @@ AngoraEditor.UIComponent.ResourceEditor.prototype={
   		res.Xframe=$('#Xframe').val();
   		res.Yframe=$('#Yframe').val();
   		$('#dd_sheet').dialog('close');
-  	});
-  	$('#addotherbtn').click(function(){
-  		var dlg=$('#otherdd').dialog({
-  			title: 'My Dialog',
-  			width: 360,
-  			height: 400,
-  			closed: false,
-  			cache: false,
-  			href: "/dialog/otherResource",
-  			modal: true,
-  			onClose: function(){
-  				var newres=editor.res.selected;
-  				var resID=newres.id;
-  				switch(newres.type){
-  				case 'spritesheet':
-  				case 'atlas':
-  					addObjectToPane(resID,'image',null,'global');
-  					break;
-  				default:
-  					addObjectToPane(resID,'other',"/data/{0}.png".format(newres.type),'global');
-  					break;
-  				}
-
-  			}
-  		});
   	});
   	$('#okbtn').click(function(){
   		resID = $(".selectedrect img").attr('id');

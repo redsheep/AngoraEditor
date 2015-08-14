@@ -89,10 +89,11 @@ AngoraEditor.ManagerController.GameNodeManager.prototype = {
 		this.editor.UI.propertyGrid.refresh();
 		this.editor.UI.eventPanel.refresh();
 		this.editor.UI.menu.activeMenuItem(selectedNode.type);
+		if(selectedNode.interactive){
 		this.editor.UI.gamePanel.showAnchor();
 		this.editor.UI.gamePanel.snapAnchorToObject(selectedNode.property.x,
 		selectedNode.property.y,selectedNode.property.width,selectedNode.property.height);
-		//this.editor.Data.game.selected;
+		}//this.editor.Data.game.selected;
 	},
 	unselect:function(){
 		if(this.editor.Data.game.curState!=null &&
@@ -100,6 +101,7 @@ AngoraEditor.ManagerController.GameNodeManager.prototype = {
 			this.editor.UI.gamePanel.hideAnchor();
 			this.editor.UI.propertyGrid.reset();
 			this.editor.UI.eventPanel.reset();
+			this.editor.UI.nodeTree.unselect();
 			this.editor.Data.game.curState.unselect();
 		}
 	},
