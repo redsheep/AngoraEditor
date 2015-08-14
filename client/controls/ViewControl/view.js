@@ -33,26 +33,32 @@ AngoraEditor.ManagerController.ViewManager.prototype = {
   showParticleEditor : function () {
     var dlg = new AngoraEditor.UIComponent.ParticleEditor(this.editor);
     dlg.show();
+    return dlg;
 	},
   showPhysicsEditor : function () {
     var dlg = new AngoraEditor.UIComponent.PhysicsEditor(this.editor);
     dlg.show();
+    return dlg;
 	},
   showResourceEditor : function () {
     var dlg = new AngoraEditor.UIComponent.ResourceEditor(this.editor);
     dlg.show();
+    return dlg;
 	},
   showTilemapEditor : function () {
     var dlg = new AngoraEditor.UIComponent.TilemapEditor(this.editor);
     dlg.show();
+    return dlg;
 	},
   showHelpDialog : function(){
     var dlg = new AngoraEditor.UIComponent.HelpDialog(this.editor);
     dlg.show();
+    return dlg;
   },
   showNewNodeDialog: function(){
     var dlg = new AngoraEditor.UIComponent.NewNodeDialog(this.editor);
     dlg.show();
+    return dlg;
   },
   showNewProjectDialog : function () {
     var self = this;
@@ -69,6 +75,7 @@ AngoraEditor.ManagerController.ViewManager.prototype = {
 		dlg.onConfirm = self.editor.Manager.project.load;
 		dlg.onCreate = self.showNewProjectDialog;
 		dlg.show();
+    return dlg;
   },
   showAboutDialog : function(){
 

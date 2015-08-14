@@ -100,14 +100,14 @@ AngoraEditor.UIComponent.NewNodeDialog=function(editor){
   ];
   this.editor=editor;
   this.title = "New Game Object";
-  this.view = '<div class="easyui-layout" fit="true">  \
+  this.view = '<div id="page" class="easyui-layout" fit="true">  \
                 	<div data-options="region:\'center\'" style="overflow:scoll;">  \
                 		<ul id="tt" class="easyui-tree">  \
                 		</ul>  \
                 	</div>  \
                 </div>';
-  this.width = 400;
-  this.height = 300;
+  this.width = 480;
+  this.height = 360;
   this.modal = true;
   this.resize = false;
 }
@@ -138,6 +138,7 @@ AngoraEditor.UIComponent.NewNodeDialog.prototype={
   onLoad:function(self){
     var editor = this.editor;
     var types = this.types;
+    $('#page').layout();
   	/*var customclass=editor.project.customclass;
   	if(customclass!=null){
   		types[types.length-1].children=[];

@@ -105,19 +105,6 @@ AngoraEditor.UIComponent.ResourceEditor.prototype={
   			this.addObjectToPane(resID,'other',null,"/data/{0}.png".format(type),'global');
   		}
   	}
-  	/*if(editor.Data.curState.selected!=null){
-  		switch(editor.node.selected.type){
-  			case 'sprite':
-  			case 'tilesprite':
-  			case 'image':
-  			case 'animate':
-  				$('#resourcepane').accordion({selected:0});break;
-  			case 'audio':
-  				$('#resourcepane').accordion({selected:1});break;
-  			default:
-  				$('#resourcepane').accordion({selected:2});break;
-  		}
-  	}*/
   	$('#resourcepane').delegate('.resrect',"mousedown",function(){
   		var selected=$(".selectedrect");
   		if(selected.length>0)
@@ -227,7 +214,8 @@ AngoraEditor.UIComponent.ResourceEditor.prototype={
   		});
   	});
   	$('#okbtn').click(function(){
-  		editor.res.selected=editor.res.get($(".selectedrect img").attr('id'));
+  		resID = $(".selectedrect img").attr('id');
+      self.onConfirm(resID);
   		$('#dd').dialog('close');
   	});
   	$('#canclebtn').click(function(){
@@ -237,7 +225,7 @@ AngoraEditor.UIComponent.ResourceEditor.prototype={
   },
   onClose:function(self){ },
   onCreate:function(){ },
-  onConfirm:function(project){ }
+  onConfirm:function(resID){ }
 }
 
 AngoraEditor.UIComponent.ResourceEditor.constructor=AngoraEditor.UIComponent.ResourceEditor;

@@ -37,7 +37,8 @@ GameNode = function (state) {
 		particle:['particle']
 	};
 	this.DefaultValue = {
-		x:0,y:0,height:32,width:32,image:''
+		x:0,y:0,height:32,width:32,image:'default',text:'text',
+		scaleX:1,scaleY:1,maxParticles:100,lifespan:1000,frequency:50
 	}
 
 	return this;
@@ -52,9 +53,20 @@ GameNode.prototype = {
 		if(typeof value === 'undefined')
 			value=this.DefaultValue[key];
 		this.property[key]=value;
+		if(this.ref !== null)
+			this.setRefAttr(key,value);
 	},
 	removeAttr:function(key){
 		delete this.property[key];
+	},
+	setRefAttr:function(key,value){
+		switch (key) {
+			case 'image':
+				this.ref.loadTexture(value);
+				break;
+			default:
+				this.ref[key]=value;
+		}
 	},
 	/**
 	* init the node attribute

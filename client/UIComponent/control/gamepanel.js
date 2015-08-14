@@ -66,12 +66,10 @@ AngoraEditor.GamePanel.prototype = {
 	},
 	create:function(){
 		var self = this;
-		//var iBg = new Image();
-		//iBg.src = this.bgData;
-		//this.game.cache.addImage('bg', this.bgData, iBg);
+
 		this.game.world.setBounds(-1024,-1024,2048,2048);
 		this.game.world.removeAll();
-		//var config = {width:800,height:600};//editor.Data.project.config;
+
 		this.game.stage.backgroundColor = '#4d4d4d';
 		this.game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
 		this.game.scale.setShowAll();
@@ -103,7 +101,7 @@ AngoraEditor.GamePanel.prototype = {
 				if(pointer.button === Phaser.Mouse.LEFT_BUTTON){
 					sprite.input.draggable = true;
 					sprite.startPoint={x:sprite.x,y:sprite.y};
-					//sprite.startGroupOffset={x:sprite.game.anchorGroup.x,y:sprite.game.anchorGroup.y};
+
 				}else{
 					sprite.input.draggable = false;
 				}
@@ -114,29 +112,19 @@ AngoraEditor.GamePanel.prototype = {
 					sprite.x=Math.round(sprite.startPoint.x+dx);
 					var dy=(dragY-sprite.startPoint.y)/sprite.game.world.scale.y;
 					sprite.y=Math.round(sprite.startPoint.y+dy);
-					var x,y,w,h;
-					//switch (sprite.anchorType) {
-					//	case "LT":
-							x=Math.round(sprite.game.anchorLT.x);
-							y=Math.round(sprite.game.anchorLT.y);
-							w=Math.round(sprite.game.anchorRB.x-sprite.game.anchorLT.x);
-							h=Math.round(sprite.game.anchorRB.y-sprite.game.anchorLT.y);
-					//		break;
-					//	case "RB":
-					//		w=Math.round(sprite.game.anchorRB.x-sprite.game.anchorLT.x);
-					//		h=Math.round(sprite.game.anchorRB.y-sprite.game.anchorLT.y);
-					//		break;
-					//	default:
-					//}
+					var x=Math.round(sprite.game.anchorLT.x);
+					var y=Math.round(sprite.game.anchorLT.y);
+					var w=Math.round(sprite.game.anchorRB.x-sprite.game.anchorLT.x);
+					var h=Math.round(sprite.game.anchorRB.y-sprite.game.anchorLT.y);
 					self.snapAnchorToObject(x,y,w,h);
-					self.editor.Manager.gameNode.updateProperty('x',x);
-					self.editor.Manager.gameNode.updateProperty('y',y);
-					self.editor.Manager.gameNode.updateProperty('width',w);
-					self.editor.Manager.gameNode.updateProperty('height',h);
+					self.editor.Manager.gameNode.updateProperty('x',x,true);
+					self.editor.Manager.gameNode.updateProperty('y',y,true);
+					self.editor.Manager.gameNode.updateProperty('width',w,true);
+					self.editor.Manager.gameNode.updateProperty('height',h,true);
 				},this);
 			return anchor;
 		};
-		//this.game.anchorSprite=this.game.add.sprite(0,0);
+
 		this.game.anchorBounds=this.game.add.graphics(0,0);
 		this.game.anchorBounds.inputEnabled = true;
 		this.game.anchorBounds.input.enableDrag(false);
@@ -145,7 +133,6 @@ AngoraEditor.GamePanel.prototype = {
 			if(pointer.button === Phaser.Mouse.LEFT_BUTTON){
 				sprite.input.draggable = true;
 				sprite.startPoint={x:sprite.x,y:sprite.y};
-				//sprite.startGroupOffset={x:sprite.game.anchorGroup.x,y:sprite.game.anchorGroup.y};
 			}else{
 				sprite.input.draggable = false;
 			}
@@ -156,15 +143,12 @@ AngoraEditor.GamePanel.prototype = {
 				sprite.x=Math.round(sprite.startPoint.x+dx);
 				var dy=(dragY-sprite.startPoint.y)/sprite.game.world.scale.y;
 				sprite.y=Math.round(sprite.startPoint.y+dy);
-				//sprite.hitArea.x=sprite.hitArea.y=0;
-				//sprite.x=sprite.y=0;
-				//console.log(sprite.x,sprite.y,sprite.game.anchorGroup.x,sprite.game.anchorGroup.y);
-				//sprite.x=sprite.y=0;
+
 				var x=Math.round(sprite.x);
 				var y=Math.round(sprite.y);
-				self.editor.Manager.gameNode.updateProperty('x',x);
-				self.editor.Manager.gameNode.updateProperty('y',y);
-				//self.snapAnchorToObject(sprite.x,sprite.y,sprite.hitArea.width,sprite.hitArea.height);
+				self.editor.Manager.gameNode.updateProperty('x',x,true);
+				self.editor.Manager.gameNode.updateProperty('y',y,true);
+
 				self.snapAnchorToObject(x,y,sprite.hitArea.width,sprite.hitArea.height);
 			},this);
 		this.game.anchorLT=create(0,0,"LT");
@@ -181,21 +165,7 @@ AngoraEditor.GamePanel.prototype = {
 			this.game.anchorBounds.lineStyle(2, 0xff0000, 1);
 			var rect = this.game.anchorBounds.hitArea;
 			this.game.anchorBounds.drawRect(rect.x,rect.y,rect.width,rect.height);
-			//this.game.anchorBounds.moveTo(this.game.anchorLT.x,this.game.anchorLT.y);
-			//this.game.anchorBounds.lineTo(this.game.anchorRB.x,this.game.anchorLT.y);
-			//this.game.anchorBounds.lineTo(this.game.anchorRB.x,this.game.anchorRB.y);
-			//this.game.anchorBounds.lineTo(this.game.anchorLT.x,this.game.anchorRB.y);
-			//this.game.anchorBounds.lineTo(this.game.anchorLT.x,this.game.anchorLT.y);
 		}
-		/*if(this.game.selected!=null && this.delay%8==0){
-			this.editor.Manager.gameNode.updateProperty('x',this.game.selected.x);
-			this.editor.Manager.gameNode.updateProperty('y',this.game.selected.y);
-			this.editor.Manager.gameNode.updateProperty('width',this.game.selected.width);
-			this.editor.Manager.gameNode.updateProperty('height',this.game.selected.height);
-			this.editor.Manager.gameNode.updateProperty('scaleX',this.game.selected.scale.x);
-			this.editor.Manager.gameNode.updateProperty('scaleY',this.game.selected.scale.y);
-		}*/
-		//this.delay++;
 	},
 	/**
 	* setup
@@ -204,7 +174,7 @@ AngoraEditor.GamePanel.prototype = {
 	*/
 	setup: function(){
 		var editor = this.editor;
-		//this.game.world.setBounds(-1024,-1024,2048,2048);
+
 		this.game.world.removeAll();
 		this.create();
 
@@ -212,12 +182,10 @@ AngoraEditor.GamePanel.prototype = {
 		for(var key in resources){
 			this.addResource(resources[key]);
 		}
-		//this.game.load.onLoadComplete.addOnce(function(){
-			var nodes = editor.Data.game.curState.nodes;
-			for(var key in nodes){
-				this.addNode(nodes[key]);
-			}
-		//},this);
+		var nodes = editor.Data.game.curState.nodes;
+		for(var key in nodes){
+			this.addNode(nodes[key]);
+		}
 	},
 	snapAnchorToObject:function(x,y,w,h){
 		var selected = this.editor.Manager.gameNode.getSelected();
@@ -226,7 +194,6 @@ AngoraEditor.GamePanel.prototype = {
 			this.game.world.bringToTop(this.game.anchorGroup);
 		else
 			this.game.world.setChildIndex(this.game.anchorGroup,index);
-		//this.game.world.bringToTop(this.game.anchorGroup);
 		this.game.anchorLT.x=x;
 		this.game.anchorLT.y=y;
 		this.game.anchorRB.x=x+parseFloat(w);
@@ -234,10 +201,6 @@ AngoraEditor.GamePanel.prototype = {
 		this.game.anchorBounds.x=x;
 		this.game.anchorBounds.y=y;
 		this.game.anchorBounds.hitArea.setTo(0,0,parseFloat(w),parseFloat(h));
-		//this.game.anchorSprite.x=x;
-		//this.game.anchorSprite.y=y;
-		//this.game.anchorSprite.width=parseInt(w);
-		//this.game.anchorSprite.height=parseInt(h);
 	},
 	hideAnchor:function(){
 		this.game.anchorGroup.visible=false;
@@ -262,7 +225,7 @@ AngoraEditor.GamePanel.prototype = {
 		this.game.load.start();
 	},
 	addNode:function(node){
-		//this.editor.Data.game.curState.addNode(node);
+
 		var game=this.game;
 		var gameNode = null;
 		switch (node.type) {
@@ -274,18 +237,28 @@ AngoraEditor.GamePanel.prototype = {
 				gameNode = game.add.tileSprite(node.property.x,node.property.y,
 					node.property.width,node.property.height,node.property.image);
 				break;
+			case 'text':
+				gameNode = game.add.text(node.property.x,node.property.y,node.property.text);
+				break;
+			case 'particle':
+				gameNode = game.add.emitter(node.property.x,node.property.y,node.property.maxParticles);
+				gameNode.makeParticles(node.property.image);
+				gameNode.start(false, node.property.lifespan, node.property.frequency);
+				break;
 			default:
 		}
 		if(gameNode!=null){
-			//gameNode.scale.set(node.property.scaleX,node.property.scaleY);
+			gameNode.scale.set(node.property.scaleX,node.property.scaleY);
 			//gameNode.fixedToCamera=true;
 	    gameNode.inputEnabled = true;
 			//gameNode.input.enableDrag(false);
-			gameNode.events.onInputDown.add(function(sprite, pointer){
-				self.editor.Manager.gameNode.select(node.id);
-				sprite.game.anchorBounds.startPoint={x:sprite.x,y:sprite.y};
-				sprite.game.anchorBounds.input.startDrag(pointer);
-			}, this);
+			if(gameNode.events != null){
+				gameNode.events.onInputDown.add(function(sprite, pointer){
+					self.editor.Manager.gameNode.select(node.id);
+					sprite.game.anchorBounds.startPoint={x:sprite.x,y:sprite.y};
+					sprite.game.anchorBounds.input.startDrag(pointer);
+				}, this);
+			}
 		}
 		return gameNode;
 	},
@@ -316,8 +289,6 @@ AngoraEditor.GamePanel.prototype = {
 	reset: function(){
 		this.game.world.removeAll();
 		this.create();
-		//this.pane.empty();
-		//this.offset={x:0,y:0};
 	}
 }
 

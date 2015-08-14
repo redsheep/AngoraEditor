@@ -2,7 +2,7 @@
 AngoraEditor.UIComponent.OpenProjectDialog=function(editor){
   this.editor=editor;
   this.href = '/dialog/openProject';
-  this.view = '	<div class="easyui-layout" fit="true">  \
+  this.view = '	<div id = "page" class="easyui-layout" fit="true">  \
     		<div data-options="region:\'center\'">  \
     			<div id="projects"></div>  \
     		</div>  \
@@ -46,6 +46,7 @@ AngoraEditor.UIComponent.OpenProjectDialog.prototype={
   },
   onLoad:function(self){
     var editor=self.editor;
+    $('#page').layout();
     editor.Data.getAllProjects(function(data){
       var projects=JSON.parse(data);
       for (var key in projects) {

@@ -44,14 +44,15 @@ AngoraEditor.ManagerController.GameNodeManager.prototype = {
 		node = this.editor.Data.game.curState.addNode(node);
 		var gameNode=this.editor.UI.gamePanel.addNode(node);
 		this.editor.Data.game.curState.nodes[node.id].ref=gameNode;
+		node.setAttr('width',gameNode.width);
+		node.setAttr('height',gameNode.height);
 		this.editor.UI.nodeTree.addNode(node);
 	},
-	updateProperty:function(name,value){
+	updateProperty:function(name,value,delay){
 		var node = this.editor.Data.game.curState.selected;
 		if(node!=null){
 			node.setAttr(name,value);
-			node.ref[name]=value;
-			this.editor.UI.propertyGrid.updateRow(name,value);
+			this.editor.UI.propertyGrid.updateRow(name,value,delay);
 			if(name=='x'||name=='y'||name=='width'||name=='height')
 				this.editor.UI.gamePanel.snapAnchorToObject(node.ref.x,node.ref.y,node.ref.width,node.ref.height);
 			//this.editor.UI.gamePanel.updateProperty(name,value);
@@ -94,7 +95,8 @@ AngoraEditor.ManagerController.GameNodeManager.prototype = {
 		//this.editor.Data.game.selected;
 	},
 	unselect:function(){
-		if(this.editor.Data.game.curState.selected!=null){
+		if(this.editor.Data.game.curState!=null &&
+			this.editor.Data.game.curState.selected!=null){
 			this.editor.UI.gamePanel.hideAnchor();
 			this.editor.UI.propertyGrid.reset();
 			this.editor.UI.eventPanel.reset();

@@ -76,9 +76,34 @@ AngoraEditor.PropertyGrid.prototype = {
 				self.selectedrow=null;
 				var name = field['name'];
 				var value = field['value'];
-				if(!isNaN(value)) value=parseFloat(value);
-				editor.Manager.gameNode.updateProperty(name,value);
-			},
+				switch (name) {
+					case 'image':
+					case 'assetatlas':
+					case 'font':
+					case 'audio':
+					var dlg = editor.Manager.view.showResourceEditor();
+					dlg.onConfirm = function(resID){
+						editor.Manager.gameNode.updateProperty(name,resID);
+						var res = editor.Manager.resource.get(resID);
+						editor.Manager.gameNode.updateProperty('width',res.width);
+						editor.Manager.gameNode.updateProperty('height',res.height);
+					}
+					break;
+					case 'tilemap':
+					editor.Manager.view.showTilemapEditor();
+					break;
+					case 'animations':
+					editor.Manager.view.showAnimationEditor();
+					break;
+					case 'tracks':
+					editor.Manager.view.showAudioEditor();
+					break;
+					default:
+					if(!isNaN(value)) value=parseFloat(value);
+					editor.Manager.gameNode.updateProperty(name,value);
+					break;
+				}
+			}/*,
 			onClickRow:function(index, field){
 				if(!self.dbclick){
 					self.dbclick=true;
@@ -94,7 +119,13 @@ AngoraEditor.PropertyGrid.prototype = {
 					case 'assetatlas':
 					case 'font':
 					case 'audio':
-					editor.Manager.view.showResourceEditor();
+					var dlg = editor.Manager.view.showResourceEditor();
+					dlg.onConfirm = function(resID){
+						editor.Manager.gameNode.updateProperty(name,resID);
+						var res = editor.Manager.resource.get(resID);
+						editor.Manager.gameNode.updateProperty('width',res.width);
+						editor.Manager.gameNode.updateProperty('height',res.height);
+					}
 					break;
 					case 'tilemap':
 					editor.Manager.view.showTilemapEditor();
@@ -108,7 +139,7 @@ AngoraEditor.PropertyGrid.prototype = {
 					default:
 					break;
 				}
-			}
+			}*/
 		});
 	},
 	/**
@@ -157,7 +188,7 @@ AngoraEditor.PropertyGrid.prototype = {
 		}
 	},
 	updateRow : function (attr, value, delay) {
-		if(this.delay%7!=0) return;
+		if(delay==true && this.delay%7!=0) return;
 		var index=this.findRow(attr);
 		//rows[index]['value'] = value;
 		this.Dom.propertygrid('updateRow', {
