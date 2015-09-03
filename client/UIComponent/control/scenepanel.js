@@ -27,6 +27,7 @@ AngoraEditor.ScenePanel.prototype = {
 	setupCallback:function(){
 		var self = this;
 		this.Dom.delegate('.sceneitem', 'click', function () {
+			self.editor.Manager.gameNode.unselect();
 			self.editor.Manager.game.loadState(this.innerHTML);
 		});
 		$("#addScene").click(function () {

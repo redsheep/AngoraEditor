@@ -151,19 +151,19 @@ AngoraEditor.PropertyGrid.prototype = {
 	*/
 	add : function (key, value, grp, append) {
 		var type = 'none';
-		if(this.category.textProperty.contains(key)){
+		if(ObjectInArray(key,this.category.textProperty)){
 			type='text';
-		}else if(this.category.numberProperty.contains(key)){
+		}else if(ObjectInArray(key,this.category.numberProperty)){
 			type='numberbox';
-		}else if(this.category.floatProperty.contains(key)){
+		}else if(ObjectInArray(key,this.category.floatProperty)){
 			type={"type":"numberbox","options":{"precision":1}};
-		}else if(this.category.boolProperty.contains(key)){
+		}else if(ObjectInArray(key,this.category.boolProperty)){
 			type={"type":"checkbox","options":{"on":true,"off":false}};
-		}else if(this.category.editorProperty.contains(key)){
+		}else if(ObjectInArray(key,this.category.editorProperty)){
 			type='none';
 		}
 		for(var g in this.groups){
-			if(this.groups[g].contains(key)){
+			if(ObjectInArray(key,this.groups[g])){
 				grp=g;
 			}
 		}

@@ -88,6 +88,7 @@ AngoraEditor.UIComponent.ResourceEditor.prototype={
       <span class='key'>{0}</span><span class='{2}'></span></div>".format(resID,respath,which));
   },
   onLoad:function(self){
+    var self=this;
     var editor=this.editor;
   	var projectpath = editor.Data.project.path;
   	var resources=editor.Manager.resource.getAll();
@@ -98,11 +99,11 @@ AngoraEditor.UIComponent.ResourceEditor.prototype={
   	for( resID in resources.Global){
   		var type=resources.Global[resID].type;
   		if(type=='image'||type=='spritesheet'||type=='atlas'){
-  			this.addObjectToPane(resID,'image',projectpath,resources.Global[resID].path,'global');
+  			self.addObjectToPane(resID,'image',projectpath,resources.Global[resID].path,'global');
   		}else if(type=='audio'){
-  			this.addObjectToPane(resID,'audio',null,'/data/audio.png','global');
+  			self.addObjectToPane(resID,'audio',null,'/data/audio.png','global');
   		}else{
-  			this.addObjectToPane(resID,'other',null,"/data/{0}.png".format(type),'global');
+  			self.addObjectToPane(resID,'other',null,"/data/{0}.png".format(type),'global');
   		}
   	}
   	$('#resourcepane').delegate('.resrect',"mousedown",function(){
@@ -118,7 +119,7 @@ AngoraEditor.UIComponent.ResourceEditor.prototype={
   				var filename = uploads[i];
   				var resID = filename.substr(0, filename.lastIndexOf('.')) || filename;
   				var respath = "{0}/data/{1}".format(projectpath,filename);
-  				this.addObjectToPane(resID,'image',respath,'global');
+  				self.addObjectToPane(resID,'image',null,respath,'global');
   				$('#'+resID).load(function(){
   					var filepath = $(this).attr('src');
   					var filename = filepath.substr(filepath.lastIndexOf('/')+1,filepath.length);
@@ -135,7 +136,7 @@ AngoraEditor.UIComponent.ResourceEditor.prototype={
   			for( i in uploads ){
   				var filename = uploads[i];
   				var resID = filename.substr(0, filename.lastIndexOf('.')) || filename;
-  				this.addObjectToPane(resID,'audio',"/data/audio.png".format(type),'global');
+  				self.addObjectToPane(resID,'audio',null,"/data/audio.png".format(type),'global');
   				editor.res.add(resID,'audio',{path:filename});
   			}
   		},'audio/*', true);
@@ -220,7 +221,7 @@ AngoraEditor.UIComponent.ResourceEditor.prototype={
   	$('#canclebtn').click(function(){
   		$('#dd').dialog('close');
   	});
-    this.onShow();
+    self.onShow();
   },
   onClose:function(self){ },
   onCreate:function(){ },

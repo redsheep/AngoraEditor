@@ -27,7 +27,27 @@ AngoraEditor.ContextMenu = function (editor) {
 }
 AngoraEditor.ContextMenu.prototype = {
 	setup: function(){
+		var self=this;
 		var editor=this.editor;
+		this.Dom.append('<div id="cm_addnode"> \
+											<span>New</span> \
+											<div> \
+												<div class="cm_additem">image</div> \
+												<div class="cm_additem">sprite</div> \
+												<div class="cm_additem">animate</div> \
+												<div class="cm_additem">particle</div> \
+												<div class="cm_additem">text</div> \
+											</div> \
+										</div> \
+										<div id="cm_remove">Remove</div> \
+										<div id="cm_hdie">Hide</div> \
+										<div id="cm_show">Show</div> \
+										<div id="cm_lock">Lock</div> \
+										<div id="cm_unlock">UnLock</div> \
+										<div id="cm_anime">AnimeEditor</div> \
+										<div id="cm_audio">AudioEditor</div> \
+										<div id="cm_particle">ParticleEditor</div> \
+										<div id="cm_tilemap">TileMapEditor</div>');
 		this.Dom.menu({onClick:function (item) {
 			switch(item.id){
 				case 'cm_tilemap':editor.Manager.resource.showTiledMapEditor();break;
@@ -47,6 +67,7 @@ AngoraEditor.ContextMenu.prototype = {
 		$(document).bind('contextmenu',function(e){
 			if($(document.activeElement).is('textarea'))
 				return true;
+			self.showContextMenu(e.clientX,e.clientY);
 			e.preventDefault();
 			return false;
 		});

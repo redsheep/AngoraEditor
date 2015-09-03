@@ -37,7 +37,7 @@ GameNode = function (state) {
 		camera:['camera'],
 		audio:['audio'],
 		particle:['particle'],
-		invisible:['audio']
+		invisible:['audio'],
 	};
 	this.DefaultValue = {
 		x:0,y:0,height:32,width:32,image:'default',text:'text',
@@ -82,7 +82,7 @@ GameNode.prototype = {
 		var type=node.type;
 		if(type==='custom')
 			type=node.basecls.toLowerCase();
-		if(this.category.gameObject.contains(type)){
+		if(ObjectInArray(type,this.category.gameObject)){
 			this.setAttr('x',node.x);
 			this.setAttr('y',node.y);
 			this.setAttr('width',node.width);
@@ -93,15 +93,15 @@ GameNode.prototype = {
 			this.setAttr('anchorY',node.anchorY);
 			this.setAttr('rotation',node.rotaion);
 		}
-		if(this.category.assets.contains(type)){
+		if(ObjectInArray(type,this.category.assets)){
 			this.setAttr('image',node.image);
 		}
-		if(this.category.text.contains(type)){
+		if(ObjectInArray(type,this.category.text)){
 			this.setAttr('text',node.text);
 			this.setAttr('font',node.font);
 			this.setAttr('fontSize',node.fontSize);
 		}
-		if(this.category.physics.contains(type)){
+		if(ObjectInArray(type,this.category.physics)){
 			this.setAttr('physics',node.physics);
 			this.setAttr('dynamic',node.dynamic);
 			this.setAttr('body',node.body);
@@ -135,6 +135,7 @@ GameNode.prototype = {
 			this.setAttr('minspeedY',node.minspeedY);
 			this.setAttr('maxspeedY',node.maxspeedY);
 		}
+		if(node.events !=null) this.events=node.events;
 	}
 }
 

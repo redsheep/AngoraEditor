@@ -32,13 +32,13 @@ AngoraEditor.GamePanel.prototype = {
 			self.dragPos={x:e.clientX,y:e.clientY};
 		});
 		this.Dom.mousemove(function (e) {
-			if(e.which===3){
+			if(e.which===2){
 				var dx=self.dragPos.x-e.clientX;
 				var dy=self.dragPos.y-e.clientY;
 				self.game.camera.x+=dx;
 				self.game.camera.y+=dy;
 				self.dragPos={x:e.clientX,y:e.clientY};
-			}
+			}//console.log(e.clientX,e.clientY);
 		});
 		this.Dom.mousewheel(function (e) {
 			var scale = self.game.world.scale.x;
@@ -60,9 +60,23 @@ AngoraEditor.GamePanel.prototype = {
 			//console.log('mouse right click');
 			//editor.ui.contextMenu.showContextMenu(e.pageX,e.pageY);
 		});
+		this.Dom.on("dragover", function(event) {
+		    event.preventDefault();
+		    event.stopPropagation();
+				//console.log(event.pageX);
+		});
+		this.Dom.on("drop", function(event) {
+		    event.preventDefault();
+		    event.stopPropagation();
+				self.editor.Manager.gameNode.add({type:'sprite',
+								image:self.editor.Manager.resource.getSelected().id,
+								x:self.game.camera.x+event.originalEvent.layerX,
+								y:self.game.camera.y+event.originalEvent.layerY});
+		});
 	},
 	preload:function(){
 		this.game.load.image('GAMECANVSBG','/client/resources/grid.jpg');
+		this.stage.disableVisibilityChange = true;
 	},
 	create:function(){
 		var self = this;
@@ -101,7 +115,6 @@ AngoraEditor.GamePanel.prototype = {
 				if(pointer.button === Phaser.Mouse.LEFT_BUTTON){
 					sprite.input.draggable = true;
 					sprite.startPoint={x:sprite.x,y:sprite.y};
-
 				}else{
 					sprite.input.draggable = false;
 				}
@@ -166,6 +179,7 @@ AngoraEditor.GamePanel.prototype = {
 			var rect = this.game.anchorBounds.hitArea;
 			this.game.anchorBounds.drawRect(rect.x,rect.y,rect.width,rect.height);
 		}
+		//console.log(this.game.input.x,this.game.input.y);
 	},
 	/**
 	* setup
@@ -233,6 +247,9 @@ AngoraEditor.GamePanel.prototype = {
 		var game=this.game;
 		var gameNode = null;
 		switch (node.type) {
+			case 'image':
+				gameNode = game.add.image(node.property.x,node.property.y,node.property.image);
+				break;
 			case 'sprite':
 			case 'animate':
 				gameNode = game.add.sprite(node.property.x,node.property.y,node.property.image);
@@ -261,14 +278,16 @@ AngoraEditor.GamePanel.prototype = {
 			default:
 		}
 		if(gameNode!=null){
-			if(gameNode.scale != null)
+			if(node.type!='tilesprite' && gameNode.scale != null)
 				gameNode.scale.set(node.property.scaleX,node.property.scaleY);
 			if(gameNode.events != null){
 	    	gameNode.inputEnabled = true;
 				gameNode.events.onInputDown.add(function(sprite, pointer){
-					self.editor.Manager.gameNode.select(node.id);
-					sprite.game.anchorBounds.startPoint={x:sprite.x,y:sprite.y};
-					sprite.game.anchorBounds.input.startDrag(pointer);
+					if(pointer.button !== Phaser.Mouse.MIDDLE_BUTTON){
+						self.editor.Manager.gameNode.select(node.id);
+						sprite.game.anchorBounds.startPoint={x:sprite.x,y:sprite.y};
+						sprite.game.anchorBounds.input.startDrag(pointer);
+					}
 				}, this);
 			}
 		}

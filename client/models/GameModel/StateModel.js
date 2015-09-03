@@ -56,10 +56,9 @@ StateModel.prototype = {
 			while(nodeID in this.nodes)
 				nodeID='{0}{1}'.format(type,this.count++);
 			var node = {
-				'id':nodeID,
-				'type':type,
-				'visible':'true'
-			}
+				"id":nodeID,
+				"type":type
+			};
 			if(type==='custom'){
 				node.clsname=cls.clsname;
 				node.basecls=cls.basecls;
@@ -68,7 +67,7 @@ StateModel.prototype = {
 	},
 	addNode:function(node){
 		if(typeof node.id==='undefined')
-			node = this.createNode(node.type);
+			node.id = this.createNode(node.type).id;
 		this.nodes[node.id]=new GameNode(this);
 		this.nodes[node.id].initNode(node);
 		return this.nodes[node.id];

@@ -16,6 +16,8 @@ AngoraEditor.ManagerController.ResourceManager = function (editor) {
 	 * @property {AngoraEditor} - reference of editor
 	 */
 	this.editor = editor;
+
+	this.selected = null;
 }
 AngoraEditor.ManagerController.ResourceManager.prototype = {
 	loadAll:function(){
@@ -31,6 +33,12 @@ AngoraEditor.ManagerController.ResourceManager.prototype = {
 			res.Local = this.editor.Data.game.curState.resources;
 		return res;
 	},
+	getSelected:function(){
+		return this.selected;
+	},
+	setSelected:function(resID){
+		this.selected=this.get(resID);
+	},
 	get:function(resID){
 		return this.editor.Data.game.resources[resID];
 	},
@@ -44,6 +52,7 @@ AngoraEditor.ManagerController.ResourceManager.prototype = {
 	add : function (res) {
 		this.editor.Data.game.addResource(res);
 		this.editor.UI.gamePanel.addResource(res);
+		this.editor.UI.resourcePanel.addResource(res);
 	},
 	/**
 	* remove a resource

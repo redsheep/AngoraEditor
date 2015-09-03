@@ -82,12 +82,12 @@ AngoraEditor.ManagerController.GameNodeManager.prototype = {
 		for (var key in property){
 			this.editor.UI.propertyGrid.add(key,property[key]);
 		}
+		this.editor.UI.propertyGrid.refresh();
+		this.editor.UI.eventPanel.refresh();
 		var events = this.editor.Data.game.curState.selected.events;
 		for (var key in events){
 			this.editor.UI.eventPanel.add(key,events[key]);
 		}
-		this.editor.UI.propertyGrid.refresh();
-		this.editor.UI.eventPanel.refresh();
 		this.editor.UI.menu.activeMenuItem(selectedNode.type);
 		if(selectedNode.interactive){
 		this.editor.UI.gamePanel.showAnchor();

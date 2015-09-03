@@ -11,8 +11,11 @@
 	<link rel="stylesheet" href="dependencies/jquery/themes/blackmetro/easyui.css">
 	<link rel="stylesheet" href="dependencies/jquery/themes/icon.css">
 	<!--loading codemirror editor-->
+
 	<link rel="stylesheet" href="dependencies/codemirror/addon/lint/lint.css">
 	<link rel="stylesheet" href="dependencies/codemirror/addon/hint/show-hint.css">
+	<link rel="stylesheet" href="dependencies/codemirror/lib/codemirror.css">
+	<link rel="stylesheet" href="dependencies/codemirror/themes/zenburn.css">
 	<script src="dependencies/codemirror/lib/codemirror.js"></script>
 	<script src="dependencies/codemirror/mode/javascript/javascript.js"></script>
 	<script src="dependencies/codemirror/addon/lint/jshint.js"></script>
@@ -34,6 +37,10 @@
 	<script type="text/javascript" src="client/UIComponent/control/contextmenu.js"></script>
 	<script type="text/javascript" src="client/UIComponent/control/gamepanel.js"></script>
 	<script type="text/javascript" src="client/UIComponent/control/scenepanel.js"></script>
+	<script type="text/javascript" src="client/UIComponent/control/resourcepanel.js"></script>
+	<script type="text/javascript" src="client/UIComponent/control/extendpanel.js"></script>
+	<script type="text/javascript" src="client/UIComponent/control/audiopanel.js"></script>
+	<script type="text/javascript" src="client/UIComponent/control/animepanel.js"></script>
 
 	<script type="text/javascript" src="client/UIComponent/dialog/OpenProjectDialog.js"></script>
 	<script type="text/javascript" src="client/UIComponent/dialog/NewProjectDialog.js"></script>
@@ -58,6 +65,7 @@
 	<script type="text/javascript" src="client/controls/GameControl/game.js"></script>
 	<script type="text/javascript" src="client/controls/GameControl/node.js"></script>
 	<script type="text/javascript" src="client/controls/GameControl/resource.js"></script>
+	<script type="text/javascript" src="client/controls/GameControl/code.js"></script>
 	<script type="text/javascript" src="client/controls/ViewControl/view.js"></script>
 
 	<link rel="stylesheet" href="client/UIComponent/style/icons.css">
@@ -122,7 +130,7 @@
 							<a id="addEvent" class="easyui-linkbutton" data-options="iconCls:'icon-ae-add'" style="border:none"></a>
 							<a id="removeEvent" class="easyui-linkbutton" data-options="iconCls:'icon-ae-remove'" style="border:none"></a>
 						</div>
-						<div id="events" data-options="region:'center'" ></div>
+						<div id="events" class="easyui-propertygrid" data-options="region:'center'" fit="true"></div>
 					</div>
 				</div>
 			</div>
@@ -163,29 +171,19 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	<!--context menu-->
-	<div id="context" class="easyui-menu">
-		<div id="cm_addnode">
-			<span>New</span>
-			<div>
-				<div class="cm_additem">image</div>
-				<div class="cm_additem">sprite</div>
-				<div class="cm_additem">animate</div>
-				<div class="cm_additem">particle</div>
-				<div class="cm_additem">text</div>
+		<!-- -->
+		<div id="centerContainer" data-options="region:'south',split:true">
+			<div id="tabs" fit="true" style="overflow:hidden;height:250px;" class="easyui-tabs" data-options="border:false,tabPosition:'left',headerWidth:100">
+				<div id='resourceTab' title="resources" fit="true"></div>
+				<div id='extendTab' title="extends" fit="true"></div>
+				<div id='animeTab' title="animation" fit="true"></div>
+				<div id='audioTab' title="audio" fit="true"></div>
 			</div>
 		</div>
-		<div id="cm_remove">Remove</div>
-		<div id="cm_hdie">Hide</div>
-		<div id="cm_show">Show</div>
-		<div id="cm_lock">Lock</div>
-		<div id="cm_unlock">UnLock</div>
-		<div id="cm_anime">AnimeEditor</div>
-		<div id="cm_audio">AudioEditor</div>
-		<div id="cm_particle">ParticleEditor</div>
-		<div id="cm_tilemap">TileMapEditor</div>
+
 	</div>
+	<!--context menu-->
+	<div id="context"></div>
 </div>
 <!--varity of dialogs-->
 <div id="dd"></div>
@@ -210,8 +208,8 @@ if(!String.prototype.insert){
 		return string + this;
 	};
 }
-Array.prototype.contains = Array.prototype.contains || function(obj){
-  return !(this.indexOf(obj) === -1);
+function ObjectInArray(obj,array){
+  return !(array.indexOf(obj) === -1);
 };
 function parseBoolean(str){
 	return String(str)=='true';

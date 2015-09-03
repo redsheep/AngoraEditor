@@ -30,21 +30,17 @@ def searchdocs(filename):
     return docs.search(cls,args)
 
 # Static Routes
-@route('/<filename:re:.*\.js>')
+@route('/client/<filename:path>')
 def javascripts(filename):
-    return static_file(filename, root='../')
+    return static_file(filename, root='../client/')
 
-@route('/<filename:re:.*\.css>')
+@route('/dependencies/<filename:path>')
 def stylesheets(filename):
-    return static_file(filename, root='../')
+    return static_file(filename, root='../dependencies/')
 
-@route('/<filename:re:.*\.(jpg|png|gif|ico)>')
-def images(filename):
-    return static_file(filename, root='../')
-
-@route('/<filename:re:.*\.(eot|ttf|woff|svg)>')
-def fonts(filename):
-    return static_file(filename, root='../')
+@route('/workspace/<filename:path>')
+def stylesheets(filename):
+    return static_file(filename, root='../workspace/')
 
 @route('/dialog/<filename:path>')
 def send_dialog(filename):

@@ -23,6 +23,13 @@ AngoraEditor.EventPanel = function (editor) {
 
 	this.data=[];
 
+	this.eventCategory={
+		'group':['onAddedToGroup','onRemovedFromGroup','onRemovedFromWorld'],
+		'anime':['onAnimationComplete','onAnimationLoop','onAnimationStart'],
+		'drag':['onDragStart','onDragStop','onDragUpdate'],
+		'mouse':['onInputDown','onInputOut','onInputOver','onInputUp'],
+		'visible':['onDestroy','onKilled','onEnterBounds','onOutOfBounds','onRevived']
+	};
 	this.setupCallback();
 }
 AngoraEditor.EventPanel.prototype = {
@@ -37,7 +44,7 @@ AngoraEditor.EventPanel.prototype = {
 			if(editor.node.selected==null)return;
 		});
 		this.Dom.propertygrid({
-			data : this.events,
+			data : this.data,
 			showGroup : true,
 			scrollbarSize : 0,
 			onDblClickRow:function(index, field){
@@ -59,30 +66,18 @@ AngoraEditor.EventPanel.prototype = {
 	* @param {string} callback - callback name
 	* @param {string} grp - group name
 	*/
-	add: function(event,callback,grp){
-		var group=grp;
-		if(typeof group ==='undefined')
-			group='default';
-		var type='none';
-		switch(event){
-		case 'onInputUp':
-		case 'onInputDown':
-		case 'onInputOver':
-		case 'onInputOut':
-			group='mouse'
-			break;
-		case 'onOutOfBounds':
-		case 'onEnterBounds':
-			group='worldBounds';
-			break;
-		case 'onAnimationComplete':
-		case 'onAnimationLoop':
-		case 'onAnimationStart':
-			group='animation';
-			break;
-		default:group=group;break;
+	findRow : function(event){
+		var index=-1;//this.grid.propertygrid('getRowIndex',attr);//this.propertyIndex[attr];
+		var rows = this.Dom.propertygrid('getRows');
+		for( i in rows){
+			if(rows[i].name==event){
+				return i;
+			}
 		}
-		this.data.push({name:event,value:callback,group:group,editor:type});
+	},
+	add: function(event,callback){
+		var i = this.findRow(event);
+		this.update(i,callback);
 	},
 	/**
 	* update the selected row of event property grid
@@ -108,7 +103,13 @@ AngoraEditor.EventPanel.prototype = {
 		});
 	},
 	refresh:function(){
-		
+		for(var grp in this.eventCategory){
+			for(var i in this.eventCategory[grp]){
+				var event = this.eventCategory[grp][i];
+				this.data.push({name:event,value:'',group:grp,type:'none'});
+			}
+		}
+		this.Dom.propertygrid('loadData', this.data);
 	},
 	/**
 	* empty the event property grid

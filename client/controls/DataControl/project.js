@@ -35,13 +35,12 @@ AngoraEditor.ManagerController.ProjectManager.prototype = {
 		self.editor.Data.project.onResourceLoaded=function(){
 			var resources = self.editor.Data.game.resources;
 			for(var key in resources){
-				self.editor.UI.gamePanel.addResource(resources[key]);
+				self.editor.Manager.resource.add(resources[key]);
 			}
 			self.editor.UI.gamePanel.startLoadResources();
 		}
 		self.editor.Data.project.load(project);
 		self.editor.UI.menu.activeMenu();
-
 	},
 	add : function(project){
 		this.editor.Data.project.add(project);

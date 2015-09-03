@@ -43,9 +43,7 @@ AngoraEditor.UIComponent = function (editor) {
 	 */
 	this.contextMenu = null;
 
-	this.codeEditors={};
-
-	this.codeEditor=null;
+	this.codePanel = null;
 
 	this.Dialog={
 		OpenProjectDialog : new AngoraEditor.UIComponent.OpenProjectDialog(),
@@ -61,13 +59,18 @@ AngoraEditor.UIComponent.prototype = {
 	 * @param
 	 */
 	setup : function () {
-		this.menu 				= new AngoraEditor.Menu(this.editor);
-		this.nodeTree 		= new AngoraEditor.NodeTree(this.editor);
+		this.menu 					= new AngoraEditor.Menu(this.editor);
+		this.nodeTree 			= new AngoraEditor.NodeTree(this.editor);
 		this.scenePanel 		= new AngoraEditor.ScenePanel(this.editor);
-		this.propertyGrid = new AngoraEditor.PropertyGrid(this.editor);
+		this.propertyGrid		= new AngoraEditor.PropertyGrid(this.editor);
 		this.eventPanel 		= new AngoraEditor.EventPanel(this.editor);
-		this.gamePanel 		= new AngoraEditor.GamePanel(this.editor);
-		this.contextMenu 	= new AngoraEditor.ContextMenu(this.editor);
+		this.gamePanel			= new AngoraEditor.GamePanel(this.editor);
+		this.contextMenu		= new AngoraEditor.ContextMenu(this.editor);
+		this.resourcePanel	= new AngoraEditor.ResourcePanel(this.editor);
+		this.animePanel			= new AngoraEditor.AnimatePanel(this.editor);
+		this.extendPanel		= new AngoraEditor.ExtendPanel(this.editor);
+		this.audioPanel			= new AngoraEditor.AudioPanel(this.editor);
+		this.codePanel			=	new AngoraEditor.CodePanel(this.editor);
 	},
 	alert:function(title,content,icon){
 		$.messager.alert(title,content,icon);
