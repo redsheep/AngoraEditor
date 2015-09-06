@@ -16,6 +16,7 @@ AngoraEditor.ProjectModel = function (Data) {
 	this.config = {};
 	this.path 	= null;
 	this.template = null;
+	this.startState =null;
 }
 
 AngoraEditor.ProjectModel.prototype = {
@@ -38,16 +39,47 @@ AngoraEditor.ProjectModel.prototype = {
 			var scenes=JSON.parse(data);
 			scenes[scene]={'name':scene,'id':scene};
 			self.Data.system.File.writeFile(path+'/scenes.json',JSON.stringify(scenes, null, '\t'));
-			self.template.createScene(path,scene,finished);
+			self.template.createScene(path,scene,function(){
+				if(self.startState==null){
+					self.startState=scene;
+					self.template.setupStartState(path,scene,finished);
+				}
+			});
 		});
 	},
-	save:function(){
-		//this.Data.filesystem.writeFile();
+	saveCurrentState:function(){
+		var state=this.Data.game.curState.name;
+		var nodes={};
+		for(var key in this.Data.game.curState.nodes){
+			var node = this.Data.game.curState.nodes[key];
+			nodes[node.id]={id:node.id,type:node.type};
+			for(var key in node.property){
+				nodes[node.id][key]=node.property[key];
+			}
+		}
+		this.Data.system.File.writeFile(this.path+'/{0}.scn'.format(state),
+			JSON.stringify(nodes, null, '\t'),function(){
+				console.log('success save state',state);
+		});
+		var resources={};
+		for(var key in this.Data.game.resources){
+			var res = this.Data.game.resources[key];
+			resources[res.id]={id:res.id,type:res.type,path:res.path};
+			for(var key in res.property){
+				resources[res.id][key]=res.property[key];
+			}
+		}
+		this.Data.system.File.writeFile(this.path+'/global.res',
+			JSON.stringify(resources, null, '\t'),function(){
+				console.log('success save resources');
+		});
 	},
 	load:function(project){
 		var self = this;
 		this.config=project.config;
 		this.path=project.path;
+		if(this.template==null)
+			this.template = new AngoraEditor.PhaserTemplate(self.Data);
 		this.Data.system.File.readFile(project.path+'/scenes.json',function(data){
 			var states = JSON.parse(data);
 			for (var state in states){
@@ -70,6 +102,8 @@ AngoraEditor.ProjectModel.prototype = {
 	clear:function(){
 		this.config={};
 		this.path=null;
+		this.startState=null;
+		this.template=null;
 	},
 	onStateLoaded:function(){},
 	onResourceLoaded:function(){}

@@ -23,6 +23,9 @@ AngoraEditor.ManagerController.CodeManager.prototype={
 		this.editor.Data.system.File.readFile(path,function(script){
 			self.editor.UI.codePanel.addCodeEditor(state,script,'stateScript');
 		});
+	},
+	getCode:function(state){
+		return self.editor.UI.codePanel.editors[state].editor.getValue();
 	}
 }
 

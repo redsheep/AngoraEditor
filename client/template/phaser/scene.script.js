@@ -1,3 +1,8 @@
+{sceneName}=function(){
+  this.sceneNodeFile="{sceneName}.scn"+'?'+ new Date().getTime();
+}
+{sceneName}.prototype=new baseState();
+
 {sceneName}.prototype.customLoad=function(){
 
 }

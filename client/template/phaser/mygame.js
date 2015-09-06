@@ -8,7 +8,7 @@ window.onload = function() {
         game = new Phaser.Game(800,600, Phaser.AUTO, '', {
           preload:function(){
             for(var res in resources){
-              LoadRes(this.game,resourcces[res]);
+              LoadRes(this.game,resources[res]);
             }
           },
           create:function(){

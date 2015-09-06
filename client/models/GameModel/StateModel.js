@@ -33,9 +33,6 @@ StateModel.prototype = {
 	setup: function(create){
 		var self = this;
 		var path = this.Data.project.path;
-		this.Data.system.File.readFile('{0}/{1}.res'.format(path,this.name),function(data){
-			self.resources=JSON.parse(data);
-		});
 		this.Data.system.File.readFile('{0}/{1}.scn'.format(path,this.name),function(data){
 			var nodes = JSON.parse(data);
 			for(var key in nodes){
