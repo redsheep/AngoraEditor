@@ -11,13 +11,20 @@
  * @classdesc
  * @constructor
  */
-Resource = function () {
+Resource = function (res) {
 
-	this.uid=null;
+	this.id=res.id;
 
-	this.type=null;
+	this.type=res.type;
+
+	this.path=res.path;
 
   this.property={};
+
+	for(var key in res){
+		if(key=='id' || key=='type' ||key=='path') continue;
+		this.property[key]=res[key];
+	}
 
 	return this;
 }

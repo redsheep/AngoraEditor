@@ -23,10 +23,10 @@ AngoraEditor.FileManager.prototype = {
 	* @method createDirectory
 	* @param {string} filepath
 	*/
-	createDirectory : function (filepath) {
+	createDirectory : function (filepath,func) {
 		//var file = Ti.Filesystem.getFile(filepath);
 		//file.createDirectory();
-		$.get('/mkdir',{"path":filepath});
+		$.get('/mkdir',{"path":filepath},func);
 	},
 	/**
 	* is the file exist
@@ -38,32 +38,15 @@ AngoraEditor.FileManager.prototype = {
 		return $.get(url,func);
 	},
 	/**
-	*
-	* @method copyFile
-	* @param {string} src - source file path
-	* @param {string} dest - destination file path
-	* @param {string} filename
-	*/
-	copyFile : function (src, dest,filename) {
-		/*if(typeof filename==='undefined'){
-			var file = Ti.Filesystem.getFile(src);
-			file.copy(dest);
-		}else{
-			var file = Ti.Filesystem.getFile("{0}\\{1}".format(src,filename));
-			file.copy("{0}\\{1}".format(dest,filename));
-		}*/
-		//$.get('/copyfile',{"src":templatefile,"dest":scenefile});
-	},
-	/**
 	* create file from template file
 	* @method copyFile
 	* @param {string} path - project path
 	* @param {string} src - source file name
 	* @param {string} dest - destination file name
 	*/
-	createTemplate: function(path,src,dest,func) {
+	copyFile: function(path,src,dest,func) {
 		if(typeof dest==='undefined') dest=src;
-		$.get('/createTemplate',{"src":src,"path":path,"dest":dest},func);
+		$.get('/copy',{"src":src,"path":path,"dest":dest},func);
 	},
 	/**
 	* read file
@@ -90,10 +73,10 @@ AngoraEditor.FileManager.prototype = {
 	* @param {string} filepath
 	* @param {string} contents - content write to file
 	*/
-	writeFile : function (filepath, contents) {
+	writeFile : function (filepath, contents,func) {
 		//var file = Ti.Filesystem.getFile(filepath);
 		//return file.write(contents);
-		$.post('/write',{"path":filepath,"data":contents});
+		$.post('/write',{"path":filepath,"data":contents},func);
 		//.done(function(data){
 		//	func(data);
 		//});

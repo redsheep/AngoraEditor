@@ -64,8 +64,9 @@ AngoraEditor.ManagerController.ViewManager.prototype = {
     var self = this;
 		var dlg = new AngoraEditor.UIComponent.NewProjectDialog(this.editor);
 		dlg.onConfirm = function(project){
-			self.editor.Manager.project.add(project);
-			self.editor.Manager.project.load(project);
+			self.editor.Manager.project.add(project,function(){
+        self.editor.Manager.project.load(project);
+      });
 		}
 		dlg.show();
 	},

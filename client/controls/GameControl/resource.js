@@ -49,9 +49,9 @@ AngoraEditor.ManagerController.ResourceManager.prototype = {
 	* @param {string} type
 	* @param {Object} resource
 	*/
-	add : function (res) {
+	add : function (res,load) {
 		this.editor.Data.game.addResource(res);
-		this.editor.UI.gamePanel.addResource(res);
+		this.editor.UI.gamePanel.addResource(res,load);
 		this.editor.UI.resourcePanel.addResource(res);
 	},
 	/**

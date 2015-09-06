@@ -42,8 +42,8 @@ AngoraEditor.ManagerController.ProjectManager.prototype = {
 		self.editor.Data.project.load(project);
 		self.editor.UI.menu.activeMenu();
 	},
-	add : function(project){
-		this.editor.Data.project.add(project);
+	add : function(project,finished){
+		this.editor.Data.project.add(project,finished);
 	},
 	/**
 	* remove project

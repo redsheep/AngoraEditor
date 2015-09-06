@@ -51,13 +51,13 @@ def hello():
     print 'test'
     return static_file('index.html' , root="../")
 
-@route('/createTemplate')
-def createTemplate():
+@route('/copy')
+def copyfile():
     path = request.query.get('path')
     src = request.query.get('src')
     dest = request.query.get('dest')
     print 'create %s from template %s'%('%s/%s'%(path,dest),src)
-    shutil.copy2('../template/'+src,'%s/%s'%('../'+path[1:],dest))
+    shutil.copy2('../client'+src,'%s/%s'%('../'+path[1:],dest))
     return 'sucess'#static_file(filename, root='./',mimetype='text')
 
 @route('/mkdir')
@@ -78,6 +78,12 @@ def readFile(filename):
     #response.content_type = 'text/html; charset=UTF-8'
     print 'read from %s success'%filename
     return static_file(filename, root='../workspace',mimetype='text')
+
+@route('/read/template/<filename:path>')
+def readFile(filename):
+    #response.content_type = 'text/html; charset=UTF-8'
+    print 'read from %s success'%filename
+    return static_file(filename, root='../client/template',mimetype='text')
 
 @route('/remove/<filename:path>')
 def removeFile(filename):

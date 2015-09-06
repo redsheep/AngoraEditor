@@ -29,18 +29,20 @@ AngoraEditor.ManagerController.GameManager.prototype={
 	},
 	addState:function(state){
 		var self = this;
-		this.editor.UI.prompt('Add Scene','Enter scene name',function(state){
+		//this.editor.UI.prompt('Add Scene','Enter scene name',function(state){
 			self.editor.Data.game.addState(state,true);
+			self.editor.Data.project.addState(state);
 			self.editor.UI.scenePanel.add(state);
-		});
+		//});
 	},
 	removeState: function(state){
 		var self = this;
-		this.editor.UI.confirm('Warning',"remove local file?",function(r){
+		//this.editor.UI.confirm('Warning',"remove local file?",function(r){
 			var state =  self.editor.Data.game.curState.name;
 			self.editor.Data.game.removeState(state);
+			self.editor.UI.gamePanel.reset();
 			self.editor.UI.scenePanel.remove(state);
-		});
+		//});
 	}
 }
 

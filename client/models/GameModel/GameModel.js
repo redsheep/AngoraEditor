@@ -35,7 +35,8 @@ AngoraEditor.GameModel.prototype = {
 		this.curState=this.states[state];
 	},
 	addResource:function(res){
-		this.resources[res.id]=res;
+		if(res.id in this.resources) return;
+		this.resources[res.id]=new Resource(res);
 	},
 	removeResource:function(res){
 		delete this.resources[res.id];

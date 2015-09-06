@@ -76,7 +76,7 @@ AngoraEditor.GamePanel.prototype = {
 	},
 	preload:function(){
 		this.game.load.image('GAMECANVSBG','/client/resources/grid.jpg');
-		this.stage.disableVisibilityChange = true;
+		//this.stage.disableVisibilityChange = true;
 	},
 	create:function(){
 		var self = this;
@@ -222,21 +222,29 @@ AngoraEditor.GamePanel.prototype = {
 	showAnchor:function(){
 		this.game.anchorGroup.visible=true;
 	},
-	addResource:function(res){
+	addResource:function(res,startload){
 		var game = this.game;
 		var projectPath = this.editor.Data.project.path;
 		var respath = '{0}/{1}'.format(projectPath,res.path);
+		var loader = game.load;
+		if(startload!=null)
+			loader = new Phaser.Loader(game);
 		switch (res.type) {
 			case 'image':
-				game.load.image(res.id,respath);
+				loader.image(res.id,respath);
 				break;
 			case 'spritesheet':
-				game.load.spritesheet(res.id, respath, parseInt(res.width/res.Xframe), parseInt(res.height/res.Yframe));
+				loader.spritesheet(res.id, respath,
+					parseInt(res.property.width/res.property.Xframe),
+					parseInt(res.property.height/res.property.Yframe));
 				break;
 			case 'audio':
-				game.load.audio(res.id,respath);
+				loader.audio(res.id,respath);
 				break;
 			default:
+		}
+		if(startload!=null){
+			loader.start()
 		}
 	},
 	startLoadResources:function(){

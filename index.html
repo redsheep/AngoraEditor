@@ -58,6 +58,7 @@
 	<script type="text/javascript" src="client/models/GameModel/GameModel.js"></script>
 	<script type="text/javascript" src="client/models/GameModel/StateModel.js"></script>
 	<script type="text/javascript" src="client/models/GameModel/GameNode.js"></script>
+	<script type="text/javascript" src="client/models/GameModel/Resource.js"></script>
 
 	<script type="text/javascript" src="client/controls/Manager.js"></script>
 	<script type="text/javascript" src="client/controls/DataControl/project.js"></script>
@@ -67,6 +68,8 @@
 	<script type="text/javascript" src="client/controls/GameControl/resource.js"></script>
 	<script type="text/javascript" src="client/controls/GameControl/code.js"></script>
 	<script type="text/javascript" src="client/controls/ViewControl/view.js"></script>
+
+	<script type="text/javascript" src="client/template/phaser/template.js"></script>
 
 	<link rel="stylesheet" href="client/UIComponent/style/icons.css">
 	<link rel="stylesheet" href="client/UIComponent/style/style.css">
@@ -78,8 +81,8 @@
 		<div id="topContainer" data-options="region:'north'" style="overflow:hidden">
 			<div >
 				<a href="#" class="easyui-menubutton" menu="#submenu_file" iconCls="icon-ae-file">File</a>
-				<a href="#" class="easyui-menubutton" menu="#submenu_tools" iconCls="icon-ae-tools">Tools</a>
-				<a href="#" class="easyui-menubutton" menu="#submenu_app" iconCls="icon-ae-config">App</a>
+				<!--<a href="#" class="easyui-menubutton" menu="#submenu_tools" iconCls="icon-ae-tools">Tools</a>
+				<a href="#" class="easyui-menubutton" menu="#submenu_app" iconCls="icon-ae-config">App</a>-->
 				<a href="#" class="easyui-menubutton" menu="#submenu_run" iconCls="icon-ae-run">Run</a>
 				<a href="#" class="easyui-menubutton" menu="#submenu_help" iconCls="icon-ae-help">About</a>
 			</div>
@@ -174,7 +177,12 @@
 		<!-- -->
 		<div id="centerContainer" data-options="region:'south',split:true">
 			<div id="tabs" fit="true" style="overflow:hidden;height:250px;" class="easyui-tabs" data-options="border:false,tabPosition:'left',headerWidth:100">
-				<div id='resourceTab' title="resources" fit="true"></div>
+				<div id='resourceTab' class="easyui-layout" title="resources" fit="true">
+					<div id="resPanel" data-options="region:'center'"></div>
+					<div data-options="region:'east',split:true" style="width:200px;">
+						<div id="resProperty" class="easyui-propertygrid" ></div>
+					</div>
+				</div>
 				<div id='extendTab' title="extends" fit="true"></div>
 				<div id='animeTab' title="animation" fit="true"></div>
 				<div id='audioTab' title="audio" fit="true"></div>

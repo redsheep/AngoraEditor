@@ -80,7 +80,7 @@ AngoraEditor.UIComponent.NewProjectDialog.prototype={
     self.onShow(self);
 		$('#confirm').click(function(){
 			var name=$('#name').val();
-			var path=editor.system.workspacePath+'/'+name;
+			var path='/workspace/'+name;
 			var DisplayX=$('#DisplayX').val();
 			var DisplayY=$('#DisplayY').val();
 			var Render=$('#Render').val();
