@@ -154,7 +154,7 @@
     d.measure = elt("div", null, "CodeMirror-measure");
     // When lines outside of the viewport are measured, they are drawn in this.
     d.lineMeasure = elt("div", null, "CodeMirror-measure");
-    // Wraps everything that needs to exist inside the vertically-padded coordinate system
+    // Wraps everything that needs to exist inside the vertically-padded coordinate System
     d.lineSpace = elt("div", [d.measure, d.lineMeasure, d.selectionDiv, d.cursorDiv, d.lineDiv],
                       null, "position: relative; outline: none");
     // Moved around its parent to cover visible view.
@@ -1738,7 +1738,7 @@
   function pageScrollY() { return window.pageYOffset || (document.documentElement || document.body).scrollTop; }
 
   // Converts a {top, bottom, left, right} box from line-local
-  // coordinates into another coordinate system. Context may be one of
+  // coordinates into another coordinate System. Context may be one of
   // "line", "div" (display.lineDiv), "local"/null (editor), or "page".
   function intoCoordSystem(cm, lineObj, rect, context) {
     if (lineObj.widgets) for (var i = 0; i < lineObj.widgets.length; ++i) if (lineObj.widgets[i].above) {
@@ -1760,12 +1760,12 @@
     return rect;
   }
 
-  // Coverts a box from "div" coords to another coordinate system.
+  // Coverts a box from "div" coords to another coordinate System.
   // Context may be "window", "page", "div", or "local"/null.
   function fromCoordSystem(cm, coords, context) {
     if (context == "div") return coords;
     var left = coords.left, top = coords.top;
-    // First move into "page" coordinate system
+    // First move into "page" coordinate System
     if (context == "page") {
       left -= pageScrollX();
       top -= pageScrollY();
@@ -1841,7 +1841,7 @@
   }
 
   // Compute the character position closest to the given coordinates.
-  // Input must be lineSpace-local ("div" coordinate system).
+  // Input must be lineSpace-local ("div" coordinate System).
   function coordsChar(cm, x, y) {
     var doc = cm.doc;
     y += cm.display.viewOffset;

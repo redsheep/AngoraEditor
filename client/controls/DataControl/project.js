@@ -39,7 +39,7 @@ AngoraEditor.ManagerController.ProjectManager.prototype = {
 			}
 			self.editor.UI.gamePanel.startLoadResources();
 		}
-		self.editor.Data.project.load(project);
+		self.editor.Data.load(project);
 		self.editor.UI.menu.activeMenu();
 	},
 	add : function(project,finished){
@@ -62,10 +62,11 @@ AngoraEditor.ManagerController.ProjectManager.prototype = {
 	* @param
 	*/
 	save : function () {
-		this.editor.Data.project.saveCurrentState();
 		var path=this.editor.Data.project.path;
 		var state=this.editor.Data.game.curState.name;
-		this.editor.Data.system.File.writeFile(path+'/{0}.script.js'.format(state),
+		this.editor.Data.game.saveResource();
+		this.editor.Data.game.curState.save();
+		System.File.writeFile(path+'/{0}.script.js'.format(state),
 			this.editor.Manager.code.getCode(state),function(){
 				console.log('success save state code');
 		});

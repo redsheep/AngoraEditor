@@ -11,7 +11,7 @@
  * @classdesc
  * @constructor
  */
-AngoraEditor.SystemController = function () {
+AngoraEditor.SystemManager = function () {
 	/**
 	 * @property {AngoraEditor} - reference of editor
 	 */
@@ -28,53 +28,19 @@ AngoraEditor.SystemController = function () {
 		langPath			: "/data/lang"
 	};
 
-	this.perferences= {};
+	this.perferences= null;//new AngoraEditor.PerferenceManager();
 
 	this.File				= new AngoraEditor.FileManager();
 
-	this.clipboard	= null;
+	this.Clipboard	= null;//new AngoraEditor.ClipboardManager();
 
-	this.history		= null;
+	this.Language		= null;//new AngoraEditor.LanguageManager();
+
+	this.Template		= new AngoraEditor.PhaserTemplate();
 
 }
 
-AngoraEditor.SystemController.prototype = {
-	loadPerferences: function(finished){
-		/*var editor=this.editor;
-		editor.file.readFile(this.configFile,function(data){
-			editor.system.config=JSON.parse(data);
-			finished();
-		});*/
-	},
+AngoraEditor.SystemManager.prototype = {
 
-	applyModify : function () {
-
-	},
-	/**
-	*
-	* @method
-	* @param
-	*/
-	get : function (param) {
-
-	},
-	/**
-	*
-	*
-	* @method
-	* @param
-	*/
-	set : function (param, value) {
-
-	},
-	/**
-	*
-	*
-	* @method
-	* @param
-	*/
-	exit : function () {
-
-	}
 }
-AngoraEditor.SystemController.prototype.constructor = AngoraEditor.SystemController;
+AngoraEditor.SystemManager.prototype.constructor = AngoraEditor.SystemManager;

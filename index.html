@@ -25,7 +25,7 @@
 	<script src="dependencies/codemirror/addon/hint/show-hint.js"></script>
 	<!--loading client scripts-->
 	<script type="text/javascript" src="client/AngoraEditor.js"></script>
-	<script type="text/javascript" src="client/System/system.js"></script>
+	<script type="text/javascript" src="client/System/System.js"></script>
 	<script type="text/javascript" src="client/System/file.js"></script>
 
 	<script type="text/javascript" src="client/UIComponent/ui.js"></script>
@@ -54,7 +54,7 @@
 	<script type="text/javascript" src="client/UIComponent/dialog/NewNodeDialog.js"></script>
 
 	<script type="text/javascript" src="client/models/DataModel.js"></script>
-	<script type="text/javascript" src="client/models/project.js"></script>
+	<script type="text/javascript" src="client/models/ProjectModel.js"></script>
 	<script type="text/javascript" src="client/models/GameModel/GameModel.js"></script>
 	<script type="text/javascript" src="client/models/GameModel/StateModel.js"></script>
 	<script type="text/javascript" src="client/models/GameModel/GameNode.js"></script>
@@ -222,6 +222,7 @@ function ObjectInArray(obj,array){
 function parseBoolean(str){
 	return String(str)=='true';
 }
+var System=new AngoraEditor.SystemManager();
 var edt=new AngoraEditor();
 </script>
 </body>

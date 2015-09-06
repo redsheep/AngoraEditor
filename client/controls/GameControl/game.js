@@ -30,8 +30,7 @@ AngoraEditor.ManagerController.GameManager.prototype={
 	addState:function(state){
 		var self = this;
 		//this.editor.UI.prompt('Add Scene','Enter scene name',function(state){
-			self.editor.Data.game.addState(state,true);
-			self.editor.Data.project.addState(state);
+			self.editor.Data.game.addState(state);
 			self.editor.UI.scenePanel.add(state);
 		//});
 	},

@@ -20,7 +20,7 @@ AngoraEditor.ManagerController.CodeManager=function(editor){
 AngoraEditor.ManagerController.CodeManager.prototype={
 	loadStateScript:function(state){
 		var path = "{0}/{1}.script.js".format(this.editor.Data.project.path,state);
-		this.editor.Data.system.File.readFile(path,function(script){
+		System.File.readFile(path,function(script){
 			self.editor.UI.codePanel.addCodeEditor(state,script,'stateScript');
 		});
 	},

@@ -19,8 +19,6 @@ AngoraEditor = function () {
 
 	this.Manager=null;
 
-	this.System=null;
-	//setup and run editor
 	this.boot();
 	return this;
 }
@@ -37,11 +35,8 @@ AngoraEditor.prototype = {
 
 		this.Manager	= new AngoraEditor.ManagerController(this);
 
-		//this.System		= new AngoraEditor.SystemController();
-
 		this.Data			=	new AngoraEditor.DataModel();
 
 	}
 }
-
 AngoraEditor.prototype.constructor = AngoraEditor;

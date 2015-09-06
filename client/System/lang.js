@@ -11,24 +11,13 @@
  * @classdesc
  * @constructor
  */
-AngoraEditor.LanguageManger = function (editor) {
+AngoraEditor.LanguageManger = function () {
 	/**
 	 * @property {AngoraEditor} - reference of editor
 	 */
-	this.editor = editor;
-	/**
-	 * @property {jquery object}
-	 */
-	this.menu = {};
 }
 AngoraEditor.LanguageManger.prototype = {
-	setup: function(lang){
-		editor=this.editor;
-		editor.file.readFile('{0}/{1}.lang'.format(editor.system.langPath,lang),function(data){
-			var langdata=JSON.parse(data);
-			
-		});
-	}
+	
 }
 
 AngoraEditor.LanguageManger.prototype.constructor = AngoraEditor.LanguageManger;

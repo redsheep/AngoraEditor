@@ -150,7 +150,7 @@ function LoadRes(game, res) {
 	}
 }
 function removeRes(game, res) {
-	switch (res.type) {	
+	switch (res.type) {
 	case 'image':
 	case 'atlas':
 	case 'spritesheet':

@@ -13,19 +13,25 @@
  */
 AngoraEditor.DataModel = function () {
 
-	this.system 	= new AngoraEditor.SystemController();
+	this.project	= new AngoraEditor.ProjectModel();
 
-	this.project	= new AngoraEditor.ProjectModel(this);
-
-  this.game 		= new AngoraEditor.GameModel(this);
+  this.game 		= new AngoraEditor.GameModel();
 
 	return this;
 }
 
 AngoraEditor.DataModel.prototype = {
 	getAllProjects:function(success){
-		var projectfile = this.system.Path.projectFile;
-		this.system.File.readFile(projectfile,success);
+		var projectfile = System.Path.projectFile;
+		System.File.readFile(projectfile,success);
+	},
+	load:function(project){
+		this.project.load(project);
+		this.game.load(project);
+	},
+	save:function(project){
+		//this.project.save();
+		//this.game.save();
 	},
 	clear:function(){
 		this.project.clear();

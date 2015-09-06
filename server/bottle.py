@@ -2252,8 +2252,8 @@ class FileUpload(object):
 
     @cached_property
     def filename(self):
-        """ Name of the file on the client file system, but normalized to ensure
-            file system compatibility. An empty filename is returned as 'empty'.
+        """ Name of the file on the client file System, but normalized to ensure
+            file System compatibility. An empty filename is returned as 'empty'.
 
             Only ASCII letters, digits, dashes, underscores and dots are
             allowed in the final filename. Accents are removed, if possible.
@@ -2848,7 +2848,7 @@ class EventletServer(ServerAdapter):
 
         * `backlog` adjust the eventlet backlog parameter which is the maximum
           number of queued connections. Should be at least 1; the maximum
-          value is system-dependent.
+          value is System-dependent.
         * `family`: (default is 2) socket family, optional. See socket
           documentation for available families.
     """

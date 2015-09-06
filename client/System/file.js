@@ -24,7 +24,7 @@ AngoraEditor.FileManager.prototype = {
 	* @param {string} filepath
 	*/
 	createDirectory : function (filepath,func) {
-		//var file = Ti.Filesystem.getFile(filepath);
+		//var file = Ti.FileSystem.getFile(filepath);
 		//file.createDirectory();
 		$.get('/mkdir',{"path":filepath},func);
 	},
@@ -55,7 +55,7 @@ AngoraEditor.FileManager.prototype = {
 	* @param {function} func - callback function when read success
 	*/
 	readFile : function (filepath,func) {
-		//var file = Ti.Filesystem.getFile(filepath);
+		//var file = Ti.FileSystem.getFile(filepath);
 		//return file.read().toString();
 		//var m_data;
 		var url='/read'+filepath+'?'+ new Date().getTime();
@@ -74,7 +74,7 @@ AngoraEditor.FileManager.prototype = {
 	* @param {string} contents - content write to file
 	*/
 	writeFile : function (filepath, contents,func) {
-		//var file = Ti.Filesystem.getFile(filepath);
+		//var file = Ti.FileSystem.getFile(filepath);
 		//return file.write(contents);
 		$.post('/write',{"path":filepath,"data":contents},func);
 		//.done(function(data){
@@ -94,7 +94,7 @@ AngoraEditor.FileManager.prototype = {
 			$.get(url,function(data){
 				func(data);
 			});
-		//var file = Ti.Filesystem.getFile(filepath);
+		//var file = Ti.FileSystem.getFile(filepath);
 		//return file.deleteFile();
 	},
 	/**
@@ -103,7 +103,7 @@ AngoraEditor.FileManager.prototype = {
 	* @param {string} filepath
 	*/
 	emptyFile : function (filepath) {
-		//var file = Ti.Filesystem.getFile(filepath);
+		//var file = Ti.FileSystem.getFile(filepath);
 		//return file.size() === 0;
 	}
 }
