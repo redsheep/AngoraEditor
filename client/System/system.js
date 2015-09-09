@@ -38,6 +38,8 @@ AngoraEditor.SystemManager = function () {
 
 	this.Template		= new AngoraEditor.PhaserTemplate();
 
+	this.History		= new AngoraEditor.HistoryManager();
+
 }
 
 AngoraEditor.SystemManager.prototype = {

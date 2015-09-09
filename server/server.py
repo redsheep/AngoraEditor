@@ -110,6 +110,16 @@ def writeFile():
     print 'write to %s success'%path
     return 'success'
 
+@route('/append', method='POST')
+def appendFile():
+    path = request.forms.get('path')
+    data = request.forms.get('data')
+    #print 'post',path,data
+    f=open('../'+path[1:],'a+')
+    f.write(data)
+    print 'write to %s success'%path
+    return 'success'
+
 @route('/files/<filepath:path>', method='POST')
 def uploadFile(filepath):
     '''print filepath

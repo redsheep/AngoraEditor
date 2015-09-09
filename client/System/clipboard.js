@@ -13,7 +13,6 @@
  */
 AngoraEditor.ClipboardManager = function () {
 
-		this.History		= null;//new AngoraEditor.HistoryManager();
 }
 AngoraEditor.ClipboardManager.prototype = {
 

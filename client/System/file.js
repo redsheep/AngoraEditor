@@ -24,8 +24,6 @@ AngoraEditor.FileManager.prototype = {
 	* @param {string} filepath
 	*/
 	createDirectory : function (filepath,func) {
-		//var file = Ti.FileSystem.getFile(filepath);
-		//file.createDirectory();
 		$.get('/mkdir',{"path":filepath},func);
 	},
 	/**
@@ -55,9 +53,6 @@ AngoraEditor.FileManager.prototype = {
 	* @param {function} func - callback function when read success
 	*/
 	readFile : function (filepath,func) {
-		//var file = Ti.FileSystem.getFile(filepath);
-		//return file.read().toString();
-		//var m_data;
 		var url='/read'+filepath+'?'+ new Date().getTime();
 		if(typeof func==='undefined')
 			$.get(url);
@@ -65,7 +60,6 @@ AngoraEditor.FileManager.prototype = {
 			$.get(url,function(data){
 				func(data);
 			});
-		//return m_data;
 	},
 	/**
 	* write file
@@ -74,12 +68,16 @@ AngoraEditor.FileManager.prototype = {
 	* @param {string} contents - content write to file
 	*/
 	writeFile : function (filepath, contents,func) {
-		//var file = Ti.FileSystem.getFile(filepath);
-		//return file.write(contents);
 		$.post('/write',{"path":filepath,"data":contents},func);
-		//.done(function(data){
-		//	func(data);
-		//});
+	},
+	/**
+	* append new content to file
+	* @method writeFile
+	* @param {string} filepath
+	* @param {string} contents - content append to file
+	*/
+	appendToFile:function(filepath,contents,func){
+		$.post('/append',{'path':filepath,'data':contents},func);
 	},
 	/**
 	* remove file
@@ -94,8 +92,6 @@ AngoraEditor.FileManager.prototype = {
 			$.get(url,function(data){
 				func(data);
 			});
-		//var file = Ti.FileSystem.getFile(filepath);
-		//return file.deleteFile();
 	},
 	/**
 	* is the file empty
@@ -103,8 +99,6 @@ AngoraEditor.FileManager.prototype = {
 	* @param {string} filepath
 	*/
 	emptyFile : function (filepath) {
-		//var file = Ti.FileSystem.getFile(filepath);
-		//return file.size() === 0;
 	}
 }
 AngoraEditor.FileManager.prototype.constructor = AngoraEditor.FileManager;

@@ -63,10 +63,12 @@ StateModel.prototype = {
 			node.id = this.createNode(node.type).id;
 		this.nodes[node.id]=new GameNode(this);
 		this.nodes[node.id].initNode(node);
+		System.History.addRecord({type:'node',operate:'add',target:node.id});
 		return this.nodes[node.id];
 	},
 	removeNode:function(nodeID){
 		delete this.nodes[nodeID];
+		System.History.addRecord({type:'node',operate:'remove',target:nodeID});
 	},
 	saveNode:function(){
 		var nodes={};

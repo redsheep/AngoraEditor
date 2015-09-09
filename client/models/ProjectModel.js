@@ -21,15 +21,17 @@ AngoraEditor.ProjectModel.prototype = {
 		var self = this;
 		this.config=project.config;
 		this.path=project.path;
+		System.History.setProject(this);
 	},
 	add:function(project,finished){
 		var self=this;
 		System.File.readFile('/data/projects.json',function(data){
 			var projects=JSON.parse(data);
 			projects[project.name]=project;
-			self.template = new AngoraEditor.PhaserTemplate(self.Data);
+			System.Template = new AngoraEditor.PhaserTemplate(self.Data);
 			System.File.writeFile('/data/projects.json',JSON.stringify(projects, null, '\t'))
 			System.File.createDirectory(project.path,function(){
+				System.History.createLogFile(project);
 				System.Template.createTemplate(project,finished);
 			});
 		});

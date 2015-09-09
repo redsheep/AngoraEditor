@@ -79,9 +79,11 @@ AngoraEditor.GameModel.prototype = {
 	addResource:function(res){
 		if(res.id in this.resources) return;
 		this.resources[res.id]=new Resource(res);
+		System.History.addRecord({type:'resource',operate:'add',target:res.id});
 	},
 	removeResource:function(res){
 		delete this.resources[res.id];
+		System.History.addRecord({type:'resource',operate:'remove',target:res.id});
 	},
 	saveResource:function(){
 		var resources={};
@@ -102,6 +104,7 @@ AngoraEditor.GameModel.prototype = {
 		this.states={};
 		this.curState=null;
 		this.basePath=null;
+		System.History.clear();
 	},
 	onStateLoaded:function(){},
 	onResourceLoaded:function(){}
