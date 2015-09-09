@@ -52,6 +52,9 @@ GameNode.prototype = {
 	addAttr:function(key,value){
 
 	},
+	addEvent:function(event,callback){
+		this.events[event]=callback;
+	},
 	setAttr:function(key,value){
 		if(typeof value === 'undefined')
 			value=this.DefaultValue[key];

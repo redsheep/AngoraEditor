@@ -67,7 +67,7 @@ AngoraEditor.ManagerController.ProjectManager.prototype = {
 		this.editor.Data.game.saveResource();
 		this.editor.Data.game.curState.save();
 		System.File.writeFile(path+'/{0}.script.js'.format(state),
-			this.editor.Manager.code.getCode(state),function(){
+			this.editor.Manager.code.getStateCode(state),function(){
 				console.log('success save state code');
 		});
 	},

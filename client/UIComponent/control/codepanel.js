@@ -26,9 +26,12 @@ AngoraEditor.CodePanel = function (editor) {
   this.currentEditor=null;
 }
 AngoraEditor.CodePanel.prototype = {
+	existsTab:function(title){
+		return $('#tabs').tabs('exists',title);
+	},
 	selectTab:function(title){
-		if($('#tabs').tabs('exists',title)){
-			//$('#tabs').tabs('select',title);
+		if(this.existsTab(title)){
+			$('#tabs').tabs('select',title);
 			return true;
 		}else{
 			return false;
@@ -68,7 +71,7 @@ AngoraEditor.CodePanel.prototype = {
 		pane.CodeMirror.toTextArea();
 	},
   addCodeEditor:function(title, script, type){
-		if(!this.selectTab(title)){
+		if(!this.existsTab(title)){
 			this.createTab(title,type);
     	this.createEditor(title, script, type);
 		}
@@ -78,10 +81,10 @@ AngoraEditor.CodePanel.prototype = {
 		this.removeTab(title);
   },
 	reloadCodeEditor:function(title,script){
-		this.editors[title].setValue(script);
+		this.editors[title].editor.setValue(script);
 	},
 	updateCodeEditor:function(title,script){
-		this.editors[title].replaceRange(script, {line: Infinity});
+		this.editors[title].editor.replaceRange(script, {line: Infinity});
 	}
 }
 

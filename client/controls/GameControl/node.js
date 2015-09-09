@@ -67,6 +67,10 @@ AngoraEditor.ManagerController.GameNodeManager.prototype = {
 			}
 		});
 	},
+	addEvent:function(sprite,event,callback){
+		sprite.addEvent(event,callback);
+		this.editor.UI.eventPanel.add(event,callback);
+	},
 	/**
 	* select node by id
 	* @method select

@@ -39,12 +39,12 @@ AngoraEditor.EventPanel.prototype = {
 	* @param
 	*/
 	setupCallback: function(){
+		var self=this;
 		var editor=this.editor;
 		$('#addEvent').click(function(){
-			if(editor.node.selected==null)return;
+			//if(editor.node.selected==null)return;
 		});
 		this.Dom.propertygrid({
-			data : this.data,
 			showGroup : true,
 			scrollbarSize : 0,
 			onDblClickRow:function(index, field){
@@ -53,8 +53,11 @@ AngoraEditor.EventPanel.prototype = {
 				if(value!=''){
 					return;
 				}else{
-					//editor.Manager.node.addEvent(name,value);
-					this.add(event,value);
+					var state=editor.Data.game.curState;
+					var callback = '{0}_{1}'.format(state.selected.id,name);
+					editor.Manager.gameNode.addEvent(state.selected,name,callback);
+					editor.Manager.code.addEvent(state.name,callback);
+					//self.add(name,callback);
 				}
 			}
 		});
@@ -103,6 +106,7 @@ AngoraEditor.EventPanel.prototype = {
 		});
 	},
 	refresh:function(){
+		this.data=[];
 		for(var grp in this.eventCategory){
 			for(var i in this.eventCategory[grp]){
 				var event = this.eventCategory[grp][i];

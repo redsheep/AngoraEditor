@@ -92,6 +92,11 @@ AngoraEditor.PhaserTemplate.prototype = {
         System.File.writeFile(path+'/mygame.js',JSContetnt,finished);
       }
     });
+  },
+  createEvent:function(args){
+    var state=args['state'];
+    var functionName=args['functionName'];
+    return "\n{0}.prototype.{1} = function(){\n}\n".format(state,functionName);
   }
 }
 AngoraEditor.PhaserTemplate.prototype.constructor = AngoraEditor.PhaserTemplate;
