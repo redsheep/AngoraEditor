@@ -125,8 +125,10 @@ AngoraEditor.ManagerController.GameNodeManager.prototype = {
 	* @param {Object} node
 	*/
 	remove : function (nodeID) {
+		this.editor.Data.game.curState.removeNode(nodeID);
 	},
 	getSelected:function(){
+		if(this.editor.Data.game.curState==null)return null;
 		return this.editor.Data.game.curState.selected;
 	},
 	/**

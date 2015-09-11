@@ -67,9 +67,11 @@ AngoraEditor.ContextMenu.prototype = {
 		$(document).bind('contextmenu',function(e){
 			if($(document.activeElement).is('textarea'))
 				return true;
-			self.showContextMenu(e.clientX,e.clientY);
-			e.preventDefault();
 			return false;
+		});
+		$('#preview').bind('contextmenu',function(e){
+			if(editor.Manager.game.getCurrentState()!=null)
+				self.showContextMenu(e.clientX,e.clientY);
 		});
 		//this.unactiveMenu();
 	},

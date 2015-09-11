@@ -79,6 +79,10 @@ AngoraEditor.ManagerController.ProjectManager.prototype = {
 	release: function() {
 		this.editor.Data.project.release();
 	},
+
+	getPath: function(){
+		this.editor.Data.project.path;
+	},
 	/**
 	*
 	* @method

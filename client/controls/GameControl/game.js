@@ -42,6 +42,9 @@ AngoraEditor.ManagerController.GameManager.prototype={
 			self.editor.UI.gamePanel.reset();
 			self.editor.UI.scenePanel.remove(state);
 		//});
+	},
+	getCurrentState:function(){
+		return this.editor.Data.game.curState;
 	}
 }
 

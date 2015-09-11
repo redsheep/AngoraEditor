@@ -36,6 +36,7 @@ AngoraEditor.ResourcePanel.prototype = {
 		//this.Property.propertygrid();
 		this.Container.append('<div id="addimgbtn" class="resrect addbtn"></div>');
 		$('#addimgbtn').click(function(){
+			if(self.editor.Manager.project.getPath()==null) return;
   		self.editor.Manager.view.openFileDialog('',function(files){
 				var projectpath = self.editor.Data.project.path;
   			var uploads=JSON.parse(files);

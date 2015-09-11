@@ -13,30 +13,11 @@
  */
 AngoraEditor = function () {
 
-	this.UI=null;
+	this.Data		= new AngoraEditor.DataModel();
 
-	this.Data=null;
+	this.Manager= new AngoraEditor.ManagerController(this);
 
-	this.Manager=null;
+	this.UI			= new AngoraEditor.UIComponent(this);
 
-	this.boot();
-	return this;
-}
-AngoraEditor.prototype = {
-	/**
-	* Setup all the manager objects
-	*
-	* @method AngoraEditor#boot
-	* @protected
-	* @param
-	*/
-	boot : function () {
-		this.UI				= new AngoraEditor.UIComponent(this);
-
-		this.Manager	= new AngoraEditor.ManagerController(this);
-
-		this.Data			=	new AngoraEditor.DataModel();
-
-	}
 }
 AngoraEditor.prototype.constructor = AngoraEditor;

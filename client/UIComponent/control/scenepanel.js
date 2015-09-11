@@ -31,11 +31,13 @@ AngoraEditor.ScenePanel.prototype = {
 			self.editor.Manager.game.loadState(this.innerHTML);
 		});
 		$("#addScene").click(function () {
+			if(self.editor.Manager.project.getPath()==null) return;
 			self.editor.UI.prompt('Add Scene','Enter scene name',function(state){
 				self.editor.Manager.game.addState(state);
 			});
 		});
 		$("#removeScene").click(function () {
+			if(self.editor.Manager.project.getPath()==null) return;
 			self.editor.UI.confirm('Warning',"remove local file?",function(r){
 				self.editor.Manager.game.removeState();
 			});
