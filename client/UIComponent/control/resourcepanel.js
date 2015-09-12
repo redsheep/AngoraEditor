@@ -55,7 +55,8 @@ AngoraEditor.ResourcePanel.prototype = {
   			}
   		},'image/*', true);
   	});
-		this.Container.delegate('.resrect',"mousedown",function(){
+		this.Container.delegate('.resrect',"click",function(e){
+			e.stopImmediatePropagation();
   		var selected=$(".selectedrect");
   		if(selected.length>0)
   			selected.removeClass("selectedrect");
@@ -63,6 +64,13 @@ AngoraEditor.ResourcePanel.prototype = {
 			self.editor.Manager.resource.setSelected($(".selectedrect img").attr('id'));
 			self.loadProperty();
   	});
+		this.Container.click(function(){
+			var selected=$(".selectedrect");
+			if(selected.length>0)
+				selected.removeClass("selectedrect");
+			self.editor.Manager.resource.unSelect();
+			self.resetProperty();
+		});
 	},
 	addObjectToPane : function (resID,projectpath,respath,which){
 		if($('#'+resID).length!=0)return;
@@ -86,6 +94,11 @@ AngoraEditor.ResourcePanel.prototype = {
 			property.push({name:key,value:res.property[key]});
 		}
 		this.Property.propertygrid('loadData',property);
+		this.Dom.layout('expand','east');
+	},
+	resetProperty:function(){
+		this.Property.propertygrid('loadData',[]);
+		this.Dom.layout('collapse','east');
 	}
 }
 

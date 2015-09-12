@@ -105,7 +105,10 @@ def writeFile():
     path = request.forms.get('path')
     data = request.forms.get('data')
     #print 'post',path,data
-    f=open('../'+path[1:],'w+')
+    if(path.startswith('/data')):
+        f=open('../client/resources/'+path[5:],'w+')
+    else:
+        f=open('../'+path[1:],'w+')
     f.write(data)
     print 'write to %s success'%path
     return 'success'

@@ -39,6 +39,9 @@ AngoraEditor.ManagerController.ResourceManager.prototype = {
 	setSelected:function(resID){
 		this.selected=this.get(resID);
 	},
+	unSelect:function(){
+		this.selected=null;
+	},
 	get:function(resID){
 		return this.editor.Data.game.resources[resID];
 	},

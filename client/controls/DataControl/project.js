@@ -81,7 +81,7 @@ AngoraEditor.ManagerController.ProjectManager.prototype = {
 	},
 
 	getPath: function(){
-		this.editor.Data.project.path;
+		return this.editor.Data.project.path;
 	},
 	/**
 	*
